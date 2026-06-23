@@ -10,8 +10,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
 
@@ -77,5 +78,20 @@ class User extends Authenticatable
     public function applications()
     {
         return $this->hasMany(RequestApplication::class);
+    }
+
+    public function emailPribadis()
+    {
+        return $this->hasMany(EmailPribadi::class);
+    }
+
+    public function emailSatkers()
+    {
+        return $this->hasMany(EmailSatker::class);
+    }
+
+    public function subdomains()
+    {
+        return $this->hasMany(Subdomain::class);
     }
 }

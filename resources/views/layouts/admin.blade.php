@@ -40,81 +40,138 @@
             <p class="text-body-md font-body-md text-on-surface-variant">Dinas Kominfo</p>
         </div>
 
-        <ul class="flex-1 overflow-y-auto">
-            <li class="mb-1">
+        <ul class="space-y-1">
+
+            {{-- Dashboard --}}
+            <li>
                 <a href="{{ route('admin.dashboard') }}"
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('admin.dashboard') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
+                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('superadmin.dashboard') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
+
                     <span class="material-symbols-outlined"
-                        style="font-variation-settings: '{{ request()->routeIs('admin.dashboard') ? '1' : '0' }}';">dashboard</span>
-                    <span class="text-label-md font-label-md">Dashboard</span>
+                        style="font-variation-settings: '{{ request()->routeIs('superadmin.dashboard') ? '1' : '0' }}';">
+                        dashboard
+                    </span>
+
+                    <span class="text-label-md font-label-md">
+                        Dashboard
+                    </span>
                 </a>
             </li>
 
-            <!-- MENU BARU: Proses Permohonan -->
-            <li class="mb-1">
-                <a href="{{ route('admin.process') }}"
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('admin.process*') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
+            {{-- Manajemen User --}}
+            <li>
+                <a href=""
+                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('admin.users*') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
+
                     <span class="material-symbols-outlined"
-                        style="font-variation-settings: '{{ request()->routeIs('admin.process*') ? '1' : '0' }}';">fact_check</span>
-                    <span class="text-label-md font-label-md">Proses Permohonan</span>
+                        style="font-variation-settings: '{{ request()->routeIs('admin.users*') ? '1' : '0' }}';">
+                        manage_accounts
+                    </span>
+
+                    <span class="text-label-md font-label-md">
+                        Manajemen User
+                    </span>
                 </a>
             </li>
 
-            <li class="mb-1">
-                <a href="{{ route('requests.service') }}"
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('requests.service') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
-                    <span class="material-symbols-outlined text-[20px]"
-                        style="font-variation-settings: '{{ request()->routeIs('requests.service') ? '1' : '0' }}';">add_circle</span>
-                    <span class="text-label-md font-label-md">Layanan Baru</span>
-                </a>
+            <li x-data="{ open: false }">
+
+                <button @click="open = !open"
+                    class="w-full flex items-center justify-between px-4 py-3 mx-2 rounded-lg hover:bg-surface-container-high">
+
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined">
+                            assignment
+                        </span>
+
+                        <span class="text-label-md font-label-md">
+                            Pengajuan :
+                        </span>
+                    </div>
+
+                    <span class="material-symbols-outlined transition-transform duration-200"
+                        :class="{ 'rotate-180': open }">
+                        expand_more
+                    </span>
+
+                </button>
+
+                <div x-show="open" x-transition class="overflow-hidden">
+
+                    <ul class="ml-8 mt-1 border-l border-outline-variant pl-4 space-y-1">
+
+                        <li>
+                            <a href="{{ route('admin.subdomain') }}"
+                                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-container-high">
+                                <span class="material-symbols-outlined text-[18px]">dns</span>
+                                <span>Subdomain</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#"
+                                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-container-high">
+                                <span class="material-symbols-outlined text-[18px]">mail</span>
+                                <span>Email Pribadi</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#"
+                                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-container-high">
+                                <span class="material-symbols-outlined text-[18px]">alternate_email</span>
+                                <span>Email Satker</span>
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </li {{-- Riwayat --}} <li>
+            <a href=""
+                class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('admin.process.history*') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
+
+                <span class="material-symbols-outlined"
+                    style="font-variation-settings: '{{ request()->routeIs('admin.process.history*') ? '1' : '0' }}';">
+                    history
+                </span>
+
+                <span class="text-label-md font-label-md">
+                    Riwayat
+                </span>
+            </a>
             </li>
 
-            <li class="mb-1">
-                <a href="{{ route('admin.subdomain_requests') }}"
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('admin.subdomain_requests') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
-                    <span class="material-symbols-outlined text-[20px]"
-                        style="font-variation-settings: '{{ request()->routeIs('admin.subdomain_requests') ? '1' : '0' }}';">dns</span>
-                    <span class="text-label-md font-label-md">Subdomain</span>
-                </a>
-            </li>
+            {{-- Profil --}}
+            <li>
+                <a href=""
+                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('profile') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
 
-            <li class="mb-1">
-                <a href="{{ route('admin.email_requests') }}"
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('admin.email_requests') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
-                    <span class="material-symbols-outlined text-[20px]"
-                        style="font-variation-settings: '{{ request()->routeIs('admin.email_requests') ? '1' : '0' }}';">mail</span>
-                    <span class="text-label-md font-label-md">Email Resmi</span>
-                </a>
-            </li>
-
-            <li class="mb-1">
-                <a href="{{ route('admin.process.history') }}"
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('admin.process.history') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
-                    <span class="material-symbols-outlined text-[20px]"
-                        style="font-variation-settings: '{{ request()->routeIs('admin.process.history') ? '1' : '0' }}';">history</span>
-                    <span class="text-label-md font-label-md">Riwayat</span>
-                </a>
-            </li>
-            <li class="mb-1">
-                <a href="#"
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all">
-                    <span class="material-symbols-outlined">description</span>
-                    <span class="text-label-md font-label-md">Dokumen</span>
-                </a>
-            </li>
-            <li class="mb-1">
-                <a href="{{ route('admin.users') }}"
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('admin.users') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
                     <span class="material-symbols-outlined"
-                        style="font-variation-settings: '{{ request()->routeIs('admin.users') ? '1' : '0' }}';">manage_accounts</span>
-                    <span class="text-label-md font-label-md">Manajemen User</span>
+                        style="font-variation-settings: '{{ request()->routeIs('profile') ? '1' : '0' }}';">
+                        account_circle
+                    </span>
+
+                    <span class="text-label-md font-label-md">
+                        Profil Saya
+                    </span>
                 </a>
             </li>
-            <li class="mb-1">
-                <a href="#"
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all">
-                    <span class="material-symbols-outlined">settings</span>
-                    <span class="text-label-md font-label-md">Pengaturan</span>
+
+            {{-- Log Aktivitas --}}
+            <li>
+                <a href="}"
+                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('admin.activity_logs*') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
+
+                    <span class="material-symbols-outlined"
+                        style="font-variation-settings: '{{ request()->routeIs('admin.activity_logs*') ? '1' : '0' }}';">
+                        history_toggle_off
+                    </span>
+
+                    <span class="text-label-md font-label-md">
+                        Log Aktivitas
+                    </span>
                 </a>
             </li>
 
@@ -159,7 +216,15 @@
         <div class="p-gutter max-w-container-max mx-auto space-y-8">
             {{ $slot }}
         </div>
+        <!-- Footer -->
+        <footer
+            class="w-full py-8 px-gutter border-t border-border-subtle flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest mt-auto">
+            <div class="text-label-md font-bold text-primary mb-4 md:mb-0">
+                © 2024 Dinas Kominfo Kabupaten Murung Raya. Transparansi &amp; Administrasi Efisien.
+            </div>
+        </footer>
     </main>
+
 
     @stack('modals')
     @livewireScripts
