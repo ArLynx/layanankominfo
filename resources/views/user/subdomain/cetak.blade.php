@@ -1,65 +1,85 @@
+@php
+
+    $kop = public_path('images/kop-diskominfo.png');
+
+    $kopData = file_exists($kop) ? base64_encode(file_get_contents($kop)) : null;
+
+    $jenisLayanan = [
+        'baru' => 'Pengajuan Subdomain Baru',
+        'ubah_penanggung' => 'Perubahan Penanggung Jawab Subdomain',
+        'ubah_subdomain' => 'Perubahan Nama Subdomain',
+        'nonaktif' => 'Penonaktifan Subdomain',
+    ];
+
+    $judulDeskripsi = match ($subdomain->jenis_layanan) {
+        'ubah_penanggung' => 'ALASAN PERUBAHAN PENANGGUNG JAWAB',
+        'ubah_subdomain' => 'ALASAN PERUBAHAN NAMA SUBDOMAIN',
+        'nonaktif' => 'ALASAN PENONAKTIFAN SUBDOMAIN',
+        default => 'DESKRIPSI WEBSITE',
+    };
+
+@endphp
+
 <!DOCTYPE html>
+
 <html>
 
 <head>
     <meta charset="utf-8">
+
 
     <title>
         Formulir Permohonan Subdomain
     </title>
 
     <style>
+        @page {
+            size: 210mm 330mm;
+            margin: 15mm;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            font-size: 12px;
+            font-size: 11px;
             color: #000;
-            margin: 25px;
+            margin: 20px;
         }
 
-        .header {
+        .kop {
             width: 100%;
-            border-bottom: 3px solid #000;
-            padding-bottom: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
 
-        .header table {
+        .kop img {
             width: 100%;
-        }
-
-        .logo {
-            width: 75px;
         }
 
         .judul {
             text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
-        .judul h1 {
-            margin: 0;
-            font-size: 20px;
-        }
-
-        .judul h2 {
-            margin: 5px 0 0;
-            font-size: 14px;
-            font-weight: normal;
+        .section {
+            margin-top: 15px;
+            page-break-inside: avoid;
         }
 
         .section-title {
-            margin-top: 15px;
-            margin-bottom: 10px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
+            margin-bottom: 10px;
+            padding-bottom: 3px;
         }
 
-        .data-table {
+        table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .data-table td {
-            padding: 6px 4px;
+        td {
+            padding: 4px;
             vertical-align: top;
         }
 
@@ -68,35 +88,35 @@
         }
 
         .separator {
-            width: 15px;
+            width: 10px;
         }
 
-        .deskripsi-box {
+        .deskripsi {
             border: 1px solid #000;
-            min-height: 70px;
             padding: 10px;
-            margin-top: 5px;
+            min-height: 60px;
+            line-height: 1.5;
         }
 
         .pernyataan {
-            margin-top: 20px;
+            margin-top: 10px;
             text-align: justify;
-            line-height: 1.6;
+            line-height: 1.4;
         }
 
         .ttd {
+            margin-top: 25px;
             width: 100%;
-            margin-top: 50px;
+            page-break-inside: avoid;
         }
 
         .ttd td {
-            width: 50%;
             text-align: center;
-            vertical-align: top;
+            width: 50%;
         }
 
         .space-sign {
-            height: 80px;
+            height: 55px;
         }
 
         .nama {
@@ -104,140 +124,184 @@
             text-decoration: underline;
         }
 
-        .footer {
-            margin-top: 25px;
-            text-align: right;
-            font-size: 11px;
+        .catatan {
+            margin-top: 15px;
+            font-size: 10px;
         }
     </style>
+
+
 </head>
 
 <body>
 
-    @php
-        $logo = public_path('images/logo-murung-raya.png');
-        $logoData = file_exists($logo) ? base64_encode(file_get_contents($logo)) : null;
 
-        $jenisLayanan = [
-            'baru' => 'Pengajuan Subdomain Baru',
-            'reset' => 'Perubahan Penanggung Jawab Subdomain',
-            'hapus' => 'Perubahan Nama Subdomain',
-            'ubah' => 'Penonaktifan Subdomain',
-        ];
-    @endphp
+    @if ($kopData)
+        <div class="kop">
+            <img src="data:image/png;base64,{{ $kopData }}">
+        </div>
+    @endif
 
-    <div class="header">
+    {{-- DATA SUBDOMAIN --}}
+    <div class="section">
+
+        <div class="section-title">
+            DATA SUBDOMAIN
+        </div>
 
         <table>
+
             <tr>
-
-                <td width="90">
-
-                    @if ($logoData)
-                        <img class="logo" src="data:image/png;base64,{{ $logoData }}">
-                    @endif
-
-                </td>
-
-                <td class="judul">
-
-                    <h1>FORMULIR PERMOHONAN SUBDOMAIN</h1>
-
-                    <h2>
-                        DINAS KOMUNIKASI DAN INFORMATIKA<br>
-                        KABUPATEN MURUNG RAYA
-                    </h2>
-
-                </td>
-
+                <td class="label">Nomor Tiket</td>
+                <td class="separator">:</td>
+                <td>{{ $subdomain->nomor_tiket }}</td>
             </tr>
+
+            <tr>
+                <td class="label">Jenis Layanan</td>
+                <td class="separator">:</td>
+                <td>
+                    {{ $jenisLayanan[$subdomain->jenis_layanan] ?? '-' }}
+                </td>
+            </tr>
+
+            <tr>
+                <td class="label">Nama Instansi</td>
+                <td class="separator">:</td>
+                <td>{{ $subdomain->nama_instansi }}</td>
+            </tr>
+
+            @if ($subdomain->jenis_layanan == 'ubah_subdomain')
+                <tr>
+                    <td class="label">Nama Subdomain Lama</td>
+                    <td class="separator">:</td>
+                    <td>{{ $subdomain->nama_subdomain }}</td>
+                </tr>
+
+                <tr>
+                    <td class="label">Nama Subdomain Baru</td>
+                    <td class="separator">:</td>
+                    <td>{{ $subdomain->nama_subdomain_baru }}</td>
+                </tr>
+            @else
+                <tr>
+                    <td class="label">Nama Subdomain</td>
+                    <td class="separator">:</td>
+                    <td>{{ $subdomain->nama_subdomain }}</td>
+                </tr>
+            @endif
+
         </table>
 
     </div>
 
-    <div class="section-title">
-        DATA PERMOHONAN
+    {{-- DATA PENANGGUNG JAWAB --}}
+    <div class="section">
+
+        <div class="section-title">
+
+            @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+                DATA PENANGGUNG JAWAB BARU
+            @else
+                DATA PENANGGUNG JAWAB
+            @endif
+
+        </div>
+
+        @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+            <div style="margin-bottom:10px; font-size:10px;">
+
+                Data berikut merupakan penanggung jawab baru yang diusulkan
+                untuk menggantikan penanggung jawab subdomain sebelumnya.
+
+            </div>
+        @endif
+
+        <table>
+
+            <tr>
+                <td class="label">Nama Lengkap</td>
+                <td class="separator">:</td>
+                <td>{{ $subdomain->nama_penanggung_jawab }}</td>
+            </tr>
+
+            <tr>
+                <td class="label">NIP</td>
+                <td class="separator">:</td>
+                <td>{{ $subdomain->nip_penanggung_jawab }}</td>
+            </tr>
+
+            <tr>
+                <td class="label">Jabatan</td>
+                <td class="separator">:</td>
+                <td>{{ $subdomain->jabatan }}</td>
+            </tr>
+
+            <tr>
+                <td class="label">Pangkat / Golongan</td>
+                <td class="separator">:</td>
+                <td>{{ $subdomain->pangkat_gol }}</td>
+            </tr>
+
+            <tr>
+                <td class="label">No. HP / WA</td>
+                <td class="separator">:</td>
+                <td>{{ $subdomain->no_hp }}</td>
+            </tr>
+
+            <tr>
+                <td class="label">Email</td>
+                <td class="separator">:</td>
+                <td>{{ $subdomain->email }}</td>
+            </tr>
+
+        </table>
+
     </div>
 
-    <table class="data-table">
+    <div class="catatan">
 
-        <tr>
-            <td class="label">Nomor Tiket</td>
-            <td class="separator">:</td>
-            <td>{{ $subdomain->nomor_tiket }}</td>
-        </tr>
+        <strong>Catatan:</strong><br>
 
-        <tr>
-            <td class="label">Nama Subdomain</td>
-            <td class="separator">:</td>
-            <td>{{ $subdomain->nama_subdomain }}</td>
-        </tr>
+        Penanggung jawab subdomain minimal memiliki jabatan setingkat
+        Administrator atau Jabatan Fungsional Ahli Madya.
 
-        <tr>
-            <td class="label">Jenis Layanan</td>
-            <td class="separator">:</td>
-            <td>
-                {{ $jenisLayanan[$subdomain->jenis_layanan] ?? '-' }}
-            </td>
-        </tr>
-
-        <tr>
-            <td class="label">Nama Instansi</td>
-            <td class="separator">:</td>
-            <td>{{ $subdomain->nama_instansi }}</td>
-        </tr>
-
-        <tr>
-            <td class="label">Nama Penanggung Jawab</td>
-            <td class="separator">:</td>
-            <td>{{ $subdomain->nama_penanggung_jawab }}</td>
-        </tr>
-
-        <tr>
-            <td class="label">NIP</td>
-            <td class="separator">:</td>
-            <td>{{ $subdomain->nip_penanggung_jawab }}</td>
-        </tr>
-
-        <tr>
-            <td class="label">Jabatan</td>
-            <td class="separator">:</td>
-            <td>{{ $subdomain->jabatan }}</td>
-        </tr>
-
-        <tr>
-            <td class="label">Pangkat / Golongan</td>
-            <td class="separator">:</td>
-            <td>{{ $subdomain->pangkat_gol }}</td>
-        </tr>
-
-        <tr>
-            <td class="label">Nomor HP</td>
-            <td class="separator">:</td>
-            <td>{{ $subdomain->no_hp }}</td>
-        </tr>
-
-        <tr>
-            <td class="label">Email</td>
-            <td class="separator">:</td>
-            <td>{{ $subdomain->email }}</td>
-        </tr>
-
-    </table>
-
-    <div class="section-title">
-        DESKRIPSI WEBSITE
     </div>
 
-    <div class="deskripsi-box">
-        {{ $subdomain->deskripsi_website }}
+    {{-- DESKRIPSI / ALASAN --}}
+    <div class="section">
+
+        <div class="section-title">
+
+            @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+                ALASAN PERUBAHAN PENANGGUNG JAWAB
+            @elseif ($subdomain->jenis_layanan == 'ubah_subdomain')
+                ALASAN PERUBAHAN NAMA SUBDOMAIN
+            @elseif ($subdomain->jenis_layanan == 'nonaktif')
+                ALASAN PENONAKTIFAN SUBDOMAIN
+            @else
+                DESKRIPSI WEBSITE
+            @endif
+
+        </div>
+
+        <div class="deskripsi">
+
+            {!! nl2br(e($subdomain->deskripsi_website)) !!}
+
+        </div>
+
     </div>
 
     <div class="pernyataan">
-        Dengan ini kami mengajukan permohonan layanan subdomain pada lingkungan
-        Pemerintah Kabupaten Murung Raya dan menyatakan bahwa seluruh data yang
-        disampaikan adalah benar serta dapat dipertanggungjawabkan sesuai dengan
-        ketentuan yang berlaku.
+
+        Dengan ini kami mengajukan permohonan layanan subdomain pada
+        lingkungan Pemerintah Kabupaten Murung Raya dan menyatakan bahwa
+        seluruh data yang tercantum dalam formulir ini adalah benar dan
+        dapat dipertanggungjawabkan. Apabila di kemudian hari terdapat
+        ketidaksesuaian data, maka kami bersedia menerima konsekuensi
+        sesuai ketentuan yang berlaku.
+
     </div>
 
     <table class="ttd">
@@ -247,7 +311,8 @@
             <td></td>
 
             <td>
-                Puruk Cahu, {{ now()->translatedFormat('d F Y') }}
+                Puruk Cahu,
+                {{ $subdomain->created_at->translatedFormat('d F Y') }}
             </td>
 
         </tr>
@@ -298,16 +363,6 @@
         </tr>
 
     </table>
-
-    {{-- <div class="footer">
-        Dicetak pada {{ now()->translatedFormat('d F Y H:i') }} WIB
-    </div> --}}
-
-    <script>
-        window.onload = function() {
-            window.print();
-        }
-    </script>
 
 </body>
 

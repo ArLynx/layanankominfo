@@ -12,6 +12,7 @@ class Subdomain extends Model
    protected $fillable = [
     'user_id',
     'nama_subdomain',
+    'nama_subdomain_baru',
     'deskripsi_website',
     'nama_penanggung_jawab',
     'nip_penanggung_jawab',
@@ -25,7 +26,7 @@ class Subdomain extends Model
     'nip_kadis',
     'karpeg',
     'formulir_subdomain',
-    'sk_penunjukan',
+    'surat_penunjukan',
     'status',
     'nomor_tiket',
     'catatan_admin',

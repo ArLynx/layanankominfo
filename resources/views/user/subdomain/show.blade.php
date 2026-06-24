@@ -76,29 +76,83 @@
                         </p>
                     </div>
 
-                    <div>
-                        <label class="font-semibold">
-                            Nama Subdomain
-                        </label>
+                    @if ($subdomain->jenis_layanan == 'ubah_subdomain')
+                        <div>
+                            <label class="font-semibold">
+                                Nama Subdomain Lama
+                            </label>
 
-                        <p>
-                            {{ $subdomain->nama_subdomain }}
-                        </p>
-                    </div>
+                            <p>
+                                {{ $subdomain->nama_subdomain }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="font-semibold">
+                                Nama Subdomain Baru
+                            </label>
+
+                            <p>
+                                {{ $subdomain->nama_subdomain_baru }}
+                            </p>
+                        </div>
+                    @else
+                        <div>
+                            <label class="font-semibold">
+                                Nama Subdomain
+                            </label>
+
+                            <p>
+                                {{ $subdomain->nama_subdomain }}
+                            </p>
+                        </div>
+                    @endif
 
                     <div>
+
                         <label class="font-semibold">
                             Jenis Layanan
                         </label>
 
                         <p>
-                            {{ ucfirst($subdomain->jenis_layanan) }}
+
+                            @switch($subdomain->jenis_layanan)
+                                @case('baru')
+                                    Pengajuan Subdomain Baru
+                                @break
+
+                                @case('ubah_penanggung')
+                                    Perubahan Penanggung Jawab Subdomain
+                                @break
+
+                                @case('ubah_subdomain')
+                                    Perubahan Nama Subdomain
+                                @break
+
+                                @case('nonaktif')
+                                    Penonaktifan Subdomain
+                                @break
+
+                                @default
+                                    -
+                            @endswitch
+
                         </p>
+
                     </div>
 
-                    <div class="md:col-span-2">
+                    @php
+                        $judulDeskripsi = match ($subdomain->jenis_layanan) {
+                            'ubah_penanggung' => 'Alasan Perubahan Penanggung Jawab',
+                            'ubah_subdomain' => 'Alasan Perubahan Nama Subdomain',
+                            'nonaktif' => 'Alasan Penonaktifan Subdomain',
+                            default => 'Deskripsi Website',
+                        };
+                    @endphp
+
+                    <div>
                         <label class="font-semibold">
-                            Deskripsi Website
+                            {{ $judulDeskripsi }}
                         </label>
 
                         <p>
@@ -215,23 +269,23 @@
                 </div>
             @endif
 
-            @if ($subdomain->sk_penunjukan)
+            @if ($subdomain->surat_penunjukan)
                 <div class="mt-6 p-4 bg-blue-50 border border-blue-300 rounded">
 
                     <p class="text-blue-700 font-medium mb-2">
-                        SK Penunjukan telah tersedia
+                        Surat Penunjukan telah tersedia
                     </p>
 
                     <a href="{{ route('subdomain.download-sk-penunjukan', $subdomain) }}" target="_blank"
                         class="text-blue-600 hover:underline">
 
-                        Download SK Penunjukan
+                        Download Surat Penunjukan
 
                     </a>
 
                 </div>
             @endif
-            
+
         </div>
     </main>
 @endsection

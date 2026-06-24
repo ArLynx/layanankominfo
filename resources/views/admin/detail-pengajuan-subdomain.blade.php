@@ -274,7 +274,7 @@
 
         <div class="lg:col-span-8 space-y-6">
 
-            {{-- Data Pemohon --}}
+            {{-- Data Penanggung Jawab --}}
             {{-- Data Subdomain --}}
             {{-- Dokumen --}}
 
@@ -286,16 +286,17 @@
 
         </div>
 
+        {{-- Card Data Penanggung Jawab --}}
         <div class="bg-surface rounded-xl border border-outline-variant p-6">
 
             <div class="flex items-center gap-2 mb-4">
 
                 <span class="material-symbols-outlined text-primary">
-                    person
+                    badge
                 </span>
 
                 <h3 class="font-semibold text-lg">
-                    Data Pemohon
+                    Data Penanggung Jawab
                 </h3>
 
             </div>
@@ -303,54 +304,65 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                 <div>
-                    <p class="text-sm text-on-surface-variant">
+                    <label class="font-semibold">
                         Nama Lengkap
-                    </p>
+                    </label>
 
-                    <p class="font-medium">
+                    <p>
                         {{ $subdomain->nama_penanggung_jawab }}
                     </p>
                 </div>
 
                 <div>
-                    <p class="text-sm text-on-surface-variant">
+                    <label class="font-semibold">
                         NIP
-                    </p>
+                    </label>
 
-                    <p class="font-medium">
+                    <p>
                         {{ $subdomain->nip_penanggung_jawab }}
                     </p>
                 </div>
 
                 <div>
-                    <p class="text-sm text-on-surface-variant">
-                        Nomor HP
-                    </p>
+                    <label class="font-semibold">
+                        Jabatan
+                    </label>
 
-                    <p class="font-medium">
+                    <p>
+                        {{ $subdomain->jabatan }}
+                    </p>
+                </div>
+
+                <div>
+                    <label class="font-semibold">
+                        Pangkat / Golongan
+                    </label>
+
+                    <p>
+                        {{ $subdomain->pangkat_gol }}
+                    </p>
+                </div>
+
+                <div>
+                    <label class="font-semibold">
+                        Nomor HP / WA
+                    </label>
+
+                    <p>
                         {{ $subdomain->no_hp }}
                     </p>
                 </div>
 
                 <div>
-                    <p class="text-sm text-on-surface-variant">
-                        Email Pribadi
-                    </p>
+                    <label class="font-semibold">
+                        Email
+                    </label>
 
-                    <p class="font-medium">
+                    <p>
                         {{ $subdomain->email }}
                     </p>
                 </div>
 
-                <div class="md:col-span-2">
-                    <p class="text-sm text-on-surface-variant">
-                        Instansi / Unit Kerja
-                    </p>
-
-                    <p class="font-medium">
-                        {{ $subdomain->nama_instansi }}
-                    </p>
-                </div>
 
             </div>
 
@@ -358,6 +370,7 @@
 
     </div>
 
+    {{-- Card Data Subdomain --}}
     <div class="bg-surface rounded-xl border border-outline-variant p-6">
 
         <div class="flex items-center gap-2 mb-4">
@@ -375,23 +388,64 @@
         <div class="space-y-4">
 
             <div>
-                <p class="text-sm text-on-surface-variant">
-                    Nama Subdomain
-                </p>
+                <label class="font-semibold">
+                    Nama Instansi
+                </label>
 
-                <p class="font-medium">
-                    {{ $subdomain->nama_subdomain }}
+                <p>
+                    {{ $subdomain->nama_instansi }}
                 </p>
             </div>
 
-            <div>
-                <p class="text-sm text-on-surface-variant">
-                    Deskripsi Website
-                </p>
+            @if ($subdomain->jenis_layanan == 'ubah_subdomain')
+                <div>
+                    <label class="font-semibold">
+                        Nama Subdomain Lama
+                    </label>
 
-                <p class="font-medium">
+                    <p>
+                        {{ $subdomain->nama_subdomain }}
+                    </p>
+                </div>
+
+                <div>
+                    <label class="font-semibold">
+                        Nama Subdomain Baru
+                    </label>
+
+                    <p>
+                        {{ $subdomain->nama_subdomain_baru }}
+                    </p>
+                </div>
+            @else
+                <div>
+                    <label class="font-semibold">
+                        Nama Subdomain
+                    </label>
+
+                    <p>
+                        {{ $subdomain->nama_subdomain }}
+                    </p>
+                </div>
+            @endif
+
+            @php
+                $judulDeskripsi = match ($subdomain->jenis_layanan) {
+                    'ubah_penanggung' => 'Alasan Perubahan Penanggung Jawab',
+                    'ubah_subdomain' => 'Alasan Perubahan Nama Subdomain',
+                    'nonaktif' => 'Alasan Penonaktifan Subdomain',
+                    default => 'Deskripsi Website',
+                };
+            @endphp
+
+            <div>
+                <label class="font-semibold">
+                    {{ $judulDeskripsi }}
+                </label>
+
+                <div class="mt-2 p-4 bg-gray-50 border rounded-lg whitespace-pre-line">
                     {{ $subdomain->deskripsi_website }}
-                </p>
+                </div>
             </div>
 
             <div>
@@ -418,10 +472,6 @@
                             Penonaktifan Subdomain
                         @break
 
-                        @case('ubah_dns')
-                            Perubahan DNS/Hosting Tujuan Subdomain
-                        @break
-
                         @default
                             -
                     @endswitch
@@ -433,6 +483,7 @@
 
     </div>
 
+    {{-- Card Data Pendukung --}}
     <div class="bg-surface rounded-xl border border-outline-variant p-6">
 
         <div class="flex items-center gap-2 mb-4">
@@ -547,7 +598,7 @@
 
     </div>
 
-
+    {{-- Tindakan Admin --}}
     <div class="bg-surface rounded-xl border border-outline-variant p-6 sticky top-6">
 
         <div class="flex items-center gap-2 mb-6">
@@ -681,27 +732,27 @@
                 <a href="{{ route('admin.subdomain.cetak-sk', $subdomain) }}" target="_blank"
                     class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium">
 
-                    Cetak SK Penunjukan
+                    Cetak Surat Penunjukan
 
                 </a>
             @endif
 
             {{-- Jika sudah ada SK, tampilkan terus --}}
-            @if ($subdomain->sk_penunjukan)
+            @if ($subdomain->surat_penunjukan)
                 <div class="border rounded-lg p-4 bg-gray-50 mt-3">
 
                     <h4 class="font-medium mb-3">
-                        SK Penunjukan
+                        Surat Penunjukan
                     </h4>
 
                     <div class="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                        SK Penunjukan telah diupload.
+                        Surat Penunjukan telah diupload.
                     </div>
 
                     <a href="{{ route('admin.subdomain.download-sk', $subdomain) }}" target="_blank"
                         class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium">
 
-                        Lihat SK
+                        Lihat Surat
 
                     </a>
 
@@ -713,7 +764,7 @@
                 <div class="border rounded-lg p-4 bg-gray-50 mt-3">
 
                     <h4 class="font-medium mb-3">
-                        Upload SK Penunjukan Final
+                        Upload Surat Penunjukan Final
                     </h4>
 
                     <form action="{{ route('admin.subdomain.upload-sk', $subdomain) }}" method="POST"
@@ -721,12 +772,12 @@
 
                         @csrf
 
-                        <input type="file" name="sk_penunjukan" accept=".pdf" class="w-full border p-2 mb-3">
+                        <input type="file" name="surat_penunjukan" accept=".pdf" class="w-full border p-2 mb-3">
 
                         <button type="submit"
                             class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium">
 
-                            {{ $subdomain->sk_penunjukan ? 'Upload Ulang SK' : 'Upload SK Penunjukan' }}
+                            {{ $subdomain->surat_penunjukan ? 'Upload Ulang Surat' : 'Upload Surat Penunjukan' }}
 
                         </button>
 

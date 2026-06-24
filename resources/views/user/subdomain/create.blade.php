@@ -84,15 +84,78 @@
                 </div>
             @endif
 
+            <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+                <div class="flex items-start gap-2">
+                    <span class="material-symbols-outlined text-amber-600">
+                        info
+                    </span>
+                    <div>
+                        <p class="font-medium text-amber-800">
+                            Catatan
+                        </p>
+
+                        <p class="text-sm text-amber-700 mt-1">
+                            Penanggung jawab subdomain minimal memiliki jabatan setingkat
+                            Administrator atau Jabatan Fungsional (JF) Ahli Madya.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             <form class="p-6 md:p-8 flex flex-col gap-8" action="{{ route('subdomain.store') }}" method="POST"
                 enctype="multipart/form-data" class="p-6 md:p-8 flex flex-col gap-8">
                 @csrf
 
-                <!-- Input: Subdomain / Email -->
+                <!-- jenis laynanan -->
                 <div class="flex flex-col gap-2">
-                    <label class="text-label-md font-label-md text-on-surface flex items-center gap-1" for="subdomain">
+                    <label class="text-label-md font-label-md text-on-surface">
+                        Jenis Layanan <span class="text-error">*</span>
+                    </label>
+
+                    <select id="jenis_layanan" name="jenis_layanan"
+                        class="w-full px-4 py-3 bg-surface border rounded-lg
+                            @error('jenis_layanan')
+                                border-red-500
+                            @else
+                                border-outline-variant
+                            @enderror">
+
+                        <option value="">Pilih Layanan</option>
+
+                        <option value="baru" {{ old('jenis_layanan') == 'baru' ? 'selected' : '' }}>
+                            Pengajuan Subdomain Baru
+                        </option>
+
+                        <option value="ubah_penanggung" {{ old('jenis_layanan') == 'ubah_penanggung' ? 'selected' : '' }}>
+                            Perubahan Penanggung Jawab Subdomain
+                        </option>
+
+                        <option value="ubah_subdomain" {{ old('jenis_layanan') == 'ubah_subdomain' ? 'selected' : '' }}>
+                            Perubahan nama subdomain
+                        </option>
+
+                        <option value="nonaktif" {{ old('jenis_layanan') == 'nonaktif' ? 'selected' : '' }}>
+                            Penonaktifan subdomain
+                        </option>
+
+                    </select>
+
+                    @error('jenis_layanan')
+                        <p class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
+
+                <!-- subdomain -->
+                <div id="subdomain-section" class="flex flex-col gap-2">
+                    <label id="label-subdomain" class="text-label-md font-label-md text-on-surface flex items-center gap-1"
+                        for="subdomain">
+
                         Nama Subdomain yang Diajukan
+
                         <span class="text-error">*</span>
+
                     </label>
                     <div class="relative flex items-center">
                         <input
@@ -114,13 +177,43 @@
                     </p>
                 </div>
 
-                <div class="flex flex-col gap-2">
-                    <label class="text-label-md font-label-md text-on-surface" for="purpose">
-                        Deskrisikan Website <span class="text-error">*</span>
+                <!-- subdomain baru -->
+                <div id="subdomain-baru-section" class="hidden flex flex-col gap-2">
+                    <label class="text-label-md font-label-md text-on-surface">
+                        Nama Subdomain Baru
+                        <span class="text-error">*</span>
                     </label>
-                    <textarea
+                    <div class="relative flex items-center">
+                        <input id="nama_subdomain_baru" name="nama_subdomain_baru" value="{{ old('nama_subdomain_baru') }}"
+                            placeholder="nama-instansi (subdomain hanya boleh huruf kecil, angka dan tanda hubung (-)""
+                            type="text"
+                            class="flex-grow px-4 py-3 bg-surface border border-outline-variant rounded-l-lg">
+                        <span class="px-4 py-3 bg-surface-container border border-l-0 border-outline-variant rounded-r-lg">
+
+                            .murungrayakab.go.id
+                        </span>
+                    </div>
+                    @error('nama_subdomain_baru')
+                        <p class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                    <p class="text-caption font-caption text-on-surface-variant flex items-start gap-1 mt-1">
+                        <span class="material-symbols-outlined text-[16px]">info</span>
+                        Isikan nama subdomain yang baru.
+                    </p>
+                </div>
+
+                <!-- deskripsikan website -->
+                <div class="flex flex-col gap-2">
+                    <label id="label-deskripsi" class="text-label-md font-label-md text-on-surface" for="deskripsi_website">
+
+                        Deskripsikan Website
+                        <span class="text-error">*</span>
+
+                    </label>
+                    <textarea id="deskripsi_website" name="deskripsi_website"
                         class="w-full px-4 py-3 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all min-h-[100px]"
-                        id="deskripsi_website" name="deskripsi_website"
                         placeholder="Misal: Profil Dinas, Aplikasi Internal, Portal Layanan Publik, dll">{{ old('deskripsi_website') }}</textarea>
                     @error('deskripsi_website')
                         <p class="text-red-500 text-sm mt-1">
@@ -129,11 +222,27 @@
                     @enderror
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div id="alert-penanggung-jawab" class="hidden mb-4 p-4 rounded-lg border border-amber-300 bg-amber-50">
 
+                    <p class="text-sm text-amber-700">
+
+                        <strong>Perhatian:</strong>
+                        Isikan data penanggung jawab baru yang akan bertanggung jawab
+                        terhadap pengelolaan subdomain di bawah ini :
+
+                    </p>
+
+                </div>
+
+                <!-- penanggung jawab -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="flex flex-col gap-2">
-                        <label class="text-label-md font-label-md text-on-surface" for="pic_name">
-                            Nama Penanggung Jawab Teknis <span class="text-error">*</span>
+                        <label id="label-penanggung-jawab" class="text-label-md font-label-md text-on-surface"
+                            for="pic_name">
+
+                            Nama Penanggung Jawab Teknis
+                            <span class="text-error">*</span>
+
                         </label>
                         <input
                             class="w-full px-4 py-3 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
@@ -146,14 +255,15 @@
                         @enderror
                     </div>
 
+                    <!-- nip -->
                     <div class="flex flex-col gap-2">
                         <label class="text-label-md font-label-md text-on-surface" for="pic_name">
-                            NIP Penanggung Jawab Teknis <span class="text-error">*</span>
+                            NIP Penanggung Jawab <span class="text-error">*</span>
                         </label>
                         <input
                             class="w-full px-4 py-3 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
-                            id="nip_penanggung_jawab" name="nip_penanggung_jawab" value="{{ old('nip_penanggung_jawab') }}" placeholder="NIP"
-                            type="text">
+                            id="nip_penanggung_jawab" name="nip_penanggung_jawab"
+                            value="{{ old('nip_penanggung_jawab') }}" placeholder="NIP" type="text">
                         @error('nip_penanggung_jawab')
                             <p class="text-red-500 text-sm mt-1">
                                 {{ $message }}
@@ -161,14 +271,15 @@
                         @enderror
                     </div>
 
+                    <!-- pangkat golongan -->
                     <div class="flex flex-col gap-2">
                         <label class="text-label-md font-label-md text-on-surface" for="pic_name">
                             Pangkat/Golongan <span class="text-error">*</span>
                         </label>
                         <input
                             class="w-full px-4 py-3 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
-                            id="pangkat_gol" name="pangkat_gol" value="{{ old('pangkat_gol') }}" placeholder="Penata Muda {III/a)"
-                            type="text">
+                            id="pangkat_gol" name="pangkat_gol" value="{{ old('pangkat_gol') }}"
+                            placeholder="Penata Muda {III/a)" type="text">
                         @error('pangkat_gol')
                             <p class="text-red-500 text-sm mt-1">
                                 {{ $message }}
@@ -176,6 +287,7 @@
                         @enderror
                     </div>
 
+                    <!-- jabatan -->
                     <div class="flex flex-col gap-2">
                         <label class="text-label-md font-label-md text-on-surface" for="pic_name">
                             Jabatan <span class="text-error">*</span>
@@ -191,6 +303,7 @@
                         @enderror
                     </div>
 
+                    <!-- nama instansi -->
                     <div class="flex flex-col gap-2">
                         <label class="text-label-md font-label-md text-on-surface" for="pic_name">
                             Nama Instansi
@@ -209,6 +322,7 @@
                         @enderror
                     </div>
 
+                    <!-- no hp -->
                     <div class="flex flex-col gap-2">
                         <label class="text-label-md font-label-md text-on-surface" for="pic_contact">
                             No Hp Penanggung Jawab <span class="text-error">*</span>
@@ -224,6 +338,7 @@
                         @enderror
                     </div>
 
+                    <!-- email -->
                     <div class="flex flex-col gap-2">
                         <label class="text-label-md font-label-md text-on-surface">
                             Email Penanggung Jawab <span class="text-error">*</span>
@@ -239,50 +354,7 @@
                         @enderror
                     </div>
 
-                    <div class="flex flex-col gap-2">
-                        <label class="text-label-md font-label-md text-on-surface">
-                            Jenis Layanan <span class="text-error">*</span>
-                        </label>
-
-                        <select name="jenis_layanan"
-                            class="w-full px-4 py-3 bg-surface border rounded-lg
-                            @error('jenis_layanan')
-                                border-red-500
-                            @else
-                                border-outline-variant
-                            @enderror">
-
-                            <option value="">Pilih Layanan</option>
-
-                            <option value="baru" {{ old('jenis_layanan') == 'baru' ? 'selected' : '' }}>
-                                Pengajuan Subdomain Baru
-                            </option>
-
-                            <option value="ubah_penanggung" {{ old('jenis_layanan') == 'ubah_penanggung' ? 'selected' : '' }}>
-                                Perubahan Penanggung Jawab Subdomain
-                            </option>
-
-                            <option value="ubah_subdomain" {{ old('jenis_layanan') == 'ubah_subdomain' ? 'selected' : '' }}>
-                                Perubahan nama subdomain
-                            </option>
-
-                            <option value="nonaktif" {{ old('jenis_layanan') == 'nonaktif' ? 'selected' : '' }}>
-                                Penonaktifan subdomain
-                            </option>
-
-                            <option value="ubah_dns" {{ old('jenis_layanan') == 'ubah_dns' ? 'selected' : '' }}>
-                                Perubahan DNS/Hosting Tujuan Subdomain (Jika Layanan Hosting ditambah)
-                            </option>
-                        </select>
-
-                        @error('jenis_layanan')
-                            <p class="text-red-500 text-sm mt-1">
-                                {{ $message }}
-                            </p>
-                        @enderror
-                    </div>
-
-
+                    <!-- nama kadis -->
                     <div class="flex flex-col gap-2">
                         <label class="text-label-md font-label-md text-on-surface">
                             Nama Kepala Dinas <span class="text-error">*</span>
@@ -298,6 +370,7 @@
                         @enderror
                     </div>
 
+                    <!-- nip kadis -->
                     <div class="flex flex-col gap-2">
                         <label class="text-label-md font-label-md text-on-surface">
                             NIP Kepala Dinas <span class="text-error">*</span>
@@ -314,6 +387,7 @@
                     </div>
 
                 </div>
+
                 <!-- File Upload: Kartu Pegawai -->
                 <div class="flex flex-col gap-2">
                     <label class="text-label-md font-label-md text-on-surface">Upload Kartu Pegawai <span
@@ -346,6 +420,7 @@
                         @enderror
                     </div>
                 </div>
+
                 <!-- Terms and Conditions Checkbox -->
                 <div
                     class="bg-surface-container-low p-4 rounded-lg border border-border-subtle flex items-start gap-3 mt-4">
@@ -376,6 +451,7 @@
                     </div>
 
                 </div>
+
                 <!-- Action Buttons -->
                 <div
                     class="pt-6 border-t border-border-subtle flex flex-col md:flex-row justify-end items-center gap-4 mt-2">
@@ -400,8 +476,10 @@
                     </button>
                 </div>
             </form>
+
         </div>
     </main>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
@@ -474,6 +552,156 @@
 
                 fileName.classList.add('text-green-600');
             });
+
+        });
+
+        //jenis-layanan
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const jenisLayanan = document.getElementById('jenis_layanan');
+            const subdomainBaru = document.getElementById('subdomain-baru-section');
+
+            function toggleSubdomainBaru() {
+
+                if (jenisLayanan.value === 'ubah_subdomain') {
+
+                    subdomainBaru.classList.remove('hidden');
+
+                } else {
+
+                    subdomainBaru.classList.add('hidden');
+
+                }
+            }
+
+            toggleSubdomainBaru();
+
+            jenisLayanan.addEventListener('change', toggleSubdomainBaru);
+
+        });
+
+        //subdomain lama
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const jenisLayanan = document.getElementById('jenis_layanan');
+            const labelSubdomain = document.getElementById('label-subdomain');
+
+            function updateLabelSubdomain() {
+
+                if (jenisLayanan.value === 'ubah_subdomain') {
+
+                    labelSubdomain.innerHTML = `
+                Nama Subdomain Lama
+                <span class="text-error">*</span>
+            `;
+
+                } else {
+
+                    labelSubdomain.innerHTML = `
+                Nama Subdomain yang Diajukan
+                <span class="text-error">*</span>
+            `;
+
+                }
+
+            }
+
+            updateLabelSubdomain();
+
+            jenisLayanan.addEventListener('change', updateLabelSubdomain);
+
+        });
+
+        //deskripsi
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const jenisLayanan = document.getElementById('jenis_layanan');
+
+            const labelDeskripsi = document.getElementById('label-deskripsi');
+            const textareaDeskripsi = document.getElementById('deskripsi_website');
+
+            function updateDeskripsi() {
+
+                switch (jenisLayanan.value) {
+
+                    case 'ubah_penanggung':
+
+                        labelDeskripsi.innerHTML =
+                            'Alasan Perubahan Penanggung Jawab <span class="text-error">*</span>';
+
+                        textareaDeskripsi.placeholder =
+                            'Contoh: Terjadi pergantian pejabat penanggung jawab karena mutasi, promosi jabatan, atau perubahan tugas.';
+
+                        break;
+
+                    case 'ubah_subdomain':
+
+                        labelDeskripsi.innerHTML =
+                            'Alasan Perubahan Nama Subdomain <span class="text-error">*</span>';
+
+                        textareaDeskripsi.placeholder =
+                            'Contoh: Penyesuaian nama subdomain dengan nomenklatur perangkat daerah atau layanan yang terbaru.';
+
+                        break;
+
+                    case 'nonaktif':
+
+                        labelDeskripsi.innerHTML =
+                            'Alasan Penonaktifan Subdomain <span class="text-error">*</span>';
+
+                        textareaDeskripsi.placeholder =
+                            'Contoh: Website sudah tidak digunakan, digabung dengan layanan lain, atau aplikasi telah dihentikan.';
+
+                        break;
+
+                    default:
+
+                        labelDeskripsi.innerHTML =
+                            'Deskripsikan Website <span class="text-error">*</span>';
+
+                        textareaDeskripsi.placeholder =
+                            'Contoh: Website profil instansi, aplikasi pelayanan publik, sistem informasi internal, portal data, dan sebagainya.';
+
+                }
+            }
+
+            updateDeskripsi();
+
+            jenisLayanan.addEventListener('change', updateDeskripsi);
+
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const jenisLayanan = document.getElementById('jenis_layanan');
+
+            const labelPJ = document.getElementById('label-penanggung-jawab');
+
+            const alertPJ = document.getElementById('alert-penanggung-jawab');
+
+            function updatePenanggungJawab() {
+
+                if (jenisLayanan.value === 'ubah_penanggung') {
+
+                    labelPJ.innerHTML =
+                        'Nama Penanggung Jawab Baru <span class="text-error">*</span>';
+
+                    alertPJ.classList.remove('hidden');
+
+                } else {
+
+                    labelPJ.innerHTML =
+                        'Nama Penanggung Jawab Teknis <span class="text-error">*</span>';
+
+                    alertPJ.classList.add('hidden');
+
+                }
+
+            }
+
+            updatePenanggungJawab();
+
+            jenisLayanan.addEventListener('change', updatePenanggungJawab);
 
         });
     </script>

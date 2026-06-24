@@ -28,6 +28,7 @@ class SubdomainController extends Controller
         $validated = $request->validate(
             [
                 'nama_subdomain' => ['required', 'max:100', 'regex:/^(?!-)[a-z0-9-]+(?<!-)$/'],
+                'nama_subdomain_baru' => $request->jenis_layanan == 'ubah_subdomain' ? ['required', 'max:100', 'regex:/^(?!-)[a-z0-9-]+(?<!-)$/'] : ['nullable'],
                 'deskripsi_website' => 'required',
 
                 'nama_penanggung_jawab' => 'required|max:100',
@@ -40,7 +41,7 @@ class SubdomainController extends Controller
                 'no_hp' => 'required|max:50',
                 'email' => 'required|email|max:100',
 
-                'jenis_layanan' => 'required|in:baru,reset,hapus,ubah',
+                'jenis_layanan' => 'required|in:baru,ubah_penanggung,ubah_subdomain,nonaktif',
 
                 'nama_kadis' => 'required|max:255',
                 'nip_kadis' => 'required|max:50',
@@ -61,14 +62,27 @@ class SubdomainController extends Controller
         try {
             $fullSubdomain = strtolower(trim($validated['nama_subdomain'])) . '.murungrayakab.go.id';
 
-            // Cek apakah subdomain sudah digunakan
-            $exists = Subdomain::where('nama_subdomain', $fullSubdomain)->exists();
+            $fullSubdomainBaru = null;
+
+            if ($validated['jenis_layanan'] === 'ubah_subdomain' && !empty($validated['nama_subdomain_baru'])) {
+                $fullSubdomainBaru = strtolower(trim($validated['nama_subdomain_baru'])) . '.murungrayakab.go.id';
+            }
+
+            $exists = Subdomain::where(function ($query) use ($fullSubdomain, $fullSubdomainBaru) {
+                $query->where('nama_subdomain', $fullSubdomain);
+
+                if ($fullSubdomainBaru) {
+                    $query->orWhere('nama_subdomain_baru', $fullSubdomainBaru);
+                }
+            })
+                ->whereNotIn('status', ['selesai', 'tutup'])
+                ->exists();
 
             if ($exists) {
                 return back()
                     ->withInput()
                     ->withErrors([
-                        'nama_subdomain' => 'Subdomain "' . $fullSubdomain . '" sudah digunakan. Silakan gunakan nama lain.',
+                        'nama_subdomain' => 'Nama subdomain sedang digunakan pada pengajuan lain.',
                     ]);
             }
 
@@ -79,6 +93,7 @@ class SubdomainController extends Controller
                 'user_id' => Auth::id(),
 
                 'nama_subdomain' => $fullSubdomain,
+                'nama_subdomain_baru' => $fullSubdomainBaru,
                 'deskripsi_website' => $validated['deskripsi_website'],
 
                 'nama_penanggung_jawab' => $validated['nama_penanggung_jawab'],
@@ -168,12 +183,12 @@ class SubdomainController extends Controller
 
     public function downloadSkPenunjukan(Subdomain $subdomain)
     {
-        abort_if(!$subdomain->sk_penunjukan, 404);
+        abort_if(!$subdomain->surat_penunjukan, 404);
 
-        $path = Storage::disk('local')->path($subdomain->sk_penunjukan);
+        $path = Storage::disk('local')->path($subdomain->surat_penunjukan);
 
         if (!file_exists($path)) {
-            abort(404, 'File SK Penunjukan tidak ditemukan.');
+            abort(404, 'File Surat Penunjukan tidak ditemukan.');
         }
 
         return response()->file($path, [

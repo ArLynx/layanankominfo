@@ -44,9 +44,9 @@ class SubdomainAdminController extends Controller
             'catatan_admin' => 'nullable|string',
         ]);
 
-        // Tidak boleh selesai jika SK belum diupload
-        if ($validated['status'] === 'selesai' && !$subdomain->sk_penunjukan) {
-            return back()->with('error', 'SK Penunjukan wajib diupload sebelum status selesai.');
+        // Tidak boleh selesai jika Surat belum diupload
+        if ($validated['status'] === 'selesai' && !$subdomain->surat_penunjukan) {
+            return back()->with('error', 'Surat Penunjukan wajib diupload sebelum status selesai.');
         }
 
         $subdomain->update([
@@ -135,35 +135,35 @@ class SubdomainAdminController extends Controller
     {
         try {
             if ($subdomain->status !== 'diproses') {
-                return back()->with('error', 'SK Penunjukan hanya dapat dicetak setelah pengajuan disetujui pimpinan.');
+                return back()->with('error', 'Surat Penunjukan hanya dapat dicetak setelah pengajuan disetujui pimpinan.');
             }
 
-            $pdf = Pdf::loadView('admin.cetak-sk-subdomain', compact('subdomain'));
+            $pdf = Pdf::loadView('admin.cetak-surat-subdomain', compact('subdomain'));
 
-            return $pdf->stream('SK-Penunjukan-' . $subdomain->nomor_tiket . '.pdf');
+            return $pdf->stream('Surat-Penunjukan-' . $subdomain->nomor_tiket . '.pdf');
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal mencetak SK Penunjukan.');
+            return back()->with('error', 'Gagal mencetak Surat Penunjukan.');
         }
     }
 
     public function uploadSkPenunjukan(Request $request, Subdomain $subdomain)
     {
         $request->validate([
-            'sk_penunjukan' => 'required|file|mimes:pdf|max:5120',
+            'surat_penunjukan' => 'required|file|mimes:pdf|max:5120',
         ]);
 
         try {
-            if ($subdomain->sk_penunjukan) {
+            if ($subdomain->surat_penunjukan) {
                 Storage::disk('local')->delete($subdomain->sk_penunjukan);
             }
 
-            $path = $request->file('sk_penunjukan')->store('subdomain/sk-penunjukan', 'local');
+            $path = $request->file('surat_penunjukan')->store('subdomain/surat-penunjukan', 'local');
 
             $subdomain->update([
-                'sk_penunjukan' => $path,
+                'surat_penunjukan' => $path,
             ]);
 
-            return back()->with('success', 'SK Penunjukan berhasil diupload.');
+            return back()->with('success', 'Surat Penunjukan berhasil diupload.');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
@@ -171,11 +171,11 @@ class SubdomainAdminController extends Controller
 
     public function downloadSkPenunjukan(Subdomain $subdomain)
     {
-        if (!$subdomain->sk_penunjukan) {
+        if (!$subdomain->surat_penunjukan) {
             abort(404);
         }
 
-        $path = Storage::disk('local')->path($subdomain->sk_penunjukan);
+        $path = Storage::disk('local')->path($subdomain->surat_penunjukan);
 
         return response()->file($path, [
             'Content-Disposition' => 'inline',

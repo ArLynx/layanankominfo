@@ -59,7 +59,7 @@
                                     </div>
 
                                     <h4 class="text-label-md font-label-md text-on-surface">
-                                        Pembuatan Subdomain
+                                        Subdomain
                                     </h4>
 
                                     <p class="text-caption font-caption text-on-surface-variant mt-2">
