@@ -27,15 +27,26 @@
             <div class="flex gap-3 mb-6">
 
                 <a href="{{ route('riwayat.index', ['tab' => 'subdomain']) }}"
-                    class="px-4 py-2 rounded-lg bg-primary text-white">
+                    class="px-4 py-2 rounded-lg transition
+        {{ request('tab', 'subdomain') == 'subdomain'
+            ? 'bg-primary text-white'
+            : 'border border-outline-variant text-on-surface hover:bg-surface-container' }}">
                     Subdomain
                 </a>
 
-                <a href="{{ route('riwayat.index', ['tab' => 'email-satker']) }}" class="px-4 py-2 rounded-lg border">
+                <a href="{{ route('riwayat.index', ['tab' => 'email-satker']) }}"
+                    class="px-4 py-2 rounded-lg transition
+        {{ request('tab') == 'email-satker'
+            ? 'bg-primary text-white'
+            : 'border border-outline-variant text-on-surface hover:bg-surface-container' }}">
                     Email Satker
                 </a>
 
-                <a href="{{ route('riwayat.index', ['tab' => 'email-pribadi']) }}" class="px-4 py-2 rounded-lg border">
+                <a href="{{ route('riwayat.index', ['tab' => 'email-pribadi']) }}"
+                    class="px-4 py-2 rounded-lg transition
+        {{ request('tab') == 'email-pribadi'
+            ? 'bg-primary text-white'
+            : 'border border-outline-variant text-on-surface hover:bg-surface-container' }}">
                     Email Pribadi
                 </a>
 
@@ -67,161 +78,271 @@
 
             </form>
 
-            {{-- TABEL SUBDOMAIN --}}
-            <div class="overflow-x-auto">
+            @if (request('tab', 'subdomain') == 'subdomain')
+                {{-- TABEL SUBDOMAIN --}}
+                <div class="overflow-x-auto">
 
-                <table class="w-full border">
+                    <table class="w-full border">
 
-                    <thead>
+                        <thead>
 
-                        <tr class="bg-gray-100">
+                            <tr class="bg-gray-100">
 
-                            <th class="p-3 text-left">
-                                Nomor Tiket
-                            </th>
-
-                            <th class="p-3 text-left">
-                                Nama Subdomain
-                            </th>
-
-                            <th class="p-3 text-left">
-                                Status
-                            </th>
-
-                            <th class="p-3 text-left">
-                                Tanggal
-                            </th>
-
-                            <th class="p-3 text-left">
-                                Catatan
-                            </th>
-
-                            <th class="p-3 text-left">
-                                Aksi
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        @forelse($subdomains as $item)
-                            <tr>
-
-                                <td class="p-3">
-                                    {{ $item->nomor_tiket }}
-                                </td>
-
-                                <td class="p-3">
-                                    {{ $item->nama_subdomain }}
-                                </td>
-
-                                <td class="p-3">
-
-                                    @switch($item->status)
-                                        @case('terbuka')
-                                            <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded">
-                                                Pengajuan
-                                            </span>
-                                        @break
-
-                                        @case('baru')
-                                            <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                                                Pemeriksaan Dokumen
-                                            </span>
-                                        @break
-
-                                        @case('diproses')
-                                            <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
-                                                Proses Pembuatan
-                                            </span>
-                                        @break
-
-                                        @case('tunda')
-                                            <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded">
-                                                Persetujuan
-                                            </span>
-                                        @break
-
-                                        @case('selesai')
-                                            <span class="bg-green-100 text-green-700 px-2 py-1 rounded">
-                                                Selesai
-                                            </span>
-                                        @break
-
-                                        @case('tutup')
-                                            <span class="bg-red-100 text-red-700 px-2 py-1 rounded">
-                                                Pengajuan ditolak
-                                            </span>
-                                        @break
-
-                                        @default
-                                            <span class="bg-red-100 text-red-700 px-2 py-1 rounded">
-                                                Tutup
-                                            </span>
-                                    @endswitch
-
-                                </td>
-
-                                <td class="p-3">
-                                    {{ $item->created_at->format('d-m-Y') }}
-                                </td>
-
-                                <td class="p-3">
-
-                                    @if ($item->catatan_admin)
-                                        <div
-                                            class="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-lg px-3 py-2 text-sm">
-
-                                            {{ $item->catatan_admin }}
-
-                                        </div>
-                                    @else
-                                        <span class="text-gray-400 italic">
-                                            Tidak ada catatan
-                                        </span>
-                                    @endif
-
-                                </td>
-
-                                <td class="p-3">
-
-                                    <a href="{{ route('subdomain.show', $item->id) }}"
-                                        class="bg-primary text-white px-3 py-2 rounded">
-
-                                        Detail
-
-                                    </a>
-
-                                </td>
+                                <th class="p-3 text-center">No</th>
+                                <th class="p-3 text-left">Nomor Tiket</th>
+                                <th class="p-3 text-left">Nama Subdomain</th>
+                                <th class="p-3 text-left">Status</th>
+                                <th class="p-3 text-left">Tanggal</th>
+                                <th class="p-3 text-left">Catatan</th>
+                                <th class="p-3 text-left">Aksi</th>
 
                             </tr>
 
-                            @empty
+                        </thead>
 
+                        <tbody>
+
+                            @forelse($subdomains as $item)
                                 <tr>
 
-                                    <td colspan="5" class="text-center p-5">
+                                    <td class="p-3 text-center">
+                                        {{ $subdomains->firstItem() + $loop->index }}
+                                    </td>
 
-                                        Belum ada data pengajuan
+                                    <td class="p-3">
+                                        {{ $item->nomor_tiket }}
+                                    </td>
+
+                                    <td class="p-3">
+                                        {{ $item->nama_subdomain }}
+                                    </td>
+
+                                    <td class="p-3">
+
+                                        @switch($item->status)
+                                            @case('terbuka')
+                                                <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                                                    Pengajuan
+                                                </span>
+                                            @break
+
+                                            @case('baru')
+                                                <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                                                    Pemeriksaan Dokumen
+                                                </span>
+                                            @break
+
+                                            @case('diproses')
+                                                <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
+                                                    Proses Pembuatan
+                                                </span>
+                                            @break
+
+                                            @case('tunda')
+                                                <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded">
+                                                    Persetujuan
+                                                </span>
+                                            @break
+
+                                            @case('selesai')
+                                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded">
+                                                    Selesai
+                                                </span>
+                                            @break
+
+                                            @case('tutup')
+                                                <span class="bg-red-100 text-red-700 px-2 py-1 rounded">
+                                                    Pengajuan ditolak
+                                                </span>
+                                            @break
+
+                                            @default
+                                                <span class="bg-red-100 text-red-700 px-2 py-1 rounded">
+                                                    Tutup
+                                                </span>
+                                        @endswitch
+
+                                    </td>
+
+                                    <td class="p-3">
+                                        {{ $item->created_at->format('d-m-Y') }}
+                                    </td>
+
+                                    <td class="p-3">
+
+                                        @if ($item->catatan_admin)
+                                            <div
+                                                class="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-lg px-3 py-2 text-sm">
+
+                                                {{ $item->catatan_admin }}
+
+                                            </div>
+                                        @else
+                                            <span class="text-gray-400 italic">
+                                                Tidak ada catatan
+                                            </span>
+                                        @endif
+
+                                    </td>
+
+                                    <td class="p-3">
+
+                                        <a href="{{ route('subdomain.show', $item->id) }}"
+                                            class="bg-primary text-white px-3 py-2 rounded">
+
+                                            Detail
+
+                                        </a>
 
                                     </td>
 
                                 </tr>
-                            @endforelse
 
-                        </tbody>
+                                @empty
 
-                    </table>
+                                    <tr>
 
-                </div>
+                                        <td colspan="6" class="text-center p-5">
 
-                <div class="mt-5">
+                                            Belum ada data pengajuan
 
-                    {{ $subdomains->links() }}
+                                        </td>
 
-                </div>
+                                    </tr>
+                                @endforelse
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="mt-5">
+
+                        {{ $subdomains->links() }}
+
+                    </div>
+
+                @elseif (request('tab') == 'email-satker')
+                    {{-- TABEL EMAIL SATKER --}}
+
+                    <div class="overflow-x-auto">
+
+                        <table class="w-full border">
+
+                            <thead>
+
+                                <tr class="bg-gray-100">
+
+                                    <th class="p-3">No</th>
+                                    <th class="p-3">Nomor Tiket</th>
+                                    <th class="p-3">Nama Email Satker</th>
+                                    <th class="p-3">Status</th>
+                                    <th class="p-3">Tanggal</th>
+                                    <th class="p-3">Aksi</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @forelse($emailSatkers as $item)
+                                    <tr>
+
+                                        <td class="p-3 text-center">
+                                            {{ $emailSatkers->firstItem() + $loop->index }}
+                                        </td>
+
+                                        {{-- isi data email satker --}}
+
+                                    </tr>
+
+                                @empty
+
+                                    <tr>
+
+                                        <td colspan="7" class="text-center p-5">
+
+                                            Belum ada data Email Satker
+
+                                        </td>
+
+                                    </tr>
+                                @endforelse
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="mt-5">
+
+                        {{ $emailSatkers->links() }}
+
+                    </div>
+                @elseif (request('tab') == 'email-pribadi')
+                    {{-- TABEL EMAIL PRIBADI --}}
+
+                    <div class="overflow-x-auto">
+
+                        <table class="w-full border">
+
+                            <thead>
+
+                                <tr class="bg-gray-100">
+
+                                    <th class="p-3">No</th>
+                                    <th class="p-3">Nomor Tiket</th>
+                                    <th class="p-3">Nama Pegawai</th>
+                                    <th class="p-3">Nama Email</th>
+                                    <th class="p-3">Status</th>
+                                    <th class="p-3">Tanggal</th>
+                                    <th class="p-3">Aksi</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @forelse($emailPribadis as $item)
+                                    <tr>
+
+                                        <td class="p-3 text-center">
+                                            {{ $emailPribadis->firstItem() + $loop->index }}
+                                        </td>
+
+                                        {{-- isi data email pribadi --}}
+
+                                    </tr>
+
+                                @empty
+
+                                    <tr>
+
+                                        <td colspan="7" class="text-center p-5">
+
+                                            Belum ada data Email Pribadi
+
+                                        </td>
+
+                                    </tr>
+                                @endforelse
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="mt-5">
+
+                        {{ $emailPribadis->links() }}
+
+                    </div>
+                @endif
 
             </div>
         </main>

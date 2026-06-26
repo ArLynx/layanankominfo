@@ -8,6 +8,7 @@ use App\Http\Controllers\RequestController;
 use App\Http\Controllers\PimpinanController;
 
 use App\Http\Controllers\Admin\SubdomainAdminController;
+use App\Http\Controllers\Admin\ActivityLogController;
 
 //User
 use App\Http\Controllers\User\DashboardUserController;
@@ -67,6 +68,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         // Pengajuan Subdomain
         Route::get('/pengajuan/subdomain', [SubdomainAdminController::class, 'index'])->name('subdomain');
         Route::get('/pengajuan/subdomain/{subdomain}', [SubdomainAdminController::class, 'show'])->name('subdomain.show');
+        Route::delete('/admin/subdomain/{subdomain}', [SubdomainAdminController::class, 'destroy'])->name('subdomain.destroy');
         Route::patch('/subdomain/{subdomain}/update-status', [SubdomainAdminController::class, 'updateStatus'])->name('subdomain.update-status');
         Route::patch('/subdomain/{subdomain}/send-to-leader', [SubdomainAdminController::class, 'sendToLeader'])->name('subdomain.send-to-leader');
         Route::get('/subdomain/{subdomain}/sk-pegawai', [SubdomainAdminController::class, 'viewKarpeg'])->name('subdomain.karpeg');

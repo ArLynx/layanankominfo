@@ -161,7 +161,7 @@
 
             {{-- Log Aktivitas --}}
             <li>
-                <a href="}"
+                <a href=""
                     class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('admin.activity_logs*') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
 
                     <span class="material-symbols-outlined"
