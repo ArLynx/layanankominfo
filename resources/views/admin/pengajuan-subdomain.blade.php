@@ -71,6 +71,9 @@
                 <thead class="bg-surface-container">
 
                     <tr>
+                        <th class="px-6 py-4 text-center font-semibold">
+                            No
+                        </th>
                         <th class="px-6 py-4 text-left font-semibold">
                             Nomor Tiket
                         </th>
@@ -106,6 +109,10 @@
 
                     @forelse ($subdomains as $subdomain)
                         <tr class="border-t border-outline-variant">
+
+                            <td class="px-6 py-4 text-center whitespace-nowrap">
+                                {{ $subdomains->firstItem() + $loop->index }}
+                            </td>
 
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {{ $subdomain->nomor_tiket }}
@@ -186,14 +193,22 @@
 
                                     </a>
 
-                                    <button
-                                        class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-red-500 text-white">
+                                    <form action="{{ route('admin.subdomain.destroy', $subdomain) }}" method="POST"
+                                        onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
 
-                                        <span class="material-symbols-outlined text-[18px]">
-                                            delete
-                                        </span>
+                                        @csrf
+                                        @method('DELETE')
 
-                                    </button>
+                                        <button type="submit"
+                                            class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-red-500 hover:bg-red-600 text-white">
+
+                                            <span class="material-symbols-outlined text-[18px]">
+                                                delete
+                                            </span>
+
+                                        </button>
+
+                                    </form>
 
                                 </div>
 
@@ -204,7 +219,7 @@
                     @empty
 
                         <tr>
-                            <td colspan="7" class="py-16 text-center">
+                            <td colspan="8" class="py-16 text-center">
                                 Belum ada pengajuan subdomain.
                             </td>
                         </tr>

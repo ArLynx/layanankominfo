@@ -11,6 +11,10 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\EmailPribadi;
+use App\Models\EmailSatker;
+use App\Models\SUbdomain;
+use App\Models\ActivityLog;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -28,39 +32,21 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
-        'status',
-        'nik',
-        'instansi',
-        'no_hp_wa',
-        'status_pegawai',
-        'kartu_pegawai',
-    ];
+    protected $fillable = ['name', 'email', 'password', 'role', 'status', 'nik', 'instansi', 'no_hp_wa', 'status_pegawai', 'kartu_pegawai'];
 
     /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-        'two_factor_recovery_codes',
-        'two_factor_secret',
-    ];
+    protected $hidden = ['password', 'remember_token', 'two_factor_recovery_codes', 'two_factor_secret'];
 
     /**
      * The accessors to append to the model's array form.
      *
      * @var array<int, string>
      */
-    protected $appends = [
-        'profile_photo_url',
-    ];
+    protected $appends = ['profile_photo_url'];
 
     /**
      * Get the attributes that should be cast.

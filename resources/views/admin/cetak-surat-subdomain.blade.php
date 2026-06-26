@@ -131,9 +131,26 @@
             </h3>
         @endif
 
+        @php
+            $bulanRomawi = [
+                1 => 'I',
+                2 => 'II',
+                3 => 'III',
+                4 => 'IV',
+                5 => 'V',
+                6 => 'VI',
+                7 => 'VII',
+                8 => 'VIII',
+                9 => 'IX',
+                10 => 'X',
+                11 => 'XI',
+                12 => 'XII',
+            ];
+        @endphp
+
         <p>
             Nomor :
-            800.1.11/_________/Diskominfo/{{ now()->format('m') }}/{{ now()->format('Y') }}
+            800.1.11/___/Diskominfo/{{ $bulanRomawi[now()->month] }}/{{ now()->format('Y') }}
         </p>
 
     </div>
@@ -334,8 +351,9 @@
     </table>
 
     <div style="
-    margin-top:60px;
-    font-size:10pt;
+    margin-top:35px;
+    font-size:9pt;
+    line-height:1.3;
 ">
 
         <strong>Tembusan disampaikan kepada Yth. :</strong>

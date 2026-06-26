@@ -37,6 +37,26 @@ class SubdomainAdminController extends Controller
         return view('admin.detail-pengajuan-subdomain', compact('subdomain'));
     }
 
+    public function destroy(Subdomain $subdomain)
+    {
+        // Hapus file jika ada
+        if ($subdomain->karpeg) {
+            Storage::disk('local')->delete($subdomain->karpeg);
+        }
+
+        if ($subdomain->formulir_subdomain) {
+            Storage::disk('local')->delete($subdomain->formulir_subdomain);
+        }
+
+        if ($subdomain->surat_penunjukan) {
+            Storage::disk('local')->delete($subdomain->surat_penunjukan);
+        }
+
+        $subdomain->delete();
+
+        return redirect()->route('admin.subdomain')->with('success', 'Pengajuan subdomain berhasil dihapus.');
+    }
+
     public function updateStatus(Request $request, Subdomain $subdomain)
     {
         $validated = $request->validate([
@@ -154,7 +174,7 @@ class SubdomainAdminController extends Controller
 
         try {
             if ($subdomain->surat_penunjukan) {
-                Storage::disk('local')->delete($subdomain->sk_penunjukan);
+                Storage::disk('local')->delete($subdomain->surat_penunjukan);
             }
 
             $path = $request->file('surat_penunjukan')->store('subdomain/surat-penunjukan', 'local');
@@ -208,16 +228,16 @@ class SubdomainAdminController extends Controller
         return view('admin.detail-persetujuan-pimpinan', compact('subdomain'));
     }
 
-    // public function approvalList()
-    // {
-    //     $subdomain = Subdomain::where('status', 'tunda')->latest()->first();
+    public function approvalList()
+    {
+        $subdomain = Subdomain::where('status', 'tunda')->latest()->first();
 
-    //     if (!$subdomain) {
-    //         return redirect()->route('admin.subdomain')->with('error', 'Tidak ada pengajuan yang menunggu persetujuan.');
-    //     }
+        if (!$subdomain) {
+            return redirect()->route('admin.subdomain')->with('error', 'Tidak ada pengajuan yang menunggu persetujuan.');
+        }
 
-    //     return view('admin.persetujuan-pimpinan', compact('subdomain'));
-    // }
+        return view('admin.persetujuan-pimpinan', compact('subdomain'));
+    }
 
     public function reject(Request $request, Subdomain $subdomain)
     {
