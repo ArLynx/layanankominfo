@@ -9,6 +9,8 @@ use App\Http\Controllers\PimpinanController;
 
 use App\Http\Controllers\Admin\SubdomainAdminController;
 
+use App\Http\Controllers\TwoFactorSetupController;
+
 //User
 use App\Http\Controllers\User\DashboardUserController;
 use App\Http\Controllers\User\JenisLayananController;
@@ -20,7 +22,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// 2FA Reset (unauthenticated - from login page)
+Route::get('/two-factor/reset/request', [App\Http\Controllers\TwoFactorResetController::class, 'showRequestForm'])->name('2fa.reset.request');
+Route::post('/two-factor/reset/request', [App\Http\Controllers\TwoFactorResetController::class, 'sendOtpByEmail'])->name('2fa.reset.send-email');
+Route::get('/two-factor/reset', [App\Http\Controllers\TwoFactorResetController::class, 'showOtpForm'])->name('2fa.reset.show');
+Route::post('/two-factor/reset/verify', [App\Http\Controllers\TwoFactorResetController::class, 'verifyOtp'])->name('2fa.reset.verify');
+
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
+    Route::get('/2fa-setup', [TwoFactorSetupController::class, 'index'])->name('2fa.setup');
+
+    // 2FA Reset via OTP (authenticated - from profile page)
+    Route::post('/two-factor/reset/send', [App\Http\Controllers\TwoFactorResetController::class, 'sendOtp'])->name('2fa.reset.send');
+});
+
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', '2fa.ensure'])->group(function () {
     // Permohonan User
     Route::get('/requests', [RequestController::class, 'index'])->name('requests.index');
     Route::get('/requests/service', [RequestController::class, 'create'])->name('requests.service');
@@ -47,7 +62,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 });
 
 // Admin Routes
-Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'role:admin'])
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'role:admin', '2fa.ensure'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -87,7 +102,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     });
 
 // Pimpinan Routes
-Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'role:pimpinan'])
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'role:pimpinan', '2fa.ensure'])
     ->prefix('pimpinan')
     ->name('pimpinan.')
     ->group(function () {
@@ -95,23 +110,26 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     });
 
 //User Routes
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', '2fa.ensure'])->group(function () {
+    Route::get('/dashboard-user', [DashboardUserController::class, 'index'])->name('dashboard-user');
+    Route::get('/jenis-layanan', [JenisLayananController::class, 'index'])->name('jenis-layanan')->middleware('profile.complete');
 
-Route::get('/dashboard-user', [DashboardUserController::class, 'index'])->name('dashboard-user');
+    // Profile
+    Route::get('/user/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
 
-Route::get('/jenis-layanan', [JenisLayananController::class, 'index'])->name('jenis-layanan');
+    //permohonan subdomain
+    Route::get('/subdomain/create', [SubdomainController::class, 'create'])->name('subdomain.create');
+    Route::post('/subdomain', [SubdomainController::class, 'store'])->name('subdomain.store');
+    Route::get('/subdomain/{subdomain}/success', [SubdomainController::class, 'success'])->name('subdomain.success');
+    Route::get('/subdomain/{subdomain}', [SubdomainController::class, 'show'])->name('subdomain.show');
+    Route::post('/subdomain/{subdomain}/upload-formulir', [SubdomainController::class, 'uploadFormulir'])->name('subdomain.upload-formulir');
+    Route::get('/subdomain/{subdomain}/cetak', [SubdomainController::class, 'cetak'])->name('subdomain.cetak');
+    Route::get('/subdomain/{subdomain}/download-formulir', [SubdomainController::class, 'downloadFormulir'])->name('subdomain.download-formulir');
+    Route::get('/subdomain/{subdomain}/download-sk-penunjukan', [SubdomainController::class, 'downloadSkPenunjukan'])->name('subdomain.download-sk-penunjukan');
 
-//permohonan subdomain
-Route::get('/subdomain/create', [SubdomainController::class, 'create'])->name('subdomain.create');
-Route::post('/subdomain', [SubdomainController::class, 'store'])->name('subdomain.store');
-Route::get('/subdomain/{subdomain}/success', [SubdomainController::class, 'success'])->name('subdomain.success');
-Route::get('/subdomain/{subdomain}', [SubdomainController::class, 'show'])->name('subdomain.show');
-Route::post('/subdomain/{subdomain}/upload-formulir', [SubdomainController::class, 'uploadFormulir'])->name('subdomain.upload-formulir');
-Route::get('/subdomain/{subdomain}/cetak', [SubdomainController::class, 'cetak'])->name('subdomain.cetak');
-Route::get('/subdomain/{subdomain}/download-formulir', [SubdomainController::class, 'downloadFormulir'])->name('subdomain.download-formulir');
-Route::get('/subdomain/{subdomain}/download-sk-penunjukan', [SubdomainController::class, 'downloadSkPenunjukan'])->name('subdomain.download-sk-penunjukan');
+    //permohonan email pribadi
+    Route::get('/emailpribadi/create', [EmailPribadiController::class, 'create'])->name('email-pribadi.create');
 
-//permohonan email pribadi
-Route::get('/emailpribadi/create', [EmailPribadiController::class, 'create'])->name('email-pribadi.create');
-
-//riwayat
-Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat.index');
+    //riwayat
+    Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat.index')->middleware('profile.complete');
+});

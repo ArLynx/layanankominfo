@@ -94,4 +94,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Subdomain::class);
     }
+
+    public function isProfileComplete(): bool
+    {
+        return !empty($this->nik)
+            && !empty($this->instansi)
+            && !empty($this->no_hp_wa)
+            && !empty($this->status_pegawai);
+    }
 }

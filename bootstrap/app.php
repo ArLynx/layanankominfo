@@ -13,9 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->alias([
-            'role' => \App\Http\Middleware\RoleMiddleware::class,
-        ]);
+         $middleware->alias([
+             'role' => \App\Http\Middleware\RoleMiddleware::class,
+             '2fa.ensure' => \App\Http\Middleware\EnsureTwoFactorIsEnabled::class,
+             'profile.complete' => \App\Http\Middleware\EnsureProfileIsComplete::class,
+         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

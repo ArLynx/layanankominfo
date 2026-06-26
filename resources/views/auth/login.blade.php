@@ -57,12 +57,18 @@
                 <span class="ml-2 font-label-sm text-label-sm text-on-surface-variant">Remember me</span>
             </label>
 
-            @if (Route::has('password.request'))
-                <a class="font-label-sm text-label-sm text-primary hover:text-primary-container transition-colors focus:outline-none"
-                    href="{{ route('password.request') }}">
-                    Forgot your password?
+            <div class="flex flex-col items-end gap-1">
+                @if (Route::has('password.request'))
+                    <a class="font-label-sm text-label-sm text-primary hover:text-primary-container transition-colors focus:outline-none"
+                        href="{{ route('password.request') }}">
+                        Forgot your password?
+                    </a>
+                @endif
+                <a class="font-label-sm text-label-sm text-orange-600 hover:text-orange-700 transition-colors focus:outline-none"
+                    href="{{ route('2fa.reset.request') }}">
+                    Lupa 2FA?
                 </a>
-            @endif
+            </div>
         </div>
 
         <!-- Submit Button -->
