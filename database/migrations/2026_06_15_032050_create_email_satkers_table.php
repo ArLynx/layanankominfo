@@ -17,19 +17,19 @@ return new class extends Migration {
 
             $table->string('nama_instansi');
             $table->string('nama_akun_dinas')->unique();
-            $table->string('nama_penanggung_jawab', 50);
-            $table->string('nip', 20);
-            $table->string('jabatan', 50);
-            $table->string('pangkat_gol', 50);
-            $table->string('email', 50);
-            $table->string('no_hp', 50);
+            $table->string('nama_penanggung_jawab');
+            $table->string('nip');
+            $table->string('jabatan');
+            $table->string('pangkat_gol');
+            $table->string('email');
+            $table->string('no_hp');
             $table->enum('jenis_layanan', ['baru', 'reset', 'hapus', 'ubah']);
             $table->string('nama_kadis');
             $table->string('nip_kadis');
             $table->string('karpeg')->nullable();
             $table->string('formulir_email')->nullable();
             $table->enum('status', ['terbuka', 'baru', 'diproses', 'tunda', 'selesai', 'tutup'])->default('terbuka');
-            $table->string('nomor_tiket', 50)->unique();
+            $table->string('nomor_tiket')->unique();
             $table->text('catatan_admin')->nullable();
             $table->text('catatan_pimpinan')->nullable();
             $table->timestamps();

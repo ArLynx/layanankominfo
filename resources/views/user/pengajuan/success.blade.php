@@ -33,8 +33,11 @@
                 </h1>
 
                 <p class="text-gray-600 mb-8">
-                    Dokumen aplikasi Anda telah berhasil kami terima. Tim administrasi kami akan segera melakukan verifikasi
-                    terhadap data yang dilampirkan.
+                    Dokumen aplikasi Anda telah berhasil kami terima.
+                    <span class="font-semibold text-gray-900">
+                        Silakan download formulir untuk ditandatangani pada Detail Pengajuan.
+                    </span>
+                    Tim administrasi kami akan segera melakukan verifikasi terhadap data yang dilampirkan.
                 </p>
 
                 <div class="bg-gray-50 border rounded-lg p-6 mb-8">

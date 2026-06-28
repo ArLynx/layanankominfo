@@ -2,12 +2,12 @@
 
 @section('content')
 
-
-<form action="{{ route('subdomain.store') }}"
+<form action="{{ route('subdomain.update', $subdomain) }}"
       method="POST"
       enctype="multipart/form-data">
 
     @csrf
+    @method('PUT')
 
     @include('user.subdomain.form')
 

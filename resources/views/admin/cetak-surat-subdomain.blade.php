@@ -164,7 +164,7 @@
         <tr>
             <td class="label">Nama</td>
             <td class="separator">:</td>
-            <td>Dr. YULIANUS, M.PdP</td>
+            <td>Dr. YULIANUS, M.Pd</td>
         </tr>
 
         <tr>
@@ -308,7 +308,7 @@
             <td>
 
                 Puruk Cahu,
-                {{ now()->translatedFormat('d F Y') }}
+                {{ now()->locale('id')->translatedFormat('d F Y') }}
 
                 <br><br>
 

@@ -97,20 +97,20 @@ class SubdomainAdminController extends Controller
         return response()->file(Storage::disk('local')->path($subdomain->formulir_subdomain));
     }
 
-    public function sendToLeader(Subdomain $subdomain)
-    {
-        try {
-            $subdomain->update([
-                'status' => 'tunda',
-            ]);
+    // public function sendToLeader(Subdomain $subdomain)
+    // {
+    //     try {
+    //         $subdomain->update([
+    //             'status' => 'tunda',
+    //         ]);
 
-            return redirect()
-                ->route('admin.subdomain')
-                ->with('success', 'Pengajuan ' . $subdomain->nomor_tiket . ' berhasil dikirim ke pimpinan untuk persetujuan.');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Gagal mengirim pengajuan ke pimpinan.');
-        }
-    }
+    //         return redirect()
+    //             ->route('admin.subdomain')
+    //             ->with('success', 'Pengajuan ' . $subdomain->nomor_tiket . ' berhasil dikirim ke pimpinan untuk persetujuan.');
+    //     } catch (\Exception $e) {
+    //         return back()->with('error', 'Gagal mengirim pengajuan ke pimpinan.');
+    //     }
+    // }
 
     public function resetFormulir(Subdomain $subdomain)
     {

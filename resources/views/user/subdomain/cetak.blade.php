@@ -142,6 +142,10 @@
         </div>
     @endif
 
+    <div class="judul">
+        FORMULIR PERMOHONAN SUBDOMAIN
+    </div>
+
     {{-- DATA SUBDOMAIN --}}
     <div class="section">
 
@@ -312,7 +316,7 @@
 
             <td>
                 Puruk Cahu,
-                {{ $subdomain->created_at->translatedFormat('d F Y') }}
+                {{ $subdomain->created_at->locale('id')->translatedFormat('d F Y') }}
             </td>
 
         </tr>
@@ -321,7 +325,7 @@
 
             <td>
                 Mengetahui,<br>
-                Kepala Dinas
+                {{ $subdomain->jabatan_kadis }}
             </td>
 
             <td>

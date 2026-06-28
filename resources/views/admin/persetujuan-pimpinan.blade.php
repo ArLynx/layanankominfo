@@ -147,15 +147,15 @@
 
                         <div class="space-y-3">
 
-                            <button type="submit" formaction="{{ route('admin.approve-subdomain', $subdomain) }}"
-                                class="w-full bg-green-500 text-white py-3 rounded-lg font-medium">
+                            <button type="button" onclick="openApprovalModal('approve')"
+                                class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium">
 
                                 Setujui Pengajuan
 
                             </button>
 
-                            <button type="submit" formaction="{{ route('admin.reject-subdomain', $subdomain) }}"
-                                class="w-full bg-red-500 text-white py-3 rounded-lg font-medium">
+                            <button type="button" onclick="openApprovalModal('reject')"
+                                class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-medium">
 
                                 Tolak Pengajuan
 
@@ -165,11 +165,50 @@
 
                     </form>
 
+                    {{-- ========================================================= --}}
+                    {{-- MODAL KONFIRMASI --}}
+                    {{-- ========================================================= --}}
+
+                    <div id="approvalModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+
+                        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+                            <div class="p-6">
+
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-amber-500 text-4xl">
+                                        warning
+                                    </span>
+
+                                    <div>
+                                        <h3 id="approvalTitle" class="text-xl font-bold">
+                                        </h3>
+                                        <p id="approvalText" class="text-gray-600 mt-1">
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="border-t p-5 flex justify-end gap-3">
+
+                                <button type="button" onclick="closeApprovalModal()"
+                                    class="px-5 py-2 rounded-lg border">
+                                    Batal
+                                </button>
+
+                                <button type="button" id="confirmApproval" class="px-5 py-2 rounded-lg text-white">
+                                    Ya
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
                     <a href="{{ route('admin.subdomain') }}"
                         class="block text-center w-full border border-gray-300 py-3 rounded-lg">
 
                         Kembali
-
                     </a>
 
                 </div>
@@ -181,5 +220,73 @@
     </div>
 
     </div>
+
+    <script>
+
+        //modal konfirmasi
+        const form = document.getElementById('approval-form');
+
+        const modal = document.getElementById('approvalModal');
+
+        const title = document.getElementById('approvalTitle');
+
+        const text = document.getElementById('approvalText');
+
+        const confirmBtn = document.getElementById('confirmApproval');
+
+        function openApprovalModal(action) {
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            if (action === 'approve') {
+
+                title.innerHTML = 'Setujui Pengajuan';
+
+                text.innerHTML =
+                    'Apakah Anda yakin ingin menyetujui pengajuan ini?';
+
+                confirmBtn.className =
+                    'px-5 py-2 rounded-lg bg-green-600 text-white';
+
+                confirmBtn.onclick = function() {
+
+                    form.action =
+                        "{{ route('admin.approve-subdomain', $subdomain) }}";
+
+                    form.submit();
+
+                };
+
+            } else {
+
+                title.innerHTML = 'Tolak Pengajuan';
+
+                text.innerHTML =
+                    'Apakah Anda yakin ingin menolak pengajuan ini?';
+
+                confirmBtn.className =
+                    'px-5 py-2 rounded-lg bg-red-600 text-white';
+
+                confirmBtn.onclick = function() {
+
+                    form.action =
+                        "{{ route('admin.reject-subdomain', $subdomain) }}";
+
+                    form.submit();
+
+                };
+
+            }
+
+        }
+
+        function closeApprovalModal() {
+
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+
+        }
+    </script>
 
 </x-admin-layout>

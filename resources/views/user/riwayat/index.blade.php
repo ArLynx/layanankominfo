@@ -91,10 +91,11 @@
                                 <th class="p-3 text-center">No</th>
                                 <th class="p-3 text-left">Nomor Tiket</th>
                                 <th class="p-3 text-left">Nama Subdomain</th>
+                                <th class="p-3 text-left">Jenis Layanan</th>
                                 <th class="p-3 text-left">Status</th>
                                 <th class="p-3 text-left">Tanggal</th>
-                                <th class="p-3 text-left">Catatan</th>
-                                <th class="p-3 text-left">Aksi</th>
+                                <th class="p-3 text-center">Catatan</th>
+                                <th class="p-3 text-center">Aksi</th>
 
                             </tr>
 
@@ -115,6 +116,40 @@
 
                                     <td class="p-3">
                                         {{ $item->nama_subdomain }}
+                                    </td>
+
+                                    <td class="p-3">
+
+                                        @switch($item->jenis_layanan)
+                                            @case('baru')
+                                                <span
+                                                    class="inline-flex px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
+                                                    Subdomain Baru
+                                                </span>
+                                            @break
+
+                                            @case('ubah_penanggung')
+                                                <span
+                                                    class="inline-flex px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium">
+                                                    Ubah Penanggung Jawab
+                                                </span>
+                                            @break
+
+                                            @case('ubah_subdomain')
+                                                <span
+                                                    class="inline-flex px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium">
+                                                    Ubah Nama Subdomain
+                                                </span>
+                                            @break
+
+                                            @case('nonaktif')
+                                                <span
+                                                    class="inline-flex px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-medium">
+                                                    Penonaktifan
+                                                </span>
+                                            @break
+                                        @endswitch
+
                                     </td>
 
                                     <td class="p-3">
@@ -168,18 +203,24 @@
                                         {{ $item->created_at->format('d-m-Y') }}
                                     </td>
 
-                                    <td class="p-3">
+                                    <td class="text-center">
 
                                         @if ($item->catatan_admin)
-                                            <div
-                                                class="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-lg px-3 py-2 text-sm">
+                                            <button onclick="showCatatan(`{{ addslashes($item->catatan_admin) }}`)"
+                                                class="text-amber-600 hover:text-amber-800">
 
-                                                {{ $item->catatan_admin }}
+                                                <span class="material-symbols-outlined">
 
-                                            </div>
+                                                    sticky_note_2
+
+                                                </span>
+
+                                            </button>
                                         @else
-                                            <span class="text-gray-400 italic">
-                                                Tidak ada catatan
+                                            <span class="text-gray-400">
+
+                                                -
+
                                             </span>
                                         @endif
 
@@ -202,7 +243,7 @@
 
                                     <tr>
 
-                                        <td colspan="6" class="text-center p-5">
+                                        <td colspan="8" class="text-center p-5">
 
                                             Belum ada data pengajuan
 
@@ -222,7 +263,6 @@
                         {{ $subdomains->links() }}
 
                     </div>
-
                 @elseif (request('tab') == 'email-satker')
                     {{-- TABEL EMAIL SATKER --}}
 
@@ -236,9 +276,11 @@
 
                                     <th class="p-3">No</th>
                                     <th class="p-3">Nomor Tiket</th>
-                                    <th class="p-3">Nama Email Satker</th>
+                                    <th class="p-3">Nama Email</th>
+                                    <th class="p-3">Jenis Layanan</th>
                                     <th class="p-3">Status</th>
                                     <th class="p-3">Tanggal</th>
+                                    <th class="p-3 text-center">Catatan</th>
                                     <th class="p-3">Aksi</th>
 
                                 </tr>
@@ -254,96 +296,397 @@
                                             {{ $emailSatkers->firstItem() + $loop->index }}
                                         </td>
 
-                                        {{-- isi data email satker --}}
+                                        <td class="p-3">
+                                            {{ $item->nomor_tiket }}
+                                        </td>
 
-                                    </tr>
+                                        <td class="p-3">
+                                            {{ $item->nama_email }}
+                                        </td>
 
-                                @empty
+                                        <td class="p-3">
 
-                                    <tr>
+                                            @switch($item->jenis_layanan)
+                                                @case('baru')
+                                                    <span
+                                                        class="inline-flex px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
+                                                        Permohonan Baru
+                                                    </span>
+                                                @break
 
-                                        <td colspan="7" class="text-center p-5">
+                                                @case('reset')
+                                                    <span
+                                                        class="inline-flex px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-medium">
+                                                        Reset Password
+                                                    </span>
+                                                @break
 
-                                            Belum ada data Email Satker
+                                                @case('reaktivasi')
+                                                    <span
+                                                        class="inline-flex px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
+                                                        Reaktivasi Akun
+                                                    </span>
+                                                @break
+
+                                                @case('ubah_akun')
+                                                    <span
+                                                        class="inline-flex px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium">
+                                                        Ganti Nama Akun
+                                                    </span>
+                                                @break
+
+                                                @case('ubah_penanggung')
+                                                    <span
+                                                        class="inline-flex px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium">
+                                                        Ubah Penanggung Jawab
+                                                    </span>
+                                                @break
+
+                                                @default
+                                                    <span class="text-gray-400">
+                                                        -
+                                                    </span>
+                                            @endswitch
+
+                                        </td>
+
+                                        <td class="p-3">
+
+                                            @switch($item->status)
+                                                @case('terbuka')
+                                                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                                                        Pengajuan
+                                                    </span>
+                                                @break
+
+                                                @case('baru')
+                                                    <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                                                        Pemeriksaan Dokumen
+                                                    </span>
+                                                @break
+
+                                                @case('diproses')
+                                                    <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
+                                                        Proses Pembuatan
+                                                    </span>
+                                                @break
+
+                                                @case('tunda')
+                                                    <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded">
+                                                        Persetujuan
+                                                    </span>
+                                                @break
+
+                                                @case('selesai')
+                                                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded">
+                                                        Selesai
+                                                    </span>
+                                                @break
+
+                                                @case('tutup')
+                                                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded">
+                                                        Pengajuan Dibatalkan
+                                                    </span>
+                                                @break
+                                            @endswitch
+
+                                        </td>
+
+                                        <td class="p-3">
+                                            {{ $item->created_at->format('d-m-Y') }}
+                                        </td>
+
+                                        <td class="text-center">
+
+                                            @if ($item->catatan_admin)
+                                                <button onclick="showCatatan(`{{ addslashes($item->catatan_admin) }}`)"
+                                                    class="text-amber-600 hover:text-amber-800">
+
+                                                    <span class="material-symbols-outlined">
+                                                        sticky_note_2
+                                                    </span>
+
+                                                </button>
+                                            @else
+                                                -
+                                            @endif
+
+                                        </td>
+
+                                        <td class="p-3">
+
+                                            <a href="{{ route('email-satker.show', $item) }}"
+                                                class="bg-primary text-white px-3 py-2 rounded">
+
+                                                Detail
+
+                                            </a>
 
                                         </td>
 
                                     </tr>
-                                @endforelse
 
-                            </tbody>
+                                    @empty
 
-                        </table>
+                                        <tr>
 
-                    </div>
+                                            <td colspan="8" class="text-center p-5">
 
-                    <div class="mt-5">
+                                                Belum ada data Email Satker
 
-                        {{ $emailSatkers->links() }}
+                                            </td>
 
-                    </div>
-                @elseif (request('tab') == 'email-pribadi')
-                    {{-- TABEL EMAIL PRIBADI --}}
+                                        </tr>
+                                    @endforelse
 
-                    <div class="overflow-x-auto">
+                                </tbody>
 
-                        <table class="w-full border">
+                            </table>
 
-                            <thead>
+                        </div>
 
-                                <tr class="bg-gray-100">
+                        <div class="mt-5">
 
-                                    <th class="p-3">No</th>
-                                    <th class="p-3">Nomor Tiket</th>
-                                    <th class="p-3">Nama Pegawai</th>
-                                    <th class="p-3">Nama Email</th>
-                                    <th class="p-3">Status</th>
-                                    <th class="p-3">Tanggal</th>
-                                    <th class="p-3">Aksi</th>
+                            {{ $emailSatkers->links() }}
 
-                                </tr>
+                        </div>
+                    @elseif (request('tab') == 'email-pribadi')
+                        {{-- TABEL EMAIL PRIBADI --}}
 
-                            </thead>
+                        <div class="overflow-x-auto">
 
-                            <tbody>
+                            <table class="w-full border">
 
-                                @forelse($emailPribadis as $item)
-                                    <tr>
+                                <thead>
 
-                                        <td class="p-3 text-center">
-                                            {{ $emailPribadis->firstItem() + $loop->index }}
-                                        </td>
+                                    <tr class="bg-gray-100">
 
-                                        {{-- isi data email pribadi --}}
-
-                                    </tr>
-
-                                @empty
-
-                                    <tr>
-
-                                        <td colspan="7" class="text-center p-5">
-
-                                            Belum ada data Email Pribadi
-
-                                        </td>
+                                        <th class="p-3">No</th>
+                                        <th class="p-3">Nomor Tiket</th>
+                                        <th class="p-3">Nama Pegawai</th>
+                                        <th class="p-3">Nama Email</th>
+                                        <th class="p-3">Jenis Layanan</th>
+                                        <th class="p-3">Status</th>
+                                        <th class="p-3">Tanggal</th>
+                                        <th class="p-3 text-center">Catatan</th>
+                                        <th class="p-3">Aksi</th>
 
                                     </tr>
-                                @endforelse
 
-                            </tbody>
+                                </thead>
 
-                        </table>
+                                <tbody>
+
+                                    @forelse($emailPribadis as $item)
+                                        <tr>
+
+                                            <td class="p-3 text-center">
+                                                {{ $emailPribadis->firstItem() + $loop->index }}
+                                            </td>
+
+                                            <td class="p-3">
+                                                {{ $item->nomor_tiket }}
+                                            </td>
+
+                                            <td class="p-3">
+                                                {{ $item->nama_lengkap }}
+                                            </td>
+
+                                            <td class="p-3">
+                                                {{ $item->email }}
+                                            </td>
+
+                                            <td class="p-3">
+
+                                                @switch($item->jenis_layanan)
+                                                    @case('baru')
+                                                        <span
+                                                            class="inline-flex px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
+                                                            Permohonan Baru
+                                                        </span>
+                                                    @break
+
+                                                    @case('reset')
+                                                        <span
+                                                            class="inline-flex px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-medium">
+                                                            Reset Password
+                                                        </span>
+                                                    @break
+
+                                                    @case('reaktivasi')
+                                                        <span
+                                                            class="inline-flex px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
+                                                            Reaktivasi Akun
+                                                        </span>
+                                                    @break
+
+                                                    @case('ubah_akun')
+                                                        <span
+                                                            class="inline-flex px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium">
+                                                            Ganti Nama Akun
+                                                        </span>
+                                                    @break
+
+                                                    @default
+                                                        <span class="text-gray-400">
+                                                            -
+                                                        </span>
+                                                @endswitch
+
+                                            </td>
+
+                                            <td class="p-3">
+
+                                                @switch($item->status)
+                                                    @case('terbuka')
+                                                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                                                            Pengajuan
+                                                        </span>
+                                                    @break
+
+                                                    @case('baru')
+                                                        <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                                                            Pemeriksaan Dokumen
+                                                        </span>
+                                                    @break
+
+                                                    @case('diproses')
+                                                        <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
+                                                            Proses Pembuatan
+                                                        </span>
+                                                    @break
+
+                                                    @case('tunda')
+                                                        <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded">
+                                                            Persetujuan
+                                                        </span>
+                                                    @break
+
+                                                    @case('selesai')
+                                                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded">
+                                                            Selesai
+                                                        </span>
+                                                    @break
+
+                                                    @case('tutup')
+                                                        <span class="bg-red-100 text-red-700 px-2 py-1 rounded">
+                                                            Pengajuan Dibatalkan
+                                                        </span>
+                                                    @break
+                                                @endswitch
+
+                                            </td>
+
+                                            <td class="p-3">
+                                                {{ $item->created_at->format('d-m-Y') }}
+                                            </td>
+
+                                            <td class="text-center">
+
+                                                @if ($item->catatan_admin)
+                                                    <button onclick="showCatatan(`{{ addslashes($item->catatan_admin) }}`)"
+                                                        class="text-amber-600 hover:text-amber-800">
+
+                                                        <span class="material-symbols-outlined">
+                                                            sticky_note_2
+                                                        </span>
+
+                                                    </button>
+                                                @else
+                                                    -
+                                                @endif
+
+                                            </td>
+
+                                            <td class="p-3">
+
+                                                <a href="{{ route('email-pribadi.show', $item) }}"
+                                                    class="bg-primary text-white px-3 py-2 rounded">
+
+                                                    Detail
+
+                                                </a>
+
+                                            </td>
+
+                                        </tr>
+
+                                        @empty
+
+                                            <tr>
+
+                                                <td colspan="9" class="text-center p-5">
+
+                                                    Belum ada data Email Pribadi
+
+                                                </td>
+
+                                            </tr>
+                                        @endforelse
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                            <div class="mt-5">
+
+                                {{ $emailPribadis->links() }}
+
+                            </div>
+                        @endif
+
+                    </div>
+                </main>
+
+                {{-- modal catatan --}}
+                <div id="catatanModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+
+                    <div class="bg-white rounded-xl w-full max-w-lg p-6">
+
+                        <div class="flex justify-between items-center mb-5">
+
+                            <h3 class="font-bold text-lg">
+
+                                Catatan Admin
+
+                            </h3>
+
+                            <button onclick="closeCatatan()">
+
+                                ✕
+
+                            </button>
+
+                        </div>
+
+                        <div id="isiCatatan" class="whitespace-pre-line leading-7 text-gray-700">
+
+                        </div>
 
                     </div>
 
-                    <div class="mt-5">
+                </div>
 
-                        {{ $emailPribadis->links() }}
+                <script>
+                    function showCatatan(catatan) {
 
-                    </div>
-                @endif
+                        document.getElementById('isiCatatan').innerHTML = catatan;
 
-            </div>
-        </main>
-    @endsection
+                        document.getElementById('catatanModal').classList.remove('hidden');
+
+                        document.getElementById('catatanModal').classList.add('flex');
+
+                    }
+
+                    function closeCatatan() {
+
+                        document.getElementById('catatanModal').classList.add('hidden');
+
+                        document.getElementById('catatanModal').classList.remove('flex');
+
+                    }
+                </script>
+
+            @endsection

@@ -35,7 +35,7 @@
             <div class="flex gap-3"><span class="material-symbols-outlined text-primary">info</span>
                 <p class="text-label-md text-primary font-medium">Kebijakan Layanan: Subdomain dan email di bawah
                     domain murungrayakab.go.id hanya tersedia untuk Dinas/Unit Kerja di lingkungan Pemerintah
-                    Kabupaten Murung Raya. Layanan untuk tingkat Desa tidak tersedia melalui jalur ini.</p>
+                    Kabupaten Murung Raya.</p>
             </div>
         </div>
 
@@ -79,7 +79,7 @@
                         {{-- garis kiri --}}
                         <div
                             class="absolute left-0 top-0 bottom-0 w-1
-        {{ $isRejected ? 'bg-red-500' : ($subdomain->status == 'selesai' ? 'bg-green-500' : 'bg-yellow-500') }}">
+        {{ $isRejected ? 'bg-red-500' : ($subdomain->status == 'selesai' ? 'bg-green-500' : 'bg-blue-500') }}">
                         </div>
 
                         <div class="flex justify-between items-start">
@@ -201,21 +201,22 @@
                                         <div
                                             class="w-8 h-8 rounded-full border-2 border-surface flex items-center justify-center shrink-0
 
-                        @if ($completed) {{ $isRejected ? 'bg-red-500 border-red-500 text-white' : 'bg-blue-500 border-blue-500 text-white' }}
+     @if ($completed) {{ $isRejected ? 'bg-red-500 border-red-500 text-white' : 'bg-blue-500 border-blue-500 text-white' }}
 
-                        @elseif($active)
+@elseif($active)
 
-                            @if ($isRejected)
-                                bg-red-500 border-red-500 text-white
-                            @else
-                                bg-yellow-500 border-yellow-500 text-white @endif
+    {{ $isRejected
+        ? 'bg-red-500 border-red-500 text-white'
+        : ($subdomain->status == 'selesai'
+            ? 'bg-green-500 border-green-500 text-white'
+            : 'bg-yellow-500 border-yellow-500 text-white') }}
+
 @else
-bg-white border-gray-300 text-gray-400
-@endif
+
+    bg-white border-gray-300 text-gray-400 @endif
                             ">
 
                                             @if ($completed)
-
                                                 <span class="material-symbols-outlined text-[16px]">
                                                     check
                                                 </span>
@@ -233,7 +234,6 @@ bg-white border-gray-300 text-gray-400
                                                 <span class="material-symbols-outlined text-[16px]">
                                                     {{ $icons[$index] }}
                                                 </span>
-
                                             @endif
 
                                         </div>
@@ -283,7 +283,6 @@ bg-white border-gray-300 text-gray-400
                     </a>
 
                 </div>
-
             @endif
 
         </section>

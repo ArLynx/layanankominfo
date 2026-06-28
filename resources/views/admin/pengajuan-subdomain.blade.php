@@ -91,6 +91,10 @@
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
+                            Jenis Layanan
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
                             Status
                         </th>
 
@@ -129,6 +133,26 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {{ $subdomain->nama_subdomain }}
                             </td>
+
+                            <td class="px-6 py-4 whitespace-nowrap">
+
+                                @php
+                                    $jenisLayanan = match ($subdomain->jenis_layanan) {
+                                        'baru' => 'Pengajuan Baru',
+                                        'ubah_penanggung' => 'Ubah Penanggung Jawab',
+                                        'ubah_subdomain' => 'Ubah Nama Subdomain',
+                                        'nonaktif' => 'Penonaktifan Subdomain',
+                                        default => '-',
+                                    };
+                                @endphp
+
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-slate-100 text-slate-700">
+                                    {{ $jenisLayanan }}
+                                </span>
+
+                            </td>
+
 
                             <td class="px-6 py-4 whitespace-nowrap">
 
@@ -193,22 +217,61 @@
 
                                     </a>
 
-                                    <form action="{{ route('admin.subdomain.destroy', $subdomain) }}" method="POST"
-                                        onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
+                                    {{-- <form id="delete-form" action="{{ route('admin.subdomain.destroy', $subdomain) }}"
+                                        method="POST">
 
                                         @csrf
                                         @method('DELETE')
 
-                                        <button type="submit"
-                                            class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-red-500 hover:bg-red-600 text-white">
-
+                                        <button type="button" onclick="openDeleteModal()"
+                                            class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-red-500 hover:bg-red-600 text-white transition">
                                             <span class="material-symbols-outlined text-[18px]">
                                                 delete
                                             </span>
-
                                         </button>
+                                    </form> --}}
 
-                                    </form>
+                                    {{-- ========================================================= --}}
+                                    {{-- MODAL KONFIRMASI --}}
+                                    {{-- ========================================================= --}}
+
+                                    {{-- <div id="deleteModal"
+                                        class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+                                        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+                                            <div class="p-6">
+                                                <div class="flex items-start gap-4">
+                                                    <span class="material-symbols-outlined text-red-500 text-5xl">
+                                                        delete_forever
+                                                    </span>
+                                                    <div>
+                                                        <h3 class="text-xl font-bold">
+                                                            Hapus Pengajuan
+                                                        </h3>
+                                                        <p class="text-gray-600 mt-2">
+                                                            Pengajuan yang telah dihapus tidak dapat dikembalikan lagi.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-5 rounded-xl bg-red-50 border border-red-200 p-4">
+                                                    <p class="text-sm text-red-700">
+                                                        Anda yakin ingin menghapus pengajuan dengan nomor tiket
+                                                        <strong>{{ $subdomain->nomor_tiket }}</strong>?
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="border-t px-6 py-4 flex justify-end gap-3">
+                                                <button type="button" onclick="closeDeleteModal()"
+                                                    class="px-5 py-2 rounded-lg border">
+
+                                                    Batal
+                                                </button>
+                                                <button type="button" onclick="submitDelete()"
+                                                    class="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white">
+                                                    Ya, Hapus
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div> --}}
 
                                 </div>
 
@@ -219,7 +282,7 @@
                     @empty
 
                         <tr>
-                            <td colspan="8" class="py-16 text-center">
+                            <td colspan="9" class="py-16 text-center">
                                 Belum ada pengajuan subdomain.
                             </td>
                         </tr>
@@ -257,5 +320,33 @@
 
     </div>
 
+    <script>
+        //delete
+        // function openDeleteModal() {
+
+        //     document.getElementById('deleteModal')
+        //         .classList.remove('hidden');
+
+        //     document.getElementById('deleteModal')
+        //         .classList.add('flex');
+
+        // }
+
+        // function closeDeleteModal() {
+
+        //     document.getElementById('deleteModal')
+        //         .classList.remove('flex');
+
+        //     document.getElementById('deleteModal')
+        //         .classList.add('hidden');
+
+        // }
+
+        // function submitDelete() {
+
+        //     document.getElementById('delete-form').submit();
+
+        // }
+    </script>
 
 </x-admin-layout>
