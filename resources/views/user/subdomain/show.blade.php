@@ -244,7 +244,11 @@
 
                         <h3 class="text-xl font-semibold text-on-surface">
 
-                            Data Penanggung Jawab
+                            @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+                                Data Penanggung Jawab Lama
+                            @else
+                                Data Penanggung Jawab
+                            @endif
 
                         </h3>
 
@@ -846,6 +850,11 @@
                                 <li>Mintakan tanda tangan pimpinan.</li>
                                 <li>Scan formulir dalam format PDF.</li>
                                 <li>Upload formulir yang telah ditandatangani.</li>
+                                @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+                                    <li class="text-red-600 font-medium">
+                                        Upload Surat Penunjukan Penanggung Jawab sebelumnya sebagai dokumen pendukung.
+                                    </li>
+                                @endif
                             </ul>
 
                         </div>
@@ -853,6 +862,37 @@
                     </div>
 
                 </div>
+
+                @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+                    <div class="mb-6 rounded-xl border border-blue-300 bg-blue-50 p-5">
+
+                        <div class="flex items-start gap-3">
+
+                            <span class="material-symbols-outlined text-blue-600 text-3xl">
+                                description
+                            </span>
+
+                            <div>
+
+                                <h3 class="font-semibold text-blue-800">
+                                    Persyaratan Tambahan
+                                </h3>
+
+                                <p class="mt-2 text-sm text-blue-700 leading-relaxed">
+
+                                    Untuk layanan <strong>Perubahan Penanggung Jawab</strong>,
+                                    pemohon wajib mengunggah
+                                    <strong>Surat Penunjukan Penanggung Jawab sebelumnya</strong>
+                                    sebagai dokumen pendukung perubahan penanggung jawab subdomain.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                @endif
 
 
                 @if (!$subdomain->formulir_subdomain)
@@ -874,7 +914,7 @@
 
                                 <p class="text-sm text-gray-500">
 
-                                    Upload formulir yang telah dicetak dan ditandatangani oleh pimpinan.
+                                    Upload formulir yang telah dicetak dan ditandatangani oleh pimpinan.( max 5MB )
 
                                 </p>
 
@@ -892,9 +932,7 @@
 
                             @error('formulir_subdomain')
                                 <p class="text-red-500 text-sm mt-2">
-
                                     {{ $message }}
-
                                 </p>
                             @enderror
 
@@ -956,6 +994,97 @@
                     </div>
                 @endif
 
+
+                @if ($subdomain->jenis_layanan == 'ubah_penanggung' && !$subdomain->surat_penunjukan_lama)
+                    <div class="mt-8 bg-white rounded-xl shadow p-6">
+
+                        <div class="flex items-center gap-3 mb-5">
+
+                            <span class="material-symbols-outlined text-primary text-3xl">
+                                description
+                            </span>
+
+                            <div>
+
+                                <h3 class="text-xl font-semibold">
+                                    Upload Surat Penunjukan Sebelumnya
+                                </h3>
+
+                                <p class="text-sm text-gray-500">
+                                    Upload Surat Penunjukan Penanggung Jawab sebelumnya
+                                    yang masih berlaku sebagai dokumen pendukung.( Mak 5 MB )
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <form action="{{ route('subdomain.upload-surat-lama', $subdomain) }}" method="POST" enctype="multipart/form-data">
+
+                            @csrf
+
+                            <input type="file" name="surat_penunjukan_lama" accept=".pdf"
+                                class="block w-full rounded-lg border border-gray-300 p-3">
+
+                            @error('surat_penunjukan_lama')
+                                <p class="text-red-500 text-sm mt-2">
+                                    {{ $message }}
+                                </p>
+                            @enderror
+
+                            <button class="mt-5 bg-primary text-white px-6 py-3 rounded-lg hover:opacity-90">
+
+                                Upload Surat Penunjukan
+
+                            </button>
+
+                        </form>
+
+                    </div>
+                @endif
+
+                @if ($subdomain->jenis_layanan == 'ubah_penanggung' && $subdomain->surat_penunjukan_lama)
+                    <div class="mt-8 bg-green-50 border border-green-300 rounded-xl p-6">
+
+                        <div class="flex items-start gap-4">
+
+                            <span class="material-symbols-outlined text-green-600 text-5xl">
+                                verified
+                            </span>
+
+                            <div>
+
+                                <h3 class="font-bold text-lg text-green-700">
+
+                                    Surat Penunjukan Sebelumnya Berhasil Diupload
+
+                                </h3>
+
+                                <p class="mt-2 text-green-700">
+
+                                    Surat Penunjukan sebelumnya berhasil diupload
+                                    dan siap diverifikasi oleh Admin Diskominfo.
+
+                                </p>
+
+                                <a href="{{ route('subdomain.download-surat-lama', $subdomain) }}" target="_blank"
+                                    class="inline-flex items-center gap-2 mt-5 px-5 py-3 bg-green-600 text-white rounded-lg">
+
+                                    <span class="material-symbols-outlined">
+                                        download
+                                    </span>
+
+                                    Download Surat Penunjukan
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                @endif
+
                 @if ($subdomain->surat_penunjukan)
                     <div class="mt-8 bg-blue-50 border border-blue-300 rounded-xl p-6">
 
@@ -977,7 +1106,7 @@
 
                                 <p class="mt-2 text-blue-700">
 
-                                    Surat penunjukan telah diterbitkan oleh Admin
+                                    Surat penunjukan telah diterbitkan oleh Diskominfo
                                     dan dapat diunduh melalui tombol berikut.
 
                                 </p>

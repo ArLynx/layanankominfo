@@ -283,8 +283,14 @@
                         badge
                     </span>
 
-                    <h3 class="font-semibold text-lg">
-                        Data Penanggung Jawab
+                    <h3 class="text-xl font-semibold text-on-surface">
+
+                        @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+                            Data Penanggung Jawab Lama
+                        @else
+                            Data Penanggung Jawab
+                        @endif
+
                     </h3>
 
                 </div>
@@ -579,7 +585,8 @@
 
                 </div>
 
-                <div class="grid lg:grid-cols-2 gap-6">
+                <div
+                    class="grid gap-6 {{ $subdomain->jenis_layanan == 'ubah_penanggung' ? 'lg:grid-cols-3' : 'lg:grid-cols-2' }}">
 
                     {{-- KARPEG --}}
                     <div class="bg-surface rounded-xl border border-outline-variant p-4">
@@ -634,10 +641,25 @@
 
                                 <iframe src="{{ route('admin.subdomain.formulir', $subdomain) }}"
                                     class="w-full h-[700px]">
-
                                 </iframe>
 
                             </div>
+
+                            <form action="{{ route('admin.subdomain.delete-formulir', $subdomain) }}" method="POST"
+                                class="mt-4">
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="submit"
+                                    onclick="return confirm('Yakin ingin menghapus formulir yang diupload pemohon?')"
+                                    class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg">
+
+                                    Hapus Formulir
+
+                                </button>
+
+                            </form>
                         @else
                             <div class="border rounded-lg p-10 text-center bg-gray-50">
 
@@ -657,25 +679,72 @@
                         @endif
 
                     </div>
+                    @if ($subdomain->jenis_layanan == 'ubah_penanggung')
 
-                    @if ($subdomain->formulir_subdomain)
-                        <form action="{{ route('admin.subdomain.delete-formulir', $subdomain) }}" method="POST"
-                            class="mt-4">
+                        <div class="bg-surface rounded-xl border border-outline-variant p-4">
 
-                            @csrf
-                            @method('DELETE')
+                            <div class="flex items-center justify-between mb-4">
 
-                            <button type="submit"
-                                onclick="return confirm('Yakin ingin menghapus formulir yang diupload pemohon?')"
-                                class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg">
+                                <h3 class="font-semibold text-lg">
+                                    Surat Penunjukan Sebelumnya
+                                </h3>
 
-                                Hapus Formulir
+                                @if ($subdomain->surat_penunjukan_lama)
+                                    <a href="{{ route('admin.subdomain.surat-lama', $subdomain) }}" target="_blank"
+                                        class="px-4 py-2 bg-primary text-white rounded-lg">
 
-                            </button>
+                                        Buka Dokumen
 
-                        </form>
+                                    </a>
+                                @endif
+
+                            </div>
+
+                            @if ($subdomain->surat_penunjukan_lama)
+                                <div class="border rounded-lg overflow-hidden bg-gray-100">
+
+                                    <iframe src="{{ route('admin.subdomain.surat-lama', $subdomain) }}"
+                                        class="w-full h-[700px]">
+                                    </iframe>
+
+                                </div>
+
+                                {{-- <form action=""
+                                    method="POST" class="mt-4">
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit"
+                                        onclick="return confirm('Yakin ingin menghapus Surat Penunjukan Sebelumnya?')"
+                                        class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg">
+
+                                        Hapus Surat
+
+                                    </button>
+
+                                </form> --}}
+                            @else
+                                <div class="border rounded-lg p-10 text-center bg-gray-50">
+
+                                    <span class="material-symbols-outlined text-5xl text-gray-400">
+                                        description
+                                    </span>
+
+                                    <h4 class="font-medium text-gray-700 mt-3">
+                                        Belum Ada Dokumen
+                                    </h4>
+
+                                    <p class="text-sm text-gray-500 mt-2">
+                                        Pemohon belum mengunggah Surat Penunjukan Sebelumnya.
+                                    </p>
+
+                                </div>
+                            @endif
+
+                        </div>
+
                     @endif
-
                 </div>
 
             </div>

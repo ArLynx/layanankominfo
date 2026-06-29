@@ -38,6 +38,7 @@ class Subdomain extends Model
     'nomor_tiket',
     'catatan_admin',
     'catatan_pimpinan',
+    'surat_penunjukan_lama',
 ];
 
     public function user(): BelongsTo

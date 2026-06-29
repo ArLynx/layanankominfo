@@ -12,26 +12,24 @@
         @page {
             size: 210mm 330mm;
             /* F4 */
-            margin-top: 15mm;
-            margin-right: 20mm;
-            margin-bottom: 15mm;
-            margin-left: 25mm;
+            margin-top: 10mm;
+            margin-right: 18mm;
+            margin-bottom: 10mm;
+            margin-left: 20mm;
         }
 
         body {
             font-family: "Times New Roman", serif;
             font-size: 12pt;
-            /* sama seperti Word ukuran 12 */
-            line-height: 1.4;
+            line-height: 1.25;
             color: #000;
             margin: 0;
             padding: 0;
         }
 
-
         .kop {
             width: 100%;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .kop img {
@@ -41,8 +39,8 @@
 
         .judul-surat {
             text-align: center;
-            margin-top: 10px;
-            margin-bottom: 25px;
+            margin-top: 3px;
+            margin-bottom: 10px;
         }
 
         .judul-surat h3 {
@@ -51,34 +49,44 @@
             font-weight: bold;
             text-decoration: underline;
             text-transform: uppercase;
+            line-height: 1.2;
         }
 
         .judul-surat p {
-            margin-top: 5px;
+            margin-top: 3px;
+            margin-bottom: 0;
             text-align: center;
         }
 
         p {
             text-align: justify;
-            margin: 0 0 10px 0;
+            margin: 0 0 4px 0;
+            line-height: 1.25;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 4px;
         }
 
         .data-table td {
-            padding: 2px 0;
+            padding: 1px 0;
             vertical-align: top;
+            line-height: 1.2;
         }
 
         .label {
-            width: 140px;
+            width: 135px;
         }
 
         .separator {
-            width: 15px;
+            width: 12px;
         }
 
         .ttd {
             width: 100%;
-            margin-top: 30px;
+            margin-top: 20px;
             page-break-inside: avoid;
             break-inside: avoid;
         }
@@ -88,7 +96,7 @@
         }
 
         .space-sign {
-            height: 65px;
+            height: 60px;
         }
 
         .nama {
@@ -187,11 +195,17 @@
 
     </table>
 
-    <br>
+    <div style="height:8px;"></div>
 
-    <p>
-        Dengan ini menunjuk :
-    </p>
+    @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+        <p>
+            Dengan ini menunjuk Penanggung Jawab Lama :
+        </p>
+    @else
+        <p>
+            Dengan ini menunjuk :
+        </p>
+    @endif
 
     <table class="data-table">
 
@@ -239,6 +253,54 @@
 
     </table>
 
+    @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+        <div style="margin-top:8px;"></div>
+
+        <p>
+            Penanggung Jawab Baru yang ditunjuk :
+        </p>
+
+        <table class="data-table">
+
+            <tr>
+                <td class="label">Nama</td>
+                <td class="separator">:</td>
+                <td>{{ $subdomain->nama_penanggung_jawab_baru }}</td>
+            </tr>
+
+            <tr>
+                <td class="label">NIP</td>
+                <td class="separator">:</td>
+                <td>{{ $subdomain->nip_penanggung_jawab_baru }}</td>
+            </tr>
+
+            <tr>
+                <td class="label">Jabatan</td>
+                <td class="separator">:</td>
+                <td>{{ $subdomain->jabatan_baru }}</td>
+            </tr>
+
+            <tr>
+                <td class="label">Pangkat / Golongan</td>
+                <td class="separator">:</td>
+                <td>{{ $subdomain->pangkat_gol_baru }}</td>
+            </tr>
+
+            <tr>
+                <td class="label">Nomor HP</td>
+                <td class="separator">:</td>
+                <td>{{ $subdomain->no_hp_baru }}</td>
+            </tr>
+
+            <tr>
+                <td class="label">E-Mail</td>
+                <td class="separator">:</td>
+                <td>{{ $subdomain->email_baru }}</td>
+            </tr>
+
+        </table>
+    @endif
+
     <br>
 
     @if ($subdomain->jenis_layanan == 'baru')
@@ -254,13 +316,12 @@
     @elseif ($subdomain->jenis_layanan == 'ubah_penanggung')
         <p>
 
-            Sebagai penanggung jawab baru pengelolaan nama subdomain :
+            Penanggung Jawab Baru sebagaimana tersebut di atas ditetapkan sebagai
+            penanggung jawab pengelolaan nama subdomain
 
-            <strong>
-                {{ $subdomain->nama_subdomain }}
-            </strong>
+            <strong>{{ $subdomain->nama_subdomain }}</strong>
 
-            yang menggantikan penanggung jawab sebelumnya.
+            menggantikan Penanggung Jawab sebelumnya.
 
         </p>
     @elseif ($subdomain->jenis_layanan == 'ubah_subdomain')

@@ -75,11 +75,11 @@ class SubdomainController extends Controller
                 $fullSubdomainBaru = strtolower(trim($validated['nama_subdomain_baru'])) . '.murungrayakab.go.id';
             }
 
-            $exists = Subdomain::where(function ($query) use ($fullSubdomain, $fullSubdomainBaru) {
-                $query->where('nama_subdomain', $fullSubdomain);
+            $subdomains = array_filter([$fullSubdomain, $fullSubdomainBaru]);
 
-                if ($fullSubdomainBaru) {
-                    $query->orWhere('nama_subdomain_baru', $fullSubdomainBaru);
+            $exists = Subdomain::where(function ($query) use ($subdomains) {
+                foreach ($subdomains as $subdomain) {
+                    $query->orWhere('nama_subdomain', $subdomain)->orWhere('nama_subdomain_baru', $subdomain);
                 }
             })
                 ->whereNotIn('status', ['selesai', 'tutup'])
@@ -89,7 +89,7 @@ class SubdomainController extends Controller
                 return back()
                     ->withInput()
                     ->withErrors([
-                        'nama_subdomain' => 'Nama subdomain sedang digunakan pada pengajuan lain.',
+                        'nama_subdomain' => 'Pengajuan subdomain dengan nama tersebut masih dalam proses. Silakan tunggu hingga pengajuan sebelumnya selesai sebelum mengajukan kembali.',
                     ]);
             }
 
@@ -220,11 +220,11 @@ class SubdomainController extends Controller
             }
 
             // cek duplikat kecuali data sendiri
-            $exists = Subdomain::where(function ($query) use ($fullSubdomain, $fullSubdomainBaru) {
-                $query->where('nama_subdomain', $fullSubdomain);
+            $subdomains = array_filter([$fullSubdomain, $fullSubdomainBaru]);
 
-                if ($fullSubdomainBaru) {
-                    $query->orWhere('nama_subdomain_baru', $fullSubdomainBaru);
+            $exists = Subdomain::where(function ($query) use ($subdomains) {
+                foreach ($subdomains as $subdomain) {
+                    $query->orWhere('nama_subdomain', $subdomain)->orWhere('nama_subdomain_baru', $subdomain);
                 }
             })
                 ->where('id', '!=', $subdomain->id)
@@ -235,7 +235,7 @@ class SubdomainController extends Controller
                 return back()
                     ->withInput()
                     ->withErrors([
-                        'nama_subdomain' => 'Nama subdomain sedang digunakan pada pengajuan lain.',
+                        'nama_subdomain' => 'Pengajuan subdomain dengan nama tersebut masih dalam proses. Silakan tunggu hingga pengajuan sebelumnya selesai sebelum mengajukan kembali.',
                     ]);
             }
 
@@ -334,6 +334,42 @@ class SubdomainController extends Controller
 
         if (!file_exists($path)) {
             abort(404, 'File Surat Penunjukan tidak ditemukan.');
+        }
+
+        return response()->file($path, [
+            'Content-Disposition' => 'inline',
+        ]);
+    }
+
+    public function uploadSuratPenunjukanLama(Request $request, Subdomain $subdomain)
+    {
+        $request->validate([
+            'surat_penunjukan_lama' => 'required|mimes:pdf|max:5120',
+        ]);
+
+        $file = $request->file('surat_penunjukan_lama')->store('subdomain/surat-penunjukan-lama', 'local');
+
+        $subdomain->update([
+            'surat_penunjukan_lama' => $file,
+        ]);
+
+        return back()->with('success', 'Surat berhasil diupload');
+    }
+    
+    public function downloadSuratPenunjukanLama(Subdomain $subdomain)
+    {
+        if ($subdomain->user_id != Auth::id()) {
+            abort(403);
+        }
+
+        if (!$subdomain->surat_penunjukan_lama) {
+            abort(404);
+        }
+
+        $path = Storage::disk('local')->path($subdomain->surat_penunjukan_lama);
+
+        if (!file_exists($path)) {
+            abort(404, 'File Surat Penunjukan Sebelumnya tidak ditemukan.');
         }
 
         return response()->file($path, [

@@ -263,4 +263,15 @@ class SubdomainAdminController extends Controller
             return back()->withInput()->with('error', 'Gagal menolak pengajuan.');
         }
     }
+
+    public function suratLama(Subdomain $subdomain)
+    {
+        abort_unless($subdomain->surat_penunjukan_lama, 404);
+
+        $path = Storage::disk('local')->path($subdomain->surat_penunjukan_lama);
+
+        return response()->file($path, [
+            'Content-Disposition' => 'inline',
+        ]);
+    }
 }

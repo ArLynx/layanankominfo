@@ -92,6 +92,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('/subdomain/{subdomain}/cetak-sk', [SubdomainAdminController::class, 'cetakSk'])->name('subdomain.cetak-sk');
         Route::post('/subdomain/{subdomain}/upload-sk', [SubdomainAdminController::class, 'uploadSkPenunjukan'])->name('subdomain.upload-sk');
         Route::get('/subdomain/{subdomain}/download-sk', [SubdomainAdminController::class, 'downloadSkPenunjukan'])->name('subdomain.download-sk');
+        Route::get('/admin/subdomain/{subdomain}/surat-lama', [SubdomainAdminController::class, 'suratLama'])->name('subdomain.surat-lama');
 
         //sementara
         Route::get('/persetujuan-pimpinan', [SubdomainAdminController::class, 'approvalList'])->name('approval-list');
@@ -132,6 +133,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('/subdomain/{subdomain}/download-sk-penunjukan', [SubdomainController::class, 'downloadSkPenunjukan'])->name('subdomain.download-sk-penunjukan');
     Route::get('/subdomain/{subdomain}/edit', [SubdomainController::class, 'edit'])->name('subdomain.edit');
     Route::put('/subdomain/{subdomain}', [SubdomainController::class, 'update'])->name('subdomain.update');
+    Route::post('/subdomain/{subdomain}/upload-surat-lama', [SubdomainController::class, 'uploadSuratPenunjukanLama'])->name('subdomain.upload-surat-lama');
+    Route::get('/subdomain/{subdomain}/download-surat-lama', [SubdomainController::class, 'downloadSuratPenunjukanLama'])->name('subdomain.download-surat-lama');
 
     //permohonan email pribadi
     Route::get('/emailpribadi/create', [EmailPribadiController::class, 'create'])->name('email-pribadi.create');
