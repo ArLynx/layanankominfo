@@ -2,11 +2,12 @@
 
 @section('content')
 
-<form action="{{ route('email-pribadi.store') }}"
+<form action="{{ route('email-pribadi.update', $emailPribadi) }}"
       method="POST"
       enctype="multipart/form-data">
 
     @csrf
+    @method('PUT')
 
     @include('user.email-pribadi.form')
 

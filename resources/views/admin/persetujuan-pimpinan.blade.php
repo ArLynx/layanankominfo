@@ -219,8 +219,6 @@
 
     </div>
 
-    </div>
-
     <script>
 
         //modal konfirmasi

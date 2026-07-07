@@ -8,7 +8,7 @@ use App\Http\Controllers\RequestController;
 use App\Http\Controllers\PimpinanController;
 
 use App\Http\Controllers\Admin\SubdomainAdminController;
-use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\EmailSatkerAdminController;
 
 use App\Http\Controllers\TwoFactorSetupController;
 
@@ -18,6 +18,7 @@ use App\Http\Controllers\User\JenisLayananController;
 use App\Http\Controllers\User\SubdomainController;
 use App\Http\Controllers\User\RiwayatController;
 use App\Http\Controllers\User\EmailPribadiController;
+use App\Http\Controllers\User\EmailSatkerController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -102,6 +103,20 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::post('/persetujuan-pimpinan/{subdomain}/approve', [SubdomainAdminController::class, 'approve'])->name('approve-subdomain');
 
         Route::post('/persetujuan-pimpinan/{subdomain}/reject', [SubdomainAdminController::class, 'reject'])->name('reject-subdomain');
+
+        // Pengajuan Email Satker
+        Route::get('/pengajuan/email-satker', [EmailSatkerAdminController::class, 'index'])->name('email-satker');
+        Route::get('/pengajuan/email-satker/{emailSatker}', [EmailSatkerAdminController::class, 'show'])->name('email-satker.show');
+        Route::delete('/email-satker/{emailSatker}', [EmailSatkerAdminController::class, 'destroy'])->name('email-satker.destroy');
+        Route::patch('/email-satker/{emailSatker}/update-status', [EmailSatkerAdminController::class, 'updateStatus'])->name('email-satker.update-status');
+        Route::get('/email-satker/{emailSatker}/karpeg', [EmailSatkerAdminController::class, 'viewKarpeg'])->name('email-satker.karpeg');
+        Route::get('/email-satker/{emailSatker}/formulir', [EmailSatkerAdminController::class, 'viewFormulir'])->name('email-satker.formulir');
+        Route::delete('/email-satker/{emailSatker}/delete-formulir', [EmailSatkerAdminController::class, 'deleteFormulir'])->name('email-satker.delete-formulir');
+        Route::get('/email-satker/{emailSatker}/cetak-formulir', [EmailSatkerAdminController::class, 'cetakFormulir'])->name('email-satker.cetak-formulir');
+
+        Route::post('/email-satker/{emailSatker}/send-information', [EmailSatkerAdminController::class, 'sendInformation'])->name('email-satker.send-information');
+        Route::get('/email-satker/{emailSatker}/preview-information', [EmailSatkerAdminController::class, 'previewInformation'])->name('email-satker.preview-information');
+        Route::get('/email-satker/{emailSatker}/information-account', [EmailSatkerAdminController::class, 'previewInformation'])->name('email-satker.information-account');
     });
 
 // Pimpinan Routes
@@ -115,6 +130,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 //User Routes
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', '2fa.ensure'])->group(function () {
     Route::get('/dashboard-user', [DashboardUserController::class, 'index'])->name('dashboard-user');
+
     Route::get('/jenis-layanan', [JenisLayananController::class, 'index'])
         ->name('jenis-layanan')
         ->middleware('profile.complete');
@@ -136,8 +152,27 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::post('/subdomain/{subdomain}/upload-surat-lama', [SubdomainController::class, 'uploadSuratPenunjukanLama'])->name('subdomain.upload-surat-lama');
     Route::get('/subdomain/{subdomain}/download-surat-lama', [SubdomainController::class, 'downloadSuratPenunjukanLama'])->name('subdomain.download-surat-lama');
 
+    //permohonan email satker
+    Route::get('/email-satker/create', [EmailSatkerController::class, 'create'])->name('email-satker.create');
+    Route::post('/email-satker', [EmailSatkerController::class, 'store'])->name('email-satker.store');
+    Route::get('/email-satker/{emailSatker}/success', [EmailSatkerController::class, 'success'])->name('email-satker.success');
+    Route::get('/email-satker/{emailSatker}', [EmailSatkerController::class, 'show'])->name('email-satker.show');
+    Route::post('/email-satker/{emailSatker}/upload-formulir', [EmailSatkerController::class, 'uploadFormulir'])->name('email-satker.upload-formulir');
+    Route::get('/email-satker/{emailSatker}/cetak', [EmailSatkerController::class, 'cetak'])->name('email-satker.cetak');
+    Route::get('/email-satker/{emailSatker}/download-formulir', [EmailSatkerController::class, 'downloadFormulir'])->name('email-satker.download-formulir');
+    Route::get('/email-satker/{emailSatker}/edit', [EmailSatkerController::class, 'edit'])->name('email-satker.edit');
+    Route::put('/email-satker/{emailSatker}', [EmailSatkerController::class, 'update'])->name('email-satker.update');
+
     //permohonan email pribadi
-    Route::get('/emailpribadi/create', [EmailPribadiController::class, 'create'])->name('email-pribadi.create');
+    Route::get('/email-pribadi/create', [EmailPribadiController::class, 'create'])->name('email-pribadi.create');
+    Route::post('/email-pribadi', [EmailPribadiController::class, 'store'])->name('email-pribadi.store');
+    Route::get('/email-pribadi/{emailPribadi}/success', [EmailPribadiController::class, 'success'])->name('email-pribadi.success');
+    Route::get('/email-pribadi/{emailPribadi}', [EmailPribadiController::class, 'show'])->name('email-pribadi.show');
+    Route::post('/email-pribadi/{emailPribadi}/upload-formulir', [EmailPribadiController::class, 'uploadFormulir'])->name('email-pribadi.upload-formulir');
+    Route::get('/email-pribadi/{emailPribadi}/cetak', [EmailPribadiController::class, 'cetak'])->name('email-pribadi.cetak');
+    Route::get('/email-pribadi/{emailPribadi}/download-formulir', [EmailPribadiController::class, 'downloadFormulir'])->name('email-pribadi.download-formulir');
+    Route::get('/email-pribadi/{emailPribadi}/edit', [EmailPribadiController::class, 'edit'])->name('email-pribadi.edit');
+    Route::put('/email-pribadi/{emailPribadi}', [EmailPribadiController::class, 'update'])->name('email-pribadi.update');
 
     //riwayat
     Route::get('/riwayat', [RiwayatController::class, 'index'])

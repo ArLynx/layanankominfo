@@ -2,13 +2,13 @@
 
 @section('content')
 
-<form action="{{ route('email-pribadi.store') }}"
+<form action="{{ route('email-satker.store') }}"
       method="POST"
       enctype="multipart/form-data">
 
     @csrf
 
-    @include('user.email-pribadi.form')
+    @include('user.email-satker.form')
 
 </form>
 

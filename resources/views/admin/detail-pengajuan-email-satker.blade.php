@@ -1,13 +1,26 @@
-<x-admin-layout title="Detail Pengajuan Subdomain">
+<x-admin-layout title="Detail Pengajuan Email Satuan Kerja">
+
     <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+
         <div>
-            <h2 class="text-headline-lg font-headline-lg text-on-surface">Pengajuan Subdomain</h2>
-            <p class="text-body-md font-body-md text-on-surface-variant mt-1">Daftar pengajuan layanan subdomain yang
-                masuk. agencies.</p>
+
+            <h2 class="text-headline-lg font-headline-lg text-on-surface">
+
+                Pengajuan Email Satuan Kerja
+
+            </h2>
+
+            <p class="text-body-md font-body-md text-on-surface-variant mt-1">
+
+                Daftar pengajuan layanan Email Satuan Kerja yang masuk.
+
+            </p>
+
         </div>
+
     </header>
 
-    {{-- haeder --}}
+    {{-- Header --}}
     <div class="bg-surface rounded-xl border border-outline-variant p-6">
 
         <div class="flex items-start justify-between">
@@ -17,10 +30,12 @@
                 <div class="flex items-center gap-2 mb-2">
 
                     <h1 class="text-2xl font-bold">
-                        {{ $subdomain->nomor_tiket }}
+
+                        {{ $emailSatker->nomor_tiket }}
+
                     </h1>
 
-                    @switch($subdomain->status)
+                    @switch($emailSatker->status)
                         @case('terbuka')
                             <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full border border-blue-200">
                                 Pengajuan
@@ -61,15 +76,44 @@
                 </div>
 
                 <p class="text-on-surface-variant">
-                    Permohonan Pembuatan Subdomain
+
+                    @switch($emailSatker->jenis_layanan)
+                        @case('baru')
+                            Permohonan Email Satuan Kerja Baru
+                        @break
+
+                        @case('reset')
+                            Permohonan Reset Password
+                        @break
+
+                        @case('reaktivasi')
+                            Permohonan Reaktivasi Akun
+                        @break
+
+                        @case('ubah_akun')
+                            Permohonan Perubahan Nama Akun Email
+                        @break
+
+                        @case('ubah_penanggung')
+                            Permohonan Perubahan Penanggung Jawab
+                        @break
+
+                        @default
+                            -
+                    @endswitch
+
                 </p>
 
             </div>
 
             <button class="text-outline hover:text-on-surface">
+
                 <span class="material-symbols-outlined">
+
                     more_vert
+
                 </span>
+
             </button>
 
         </div>
@@ -104,9 +148,11 @@
             'tutup' => 5,
         ];
 
-        $currentStep = $steps[$subdomain->status] ?? 1;
+        $currentStep = $steps[$emailSatker->status] ?? 1;
 
-        $isCancelled = $subdomain->status == 'tutup';
+        $isCancelled = $emailSatker->status == 'tutup';
+
+        $skipApproval = in_array($emailSatker->jenis_layanan, ['reset', 'reaktivasi', 'ubah_akun']);
     @endphp
 
     <div class="bg-surface rounded-xl border border-outline-variant p-6">
@@ -119,11 +165,11 @@
                 <div
                     class="w-12 h-12 rounded-full flex items-center justify-center
 
-                @if ($currentStep > 1) bg-primary text-white
-                @elseif($currentStep == 1)
-                    bg-yellow-500 text-gray-600
-                @else
-                    bg-gray-200 text-gray-600 @endif">
+                    @if ($currentStep > 1) bg-primary text-white
+                    @elseif($currentStep == 1)
+                        bg-yellow-500 text-gray-600
+                    @else
+                        bg-gray-200 text-gray-600 @endif">
 
                     <span class="material-symbols-outlined">
                         {{ $currentStep > 1 ? 'check' : 'description' }}
@@ -145,11 +191,11 @@
                 <div
                     class="w-12 h-12 rounded-full flex items-center justify-center
 
-                @if ($currentStep > 2) bg-primary text-white
-                @elseif($currentStep == 2)
-                    bg-yellow-500 text-gray-600
-                @else
-                    bg-gray-200 text-gray-600 @endif">
+                    @if ($currentStep > 2) bg-primary text-white
+                    @elseif($currentStep == 2)
+                        bg-yellow-500 text-gray-600
+                    @else
+                        bg-gray-200 text-gray-600 @endif">
 
                     <span class="material-symbols-outlined">
                         {{ $currentStep > 2 ? 'check' : 'fact_check' }}
@@ -163,45 +209,47 @@
 
             </div>
 
-            <div class="flex-1 h-1 mx-3 {{ $currentStep > 2 ? 'bg-primary' : 'bg-gray-200' }}"></div>
+            @unless ($skipApproval)
+                <div class="flex-1 h-1 mx-3 {{ $currentStep > 2 ? 'bg-primary' : 'bg-gray-200' }}"></div>
 
-            {{-- Persetujuan --}}
-            <div class="flex flex-col items-center">
+                {{-- Persetujuan --}}
+                <div class="flex flex-col items-center">
 
-                <div
-                    class="w-12 h-12 rounded-full flex items-center justify-center
+                    <div
+                        class="w-12 h-12 rounded-full flex items-center justify-center
 
-                @if ($currentStep > 3) bg-primary text-white
-                @elseif($currentStep == 3)
-                     bg-yellow-500 text-gray-600
-                @else
-                    bg-gray-200 text-gray-600 @endif">
+                        @if ($currentStep > 3) bg-primary text-white
+                        @elseif($currentStep == 3)
+                            bg-yellow-500 text-gray-600
+                        @else
+                            bg-gray-200 text-gray-600 @endif">
 
-                    <span class="material-symbols-outlined">
-                        {{ $currentStep > 3 ? 'check' : 'approval' }}
+                        <span class="material-symbols-outlined">
+                            {{ $currentStep > 3 ? 'check' : 'approval' }}
+                        </span>
+
+                    </div>
+
+                    <span class="text-sm mt-3 font-medium text-center">
+                        Persetujuan Pimpinan
                     </span>
 
                 </div>
-
-                <span class="text-sm mt-3 font-medium text-center">
-                    Persetujuan Pimpinan
-                </span>
-
-            </div>
+            @endunless
 
             <div class="flex-1 h-1 mx-3 {{ $currentStep > 3 ? 'bg-primary' : 'bg-gray-200' }}"></div>
 
-            {{-- Pembuatan --}}
+            {{-- Proses --}}
             <div class="flex flex-col items-center">
 
                 <div
                     class="w-12 h-12 rounded-full flex items-center justify-center
 
-                @if ($currentStep > 4) bg-primary text-white
-                @elseif($currentStep == 4)
-                     bg-yellow-500 text-gray-600
-                @else
-                    bg-gray-200 text-gray-600 @endif">
+                    @if ($currentStep > 4) bg-primary text-white
+                    @elseif($currentStep == 4)
+                        bg-yellow-500 text-gray-600
+                    @else
+                        bg-gray-200 text-gray-600 @endif">
 
                     <span class="material-symbols-outlined">
                         {{ $currentStep > 4 ? 'check' : 'settings' }}
@@ -218,24 +266,24 @@
             <div
                 class="flex-1 h-1 mx-3
 
-            @if ($isCancelled) bg-red-500
-            @elseif($currentStep >= 5)
-                 bg-yellow-500 text-gray-600
-            @else
-                bg-gray-200 text-gray-600 @endif">
+                @if ($isCancelled) bg-red-500
+                @elseif($currentStep >= 5)
+                    bg-yellow-500
+                @else
+                    bg-gray-200 @endif">
             </div>
 
-            {{-- Selesai / Cancel --}}
+            {{-- Selesai --}}
             <div class="flex flex-col items-center">
 
                 <div
                     class="w-12 h-12 rounded-full flex items-center justify-center
 
-                @if ($isCancelled) bg-red-500 text-white
-                @elseif($currentStep == 5)
-                    bg-green-500 text-white
-                @else
-                    bg-gray-200 text-gray-600 @endif">
+                    @if ($isCancelled) bg-red-500 text-white
+                    @elseif($currentStep == 5)
+                        bg-green-500 text-white
+                    @else
+                        bg-gray-200 text-gray-600 @endif">
 
                     <span class="material-symbols-outlined">
 
@@ -254,9 +302,9 @@
                 <span
                     class="text-sm mt-3 font-medium text-center
 
-                @if ($isCancelled) text-red-600
-                @elseif($currentStep == 5)
-                    text-green-600 @endif">
+                    @if ($isCancelled) text-red-600
+                    @elseif($currentStep == 5)
+                        text-green-600 @endif">
 
                     {{ $isCancelled ? 'Pengajuan Dibatalkan' : 'Selesai' }}
 
@@ -272,6 +320,8 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
 
+        {{-- ================= KOLOM KIRI ================= --}}
+
         <div class="lg:col-span-8 space-y-6">
 
             {{-- Card Data Penanggung Jawab --}}
@@ -285,7 +335,7 @@
 
                     <h3 class="text-xl font-semibold text-on-surface">
 
-                        @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+                        @if ($emailSatker->jenis_layanan == 'ubah_penanggung')
                             Data Penanggung Jawab Lama
                         @else
                             Data Penanggung Jawab
@@ -298,72 +348,95 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                     <div>
+
                         <label class="font-semibold">
                             Nama Lengkap
                         </label>
 
                         <p>
-                            {{ $subdomain->nama_penanggung_jawab }}
+                            {{ $emailSatker->nama_penanggung_jawab }}
                         </p>
+
                     </div>
 
                     <div>
+
                         <label class="font-semibold">
                             NIP
                         </label>
 
                         <p>
-                            {{ $subdomain->nip_penanggung_jawab }}
+                            {{ $emailSatker->nip }}
                         </p>
+
                     </div>
 
                     <div>
+
                         <label class="font-semibold">
                             Jabatan
                         </label>
 
                         <p>
-                            {{ $subdomain->jabatan }}
+                            {{ $emailSatker->jabatan }}
                         </p>
+
                     </div>
 
                     <div>
+
                         <label class="font-semibold">
                             Pangkat / Golongan
                         </label>
 
                         <p>
-                            {{ $subdomain->pangkat_gol }}
+                            {{ $emailSatker->pangkat_gol }}
                         </p>
+
                     </div>
 
                     <div>
+
                         <label class="font-semibold">
                             Nomor HP / WA
                         </label>
 
                         <p>
-                            {{ $subdomain->no_hp }}
+                            {{ $emailSatker->no_hp }}
                         </p>
+
                     </div>
 
                     <div>
+
                         <label class="font-semibold">
                             Email
                         </label>
 
                         <p>
-                            {{ $subdomain->email }}
+                            {{ $emailSatker->email }}
                         </p>
+
                     </div>
 
+                    <div class="md:col-span-2">
+
+                        <label class="font-semibold">
+                            Instansi / Unit Kerja
+                        </label>
+
+                        <p>
+                            {{ $emailSatker->nama_instansi }}
+                        </p>
+
+                    </div>
 
                 </div>
 
             </div>
 
             {{-- Card Data Penanggung Jawab baru --}}
-            @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+            @if ($emailSatker->jenis_layanan == 'ubah_penanggung')
                 <div class="bg-surface rounded-xl border border-outline-variant p-6">
 
                     <div class="flex items-center gap-2 mb-4">
@@ -373,7 +446,9 @@
                         </span>
 
                         <h3 class="font-semibold text-lg">
+
                             Data Penanggung Jawab Baru
+
                         </h3>
 
                     </div>
@@ -387,7 +462,7 @@
                             </label>
 
                             <p>
-                                {{ $subdomain->nama_penanggung_jawab_baru }}
+                                {{ $emailSatker->nama_penanggung_jawab_baru }}
                             </p>
 
                         </div>
@@ -399,7 +474,7 @@
                             </label>
 
                             <p>
-                                {{ $subdomain->nip_penanggung_jawab_baru }}
+                                {{ $emailSatker->nip_baru }}
                             </p>
 
                         </div>
@@ -411,7 +486,7 @@
                             </label>
 
                             <p>
-                                {{ $subdomain->jabatan_baru }}
+                                {{ $emailSatker->jabatan_baru }}
                             </p>
 
                         </div>
@@ -423,7 +498,7 @@
                             </label>
 
                             <p>
-                                {{ $subdomain->pangkat_gol_baru }}
+                                {{ $emailSatker->pangkat_gol_baru }}
                             </p>
 
                         </div>
@@ -435,7 +510,7 @@
                             </label>
 
                             <p>
-                                {{ $subdomain->no_hp_baru }}
+                                {{ $emailSatker->no_hp_baru }}
                             </p>
 
                         </div>
@@ -447,7 +522,7 @@
                             </label>
 
                             <p>
-                                {{ $subdomain->email_baru }}
+                                {{ $emailSatker->email_baru }}
                             </p>
 
                         </div>
@@ -463,11 +538,11 @@
                 <div class="flex items-center gap-2 mb-4">
 
                     <span class="material-symbols-outlined text-primary">
-                        dns
+                        alternate_email
                     </span>
 
                     <h3 class="font-semibold text-lg">
-                        Data Subdomain
+                        Data Email Satuan Kerja
                     </h3>
 
                 </div>
@@ -475,88 +550,82 @@
                 <div class="space-y-4">
 
                     <div>
+
                         <label class="font-semibold">
                             Nama Instansi
                         </label>
 
                         <p>
-                            {{ $subdomain->nama_instansi }}
+                            {{ $emailSatker->nama_instansi }}
                         </p>
+
                     </div>
 
-                    @if ($subdomain->jenis_layanan == 'ubah_subdomain')
+                    @if ($emailSatker->jenis_layanan == 'ubah_akun')
                         <div>
+
                             <label class="font-semibold">
-                                Nama Subdomain Lama
+                                Nama Akun Email Lama
                             </label>
 
                             <p>
-                                {{ $subdomain->nama_subdomain }}
+                                {{ $emailSatker->nama_akun_dinas }}
                             </p>
+
                         </div>
 
                         <div>
+
                             <label class="font-semibold">
-                                Nama Subdomain Baru
+                                Nama Akun Email Baru
                             </label>
 
                             <p>
-                                {{ $subdomain->nama_subdomain_baru }}
+                                {{ $emailSatker->nama_akun_dinas_baru }}
                             </p>
+
                         </div>
                     @else
                         <div>
+
                             <label class="font-semibold">
-                                Nama Subdomain
+                                Nama Akun Email
                             </label>
 
                             <p>
-                                {{ $subdomain->nama_subdomain }}
+                                {{ $emailSatker->nama_akun_dinas }}
                             </p>
+
                         </div>
                     @endif
 
-                    @php
-                        $judulDeskripsi = match ($subdomain->jenis_layanan) {
-                            'ubah_penanggung' => 'Alasan Perubahan Penanggung Jawab',
-                            'ubah_subdomain' => 'Alasan Perubahan Nama Subdomain',
-                            'nonaktif' => 'Alasan Penonaktifan Subdomain',
-                            default => 'Deskripsi Website',
-                        };
-                    @endphp
-
                     <div>
-                        <label class="font-semibold">
-                            {{ $judulDeskripsi }}
-                        </label>
 
-                        <div class="mt-2 p-4 bg-gray-50 border rounded-lg whitespace-pre-line">
-                            {{ $subdomain->deskripsi_website }}
-                        </div>
-                    </div>
-
-                    <div>
                         <p class="text-sm text-on-surface-variant">
                             Jenis Layanan
                         </p>
 
                         <p class="font-medium">
 
-                            @switch($subdomain->jenis_layanan)
+                            @switch($emailSatker->jenis_layanan)
                                 @case('baru')
-                                    Pengajuan Subdomain Baru
+                                    Pengajuan Email Satuan Kerja Baru
+                                @break
+
+                                @case('reset')
+                                    Reset Password
+                                @break
+
+                                @case('reaktivasi')
+                                    Reaktivasi Akun
+                                @break
+
+                                @case('ubah_akun')
+                                    Perubahan Nama Akun Email
                                 @break
 
                                 @case('ubah_penanggung')
-                                    Perubahan Penanggung Jawab Subdomain
-                                @break
-
-                                @case('ubah_subdomain')
-                                    Perubahan Nama Subdomain
-                                @break
-
-                                @case('nonaktif')
-                                    Penonaktifan Subdomain
+                                    Perubahan Penanggung Jawab
                                 @break
 
                                 @default
@@ -564,6 +633,7 @@
                             @endswitch
 
                         </p>
+
                     </div>
 
                 </div>
@@ -585,8 +655,7 @@
 
                 </div>
 
-                <div
-                    class="grid gap-6 {{ $subdomain->jenis_layanan == 'ubah_penanggung' ? 'lg:grid-cols-3' : 'lg:grid-cols-2' }}">
+                <div class="grid lg:grid-cols-2 gap-6">
 
                     {{-- KARPEG --}}
                     <div class="bg-surface rounded-xl border border-outline-variant p-4">
@@ -597,7 +666,7 @@
                                 Kartu Pegawai
                             </h3>
 
-                            <a href="{{ route('admin.subdomain.karpeg', $subdomain) }}" target="_blank"
+                            <a href="{{ route('admin.email-satker.karpeg', $emailSatker) }}" target="_blank"
                                 class="px-4 py-2 bg-primary text-white rounded-lg">
 
                                 Buka Dokumen
@@ -608,8 +677,8 @@
 
                         <div class="border rounded-lg overflow-hidden bg-gray-100">
 
-                            <iframe src="{{ route('admin.subdomain.karpeg', $subdomain) }}" class="w-full h-[700px]">
-
+                            <iframe src="{{ route('admin.email-satker.karpeg', $emailSatker) }}"
+                                class="w-full h-[700px]">
                             </iframe>
 
                         </div>
@@ -622,11 +691,11 @@
                         <div class="flex items-center justify-between mb-4">
 
                             <h3 class="font-semibold text-lg">
-                                Formulir Subdomain
+                                Formulir Email Satuan Kerja
                             </h3>
 
-                            @if ($subdomain->formulir_subdomain)
-                                <a href="{{ route('admin.subdomain.formulir', $subdomain) }}" target="_blank"
+                            @if ($emailSatker->formulir_email)
+                                <a href="{{ route('admin.email-satker.formulir', $emailSatker) }}" target="_blank"
                                     class="px-4 py-2 bg-primary text-white rounded-lg">
 
                                     Buka Dokumen
@@ -636,17 +705,17 @@
 
                         </div>
 
-                        @if ($subdomain->formulir_subdomain)
+                        @if ($emailSatker->formulir_email)
                             <div class="border rounded-lg overflow-hidden bg-gray-100">
 
-                                <iframe src="{{ route('admin.subdomain.formulir', $subdomain) }}"
+                                <iframe src="{{ route('admin.email-satker.formulir', $emailSatker) }}"
                                     class="w-full h-[700px]">
                                 </iframe>
 
                             </div>
 
-                            <form action="{{ route('admin.subdomain.delete-formulir', $subdomain) }}" method="POST"
-                                class="mt-4">
+                            <form action="{{ route('admin.email-satker.delete-formulir', $emailSatker) }}"
+                                method="POST" class="mt-4">
 
                                 @csrf
                                 @method('DELETE')
@@ -664,93 +733,35 @@
                             <div class="border rounded-lg p-10 text-center bg-gray-50">
 
                                 <span class="material-symbols-outlined text-5xl text-gray-400">
+
                                     description
+
                                 </span>
 
                                 <h4 class="font-medium text-gray-700 mt-3">
+
                                     Belum Ada Dokumen
+
                                 </h4>
 
                                 <p class="text-sm text-gray-500 mt-2">
+
                                     Pemohon belum mengunggah formulir yang telah ditandatangani.
+
                                 </p>
 
                             </div>
                         @endif
 
                     </div>
-                    @if ($subdomain->jenis_layanan == 'ubah_penanggung')
 
-                        <div class="bg-surface rounded-xl border border-outline-variant p-4">
-
-                            <div class="flex items-center justify-between mb-4">
-
-                                <h3 class="font-semibold text-lg">
-                                    Surat Penunjukan Sebelumnya
-                                </h3>
-
-                                @if ($subdomain->surat_penunjukan_lama)
-                                    <a href="{{ route('admin.subdomain.surat-lama', $subdomain) }}" target="_blank"
-                                        class="px-4 py-2 bg-primary text-white rounded-lg">
-
-                                        Buka Dokumen
-
-                                    </a>
-                                @endif
-
-                            </div>
-
-                            @if ($subdomain->surat_penunjukan_lama)
-                                <div class="border rounded-lg overflow-hidden bg-gray-100">
-
-                                    <iframe src="{{ route('admin.subdomain.surat-lama', $subdomain) }}"
-                                        class="w-full h-[700px]">
-                                    </iframe>
-
-                                </div>
-
-                                {{-- <form action=""
-                                    method="POST" class="mt-4">
-
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit"
-                                        onclick="return confirm('Yakin ingin menghapus Surat Penunjukan Sebelumnya?')"
-                                        class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg">
-
-                                        Hapus Surat
-
-                                    </button>
-
-                                </form> --}}
-                            @else
-                                <div class="border rounded-lg p-10 text-center bg-gray-50">
-
-                                    <span class="material-symbols-outlined text-5xl text-gray-400">
-                                        description
-                                    </span>
-
-                                    <h4 class="font-medium text-gray-700 mt-3">
-                                        Belum Ada Dokumen
-                                    </h4>
-
-                                    <p class="text-sm text-gray-500 mt-2">
-                                        Pemohon belum mengunggah Surat Penunjukan Sebelumnya.
-                                    </p>
-
-                                </div>
-                            @endif
-
-                        </div>
-
-                    @endif
                 </div>
 
             </div>
 
         </div>
 
+        {{-- ================= KOLOM KANAN ================= --}}
         <div class="lg:col-span-4">
 
             {{-- Tindakan Admin --}}
@@ -769,6 +780,7 @@
                 </div>
 
                 @if ($errors->any())
+
                     <div class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
 
                         <ul class="list-disc pl-5 text-red-700">
@@ -780,9 +792,10 @@
                         </ul>
 
                     </div>
+
                 @endif
 
-                <form id="status" action="{{ route('admin.subdomain.update-status', $subdomain) }}"
+                <form id="status" action="{{ route('admin.email-satker.update-status', $emailSatker) }}"
                     method="POST">
 
                     @csrf
@@ -790,37 +803,41 @@
 
                     <div class="space-y-5">
 
-                        {{-- Status --}}
+                        {{-- STATUS --}}
                         <div>
 
                             <label class="block text-sm font-medium mb-2">
+
                                 Status Pengajuan
+
                             </label>
 
                             <select id="status" name="status"
                                 class="w-full rounded-lg border border-outline-variant px-4 py-3">
 
-                                <option value="terbuka" {{ $subdomain->status == 'terbuka' ? 'selected' : '' }}>
+                                <option value="terbuka" {{ $emailSatker->status == 'terbuka' ? 'selected' : '' }}>
                                     Pengajuan
                                 </option>
 
-                                <option value="baru" {{ $subdomain->status == 'baru' ? 'selected' : '' }}>
+                                <option value="baru" {{ $emailSatker->status == 'baru' ? 'selected' : '' }}>
                                     Pemeriksaan Dokumen
                                 </option>
 
-                                <option value="tunda" {{ $subdomain->status == 'tunda' ? 'selected' : '' }}>
-                                    Persetujuan Pimpinan
-                                </option>
+                                @if (!in_array($emailSatker->jenis_layanan, ['reset', 'reaktivasi', 'ubah_akun']))
+                                    <option value="tunda" {{ $emailSatker->status == 'tunda' ? 'selected' : '' }}>
+                                        Persetujuan Pimpinan
+                                    </option>
+                                @endif
 
-                                <option value="diproses" {{ $subdomain->status == 'diproses' ? 'selected' : '' }}>
+                                <option value="diproses" {{ $emailSatker->status == 'diproses' ? 'selected' : '' }}>
                                     Proses Pembuatan
                                 </option>
 
-                                <option value="selesai" {{ $subdomain->status == 'selesai' ? 'selected' : '' }}>
+                                <option value="selesai" {{ $emailSatker->status == 'selesai' ? 'selected' : '' }}>
                                     Selesai
                                 </option>
 
-                                <option value="tutup" {{ $subdomain->status == 'tutup' ? 'selected' : '' }}>
+                                <option value="tutup" {{ $emailSatker->status == 'tutup' ? 'selected' : '' }}>
                                     Pengajuan Dibatalkan
                                 </option>
 
@@ -828,121 +845,320 @@
 
                             @error('status')
                                 <p class="text-red-500 text-sm mt-1">
+
                                     {{ $message }}
+
                                 </p>
                             @enderror
 
                         </div>
 
-                        {{-- Catatan --}}
+                        {{-- CATATAN ADMIN --}}
                         <div>
 
                             <label class="block text-sm font-medium mb-2">
+
                                 Catatan Admin
+
                             </label>
 
                             <textarea name="catatan_admin" rows="6" class="w-full rounded-lg border border-outline-variant px-4 py-3"
-                                placeholder="Masukkan catatan untuk pemohon...">{{ old('catatan_admin', $subdomain->catatan_admin) }}</textarea>
+                                placeholder="Masukkan catatan untuk pemohon...">{{ old('catatan_admin', $emailSatker->catatan_admin) }}</textarea>
 
                             @error('catatan_admin')
                                 <p class="text-red-500 text-sm mt-1">
+
                                     {{ $message }}
+
                                 </p>
                             @enderror
 
                         </div>
 
-                        {{-- Info --}}
+                        {{-- INFO --}}
                         <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700">
 
                             Catatan ini akan ditampilkan kepada pemohon pada halaman riwayat pengajuan.
 
                         </div>
 
+                        {{-- CATATAN PIMPINAN --}}
                         <div>
+
                             <label class="block text-sm font-medium mb-2">
+
                                 Catatan Pimpinan
+
                             </label>
 
-                            @if ($subdomain->catatan_pimpinan)
+                            @if ($emailSatker->catatan_pimpinan)
                                 <div class="mt-1 p-3 bg-blue-50 border border-blue-200 rounded-lg">
 
-                                    {{ $subdomain->catatan_pimpinan }}
+                                    {{ $emailSatker->catatan_pimpinan }}
 
                                 </div>
                             @else
-                                <p class="text-red-gray text-sm mt-1">
+                                <p class="text-gray-500 text-sm">
+
                                     Belum ada catatan dari pimpinan.
+
                                 </p>
                             @endif
 
                         </div>
+
                     </div>
+
                 </form>
 
+                <div class="flex flex-col gap-3 mt-5">
 
-                <div class="flex flex-col gap-3 mt-3">
+                    @if ($emailSatker->status == 'diproses')
 
-                    {{-- Saat diproses boleh cetak SK --}}
-                    @if ($subdomain->status == 'diproses')
-                        <a href="{{ route('admin.subdomain.cetak-sk', $subdomain) }}" target="_blank"
-                            class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium">
+                        <div class="border rounded-lg bg-gray-50 p-5 mt-4">
 
-                            Cetak Surat Penunjukan
+                            <h4 class="font-semibold text-lg mb-4">
 
-                        </a>
-                    @endif
+                                Kirim Informasi Akun
 
-                    {{-- Jika sudah ada SK, tampilkan terus --}}
-                    @if ($subdomain->surat_penunjukan)
-                        <div class="border rounded-lg p-4 bg-gray-50 mt-3">
-
-                            <h4 class="font-medium mb-3">
-                                Surat Penunjukan
                             </h4>
 
-                            <div class="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                                Surat Penunjukan telah diupload.
+                            {{-- Tujuan Email --}}
+                            <div class="mb-4 rounded-lg border border-blue-200 bg-blue-50 p-4">
+
+                                <p class="text-sm text-gray-600">
+
+                                    Informasi akun akan dikirim ke Email Penanggung Jawab
+
+                                </p>
+
+                                <p class="font-semibold text-blue-700 mt-1">
+
+                                    {{ $emailSatker->jenis_layanan == 'ubah_penanggung' ? $emailSatker->email_baru : $emailSatker->email }}
+
+                                </p>
+
                             </div>
 
-                            <a href="{{ route('admin.subdomain.download-sk', $subdomain) }}" target="_blank"
-                                class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium">
-
-                                Lihat Surat
-
-                            </a>
-
-                        </div>
-                    @endif
-
-                    {{-- Upload hanya saat diproses --}}
-                    @if ($subdomain->status == 'diproses')
-                        <div class="border rounded-lg p-4 bg-gray-50 mt-3">
-
-                            <h4 class="font-medium mb-3">
-                                Upload Surat Penunjukan Final
-                            </h4>
-
-                            <form action="{{ route('admin.subdomain.upload-sk', $subdomain) }}" method="POST"
-                                enctype="multipart/form-data">
+                            <form action="{{ route('admin.email-satker.send-information', $emailSatker) }}"
+                                method="POST">
 
                                 @csrf
 
-                                <input type="file" name="surat_penunjukan" accept=".pdf"
-                                    class="w-full border p-2 mb-3">
+                                <div class="space-y-4">
 
-                                <button type="submit"
-                                    class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium">
+                                    {{-- ===================== --}}
+                                    {{-- BARU --}}
+                                    {{-- RESET --}}
+                                    {{-- REAKTIVASI --}}
+                                    {{-- ===================== --}}
 
-                                    {{ $subdomain->surat_penunjukan ? 'Upload Ulang Surat' : 'Upload Surat Penunjukan' }}
+                                    @if (in_array($emailSatker->jenis_layanan, ['baru', 'reset', 'reaktivasi']))
+                                        <div>
 
-                                </button>
+                                            <label class="block text-sm font-medium mb-2">
+
+                                                Username Email
+
+                                            </label>
+
+                                            <input type="text" name="username"
+                                                class="w-full rounded-lg border px-4 py-3"
+                                                value="{{ $emailSatker->nama_akun_dinas }}" readonly>
+
+                                        </div>
+                                    @endif
+
+                                    {{-- ===================== --}}
+                                    {{-- UBAH AKUN --}}
+                                    {{-- ===================== --}}
+
+                                    @if ($emailSatker->jenis_layanan == 'ubah_akun')
+                                        <div>
+
+                                            <label class="block text-sm font-medium mb-2">
+
+                                                Username Lama
+
+                                            </label>
+
+                                            <input type="text"
+                                                class="w-full rounded-lg border bg-gray-100 px-4 py-3"
+                                                value="{{ $emailSatker->nama_akun_dinas }}" readonly>
+
+                                        </div>
+
+                                        <div>
+
+                                            <label class="block text-sm font-medium mb-2">
+
+                                                Username Baru
+
+                                            </label>
+
+                                            <input type="text" name="username"
+                                                class="w-full rounded-lg border px-4 py-3"
+                                                value="{{ $emailSatker->nama_akun_dinas_baru }}" readonly>
+
+                                        </div>
+                                    @endif
+
+                                    {{-- ===================== --}}
+                                    {{-- UBAH PENANGGUNG JAWAB --}}
+                                    {{-- ===================== --}}
+
+                                    @if ($emailSatker->jenis_layanan == 'ubah_penanggung')
+                                        <div>
+
+                                            <label class="block text-sm font-medium mb-2">
+
+                                                Username Email
+
+                                            </label>
+
+                                            <input type="text" name="username"
+                                                class="w-full rounded-lg border px-4 py-3"
+                                                value="{{ $emailSatker->nama_akun_dinas }}" readonly>
+
+                                        </div>
+                                    @endif
+
+                                    {{-- PASSWORD --}}
+
+                                    <div>
+
+                                        <label class="block text-sm font-medium mb-2">
+
+                                            @if (in_array($emailSatker->jenis_layanan, ['reset', 'reaktivasi']))
+                                                Password Baru
+                                            @else
+                                                Password Awal
+                                            @endif
+
+                                        </label>
+
+                                        <input type="text" name="password"
+                                            class="w-full rounded-lg border px-4 py-3"
+                                            placeholder="Masukkan password awal" required>
+
+                                    </div>
+
+                                    <button type="submit"
+                                        class="w-full rounded-lg bg-primary py-3 text-white hover:opacity-90">
+
+                                        @if ($emailSatker->dokumen_akun)
+
+                                            <button type="submit"
+                                                class="w-full rounded-lg bg-orange-500 hover:bg-orange-600 text-white py-3">
+
+                                                Kirim Ulang Informasi Akun
+
+                                            </button>
+                                        @else
+                                            <button type="submit"
+                                                class="w-full rounded-lg bg-primary hover:opacity-90 text-white py-3">
+
+                                                @if ($emailSatker->jenis_layanan == 'baru')
+                                                    Kirim Informasi Akun
+                                                @elseif($emailSatker->jenis_layanan == 'reset')
+                                                    Kirim Password Baru
+                                                @elseif($emailSatker->jenis_layanan == 'reaktivasi')
+                                                    Kirim Informasi Reaktivasi
+                                                @elseif($emailSatker->jenis_layanan == 'ubah_akun')
+                                                    Kirim Informasi Perubahan Akun
+                                                @elseif($emailSatker->jenis_layanan == 'ubah_penanggung')
+                                                    Kirim Informasi Penanggung Jawab
+                                                @endif
+
+                                            </button>
+
+                                        @endif
+
+                                    </button>
+
+                                </div>
 
                             </form>
 
                         </div>
+
                     @endif
 
+                    @if ($emailSatker->dokumen_akun)
+
+                        <div class="border rounded-lg p-4 bg-green-50 mt-4">
+
+                            <div class="flex items-center gap-2 mb-3">
+
+                                <span class="material-symbols-outlined text-green-600">
+
+                                    mark_email_read
+
+                                </span>
+
+                                <h4 class="font-semibold">
+
+                                    Informasi Akun
+
+                                </h4>
+
+                            </div>
+
+                            <div class="space-y-2 text-sm">
+
+                                <div>
+
+                                    <span class="text-gray-500">
+
+                                        Status Pengiriman
+
+                                    </span>
+
+                                    <br>
+
+                                    <span class="font-medium text-green-700">
+
+                                        Berhasil Dikirim
+
+                                    </span>
+
+                                </div>
+
+                                @if ($emailSatker->email_sent_at)
+                                    <div>
+
+                                        <span class="text-gray-500">
+
+                                            Tanggal Pengiriman
+
+                                        </span>
+
+                                        <br>
+
+                                        <span class="font-medium">
+
+                                            {{ $emailSatker->email_sent_at->format('d F Y H:i') }}
+
+                                        </span>
+
+                                    </div>
+                                @endif
+
+                            </div>
+
+                            <a href="{{ route('admin.email-satker.information-account', $emailSatker) }}"
+                                target="_blank"
+                                class="mt-4 block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg">
+
+                                Lihat Dokumen Informasi Akun
+
+                            </a>
+
+                        </div>
+
+                    @endif
+
+                    {{-- Simpan + Kembali --}}
                     <div class="flex gap-3">
 
                         <button type="submit" form="status"
@@ -952,7 +1168,7 @@
 
                         </button>
 
-                        <a href="{{ route('admin.subdomain') }}"
+                        <a href="{{ route('admin.email-satker') }}"
                             class="flex-1 text-center border border-outline-variant py-3 rounded-lg font-medium hover:bg-surface-container transition">
 
                             Kembali
@@ -960,10 +1176,11 @@
                         </a>
 
                     </div>
+
                 </div>
+
             </div>
         </div>
-
     </div>
 
     <script>

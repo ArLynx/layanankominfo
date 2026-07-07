@@ -109,7 +109,7 @@
                         </li>
 
                         <li>
-                            <a href="#"
+                            <a href=""
                                 class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-container-high">
                                 <span class="material-symbols-outlined text-[18px]">mail</span>
                                 <span>Email Pribadi</span>
@@ -117,7 +117,7 @@
                         </li>
 
                         <li>
-                            <a href="#"
+                            <a href="{{ route('admin.email-satker') }}"
                                 class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-container-high">
                                 <span class="material-symbols-outlined text-[18px]">alternate_email</span>
                                 <span>Email Satker</span>

@@ -72,28 +72,32 @@
                         <!-- Email Pribadi -->
                         <label class="cursor-pointer">
                             <a href="{{ route('email-pribadi.create') }}" class="block">
-                            <div
-                                class="p-6 border-2 border-border-subtle rounded-xl peer-checked:border-primary peer-checked:bg-primary-fixed/20 hover:border-outline-variant transition-all h-full flex flex-col items-center text-center">
                                 <div
-                                    class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-4 text-primary">
-                                    <span class="material-symbols-outlined text-[32px]">mail</span>
+                                    class="p-6 border-2 border-border-subtle rounded-xl peer-checked:border-primary peer-checked:bg-primary-fixed/20 hover:border-outline-variant transition-all h-full flex flex-col items-center text-center">
+                                    <div
+                                        class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-4 text-primary">
+                                        <span class="material-symbols-outlined text-[32px]">mail</span>
+                                    </div>
+                                    <h4 class="text-label-md font-label-md text-on-surface">Email Kedinasan (Personal)</h4>
+                                    <p class="text-caption font-caption text-on-surface-variant mt-2">Alamat email resmi
+                                        dengan
+                                        domain @murungrayakab.go.id untuk ASN.</p>
                                 </div>
-                                <h4 class="text-label-md font-label-md text-on-surface">Email Kedinasan (Personal)</h4>
-                                <p class="text-caption font-caption text-on-surface-variant mt-2">Alamat email resmi dengan
-                                    domain @murungrayakab.go.id untuk ASN.</p>
-                            </div>
                         </label>
 
                         <!-- Email Satker -->
                         <label class="cursor-pointer">
-                            <input class="peer sr-only service-type-input" name="type" type="radio" value="email_satker">
-                            <div class="p-6 border-2 border-border-subtle rounded-xl peer-checked:border-primary peer-checked:bg-primary-fixed/20 hover:border-outline-variant transition-all h-full flex flex-col items-center text-center">
-                                <div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-4 text-primary">
-                                    <span class="material-symbols-outlined text-[32px]">corporate_fare</span>
+                            <a href="{{ route('email-satker.create') }}" class="block">
+                                <div
+                                    class="p-6 border-2 border-border-subtle rounded-xl peer-checked:border-primary peer-checked:bg-primary-fixed/20 hover:border-outline-variant transition-all h-full flex flex-col items-center text-center">
+                                    <div
+                                        class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-4 text-primary">
+                                        <span class="material-symbols-outlined text-[32px]">corporate_fare</span>
+                                    </div>
+                                    <h4 class="text-label-md font-label-md text-on-surface">Email Satker</h4>
+                                    <p class="text-caption font-caption text-on-surface-variant mt-2">Email resmi untuk unit
+                                        kerja/satker (@murungrayakab.go.id).</p>
                                 </div>
-                                <h4 class="text-label-md font-label-md text-on-surface">Email Satker</h4>
-                                <p class="text-caption font-caption text-on-surface-variant mt-2">Email resmi untuk unit kerja/satker (@murungrayakab.go.id).</p>
-                            </div>
                         </label>
                     </div>
                 </div>

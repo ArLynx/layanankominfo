@@ -22,7 +22,7 @@
             <div class="bg-white rounded-xl shadow p-6">
 
                 <h2 class="text-2xl font-bold mb-6">
-                    Detail Pengajuan Subdomain
+                    Detail Pengajuan Email Satuan Kerja
                 </h2>
 
 
@@ -54,7 +54,7 @@
                             </p>
 
                             <p class="font-semibold">
-                                {{ $subdomain->nomor_tiket }}
+                                {{ $emailSatker->nomor_tiket }}
                             </p>
 
                         </div>
@@ -67,7 +67,7 @@
 
                             <p class="font-semibold">
 
-                                @switch($subdomain->status)
+                                @switch($emailSatker->status)
                                     @case('terbuka')
                                         Pengajuan
                                     @break
@@ -105,21 +105,25 @@
 
                             <p class="font-semibold">
 
-                                @switch($subdomain->jenis_layanan)
+                                @switch($emailSatker->jenis_layanan)
                                     @case('baru')
-                                        Pengajuan Subdomain Baru
+                                        Pengajuan Email Satker Baru
+                                    @break
+
+                                    @case('reset')
+                                        Reset Password
+                                    @break
+
+                                    @case('reaktivasi')
+                                        Reaktivasi Akun
+                                    @break
+
+                                    @case('ubah_akun')
+                                        Perubahan Nama Akun Email
                                     @break
 
                                     @case('ubah_penanggung')
-                                        Perubahan Penanggung Jawab
-                                    @break
-
-                                    @case('ubah_subdomain')
-                                        Perubahan Nama Subdomain
-                                    @break
-
-                                    @case('nonaktif')
-                                        Penonaktifan Subdomain
+                                        Perubahan Penanggung Jawab Email
                                     @break
                                 @endswitch
 
@@ -135,7 +139,7 @@
 
                             <p class="font-semibold">
 
-                                {{ $subdomain->created_at->locale('id')->translatedFormat('d F Y') }}
+                                {{ $emailSatker->created_at->locale('id')->translatedFormat('d F Y') }}
 
                             </p>
 
@@ -145,106 +149,73 @@
 
                 </div>
 
-                {{-- ================= DATA SUBDOMAIN ================= --}}
+                {{-- ================= DATA EMAIL SATUAN KERJA ================= --}}
                 <div class="bg-surface rounded-xl border border-outline-variant p-6 mb-8">
 
                     <div class="flex items-center gap-3 mb-6">
 
                         <span class="material-symbols-outlined text-3xl text-on-surface">
-
-                            dns
-
+                            alternate_email
                         </span>
 
                         <h3 class="text-xl font-semibold text-on-surface">
-
-                            Data Subdomain
-
+                            Data Email Satuan Kerja
                         </h3>
 
                     </div>
 
                     <div class="grid md:grid-cols-2 gap-6">
 
-                        {{-- Nama Subdomain --}}
-                        @if ($subdomain->jenis_layanan == 'ubah_subdomain')
+                        @if ($emailSatker->jenis_layanan == 'ubah_akun')
                             <div>
                                 <p class="text-sm text-gray-500">
-                                    Nama Subdomain Lama
+                                    Nama Akun Email Lama
                                 </p>
+
                                 <p class="font-semibold">
-                                    {{ $subdomain->nama_subdomain }}
+                                    {{ $emailSatker->nama_akun_dinas }}
                                 </p>
                             </div>
 
                             <div>
                                 <p class="text-sm text-gray-500">
-                                    Nama Subdomain Baru
+                                    Nama Akun Email Baru
                                 </p>
+
                                 <p class="font-semibold">
-                                    {{ $subdomain->nama_subdomain_baru }}
+                                    {{ $emailSatker->nama_akun_dinas_baru }}
                                 </p>
                             </div>
                         @else
                             <div class="md:col-span-2">
 
                                 <p class="text-sm text-gray-500">
-                                    Nama Subdomain
+                                    Nama Akun Email
                                 </p>
+
                                 <p class="font-semibold">
-                                    {{ $subdomain->nama_subdomain }}
+                                    {{ $emailSatker->nama_akun_dinas }}
                                 </p>
 
                             </div>
                         @endif
 
-                        {{-- Deskripsi Website --}}
-                        @php
-                            $judulDeskripsi = match ($subdomain->jenis_layanan) {
-                                'ubah_penanggung' => 'Alasan Perubahan Penanggung Jawab',
-                                'ubah_subdomain' => 'Alasan Perubahan Nama Subdomain',
-                                'nonaktif' => 'Alasan Penonaktifan Subdomain',
-                                default => 'Deskripsi Website',
-                            };
-                        @endphp
-
-                        <div class="md:col-span-2">
-
-                            <p class="text-sm text-gray-500 mb-2">
-                                {{ $judulDeskripsi }}
-                            </p>
-                            <div class="rounded-xl border border-slate-200 bg-slate-50 px-5 py-4">
-
-                                <p class="text-gray-800 whitespace-pre-line break-words leading-7">
-
-                                    {{ $subdomain->deskripsi_website }}
-
-                                </p>
-
-                            </div>
-
-                        </div>
-
                     </div>
 
                 </div>
 
-
                 {{-- ================= DATA PENANGGUNG JAWAB ================= --}}
-
                 <div class="bg-surface rounded-xl border border-outline-variant p-6 mb-8">
 
                     <div class="flex items-center gap-3 mb-6">
 
                         <span class="material-symbols-outlined text-3xl text-on-surface">
-
                             badge
-
                         </span>
 
                         <h3 class="text-xl font-semibold text-on-surface">
 
-                            @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+                            @if ($emailSatker->jenis_layanan == 'ubah_penanggung')
                                 Data Penanggung Jawab Lama
                             @else
                                 Data Penanggung Jawab
@@ -264,7 +235,7 @@
                             </p>
 
                             <p class="font-semibold">
-                                {{ $subdomain->nama_penanggung_jawab }}
+                                {{ $emailSatker->nama_penanggung_jawab }}
                             </p>
 
                         </div>
@@ -277,7 +248,7 @@
                             </p>
 
                             <p class="font-semibold">
-                                {{ $subdomain->nip_penanggung_jawab }}
+                                {{ $emailSatker->nip }}
                             </p>
 
                         </div>
@@ -290,7 +261,7 @@
                             </p>
 
                             <p class="font-semibold">
-                                {{ $subdomain->jabatan }}
+                                {{ $emailSatker->jabatan }}
                             </p>
 
                         </div>
@@ -303,12 +274,12 @@
                             </p>
 
                             <p class="font-semibold">
-                                {{ $subdomain->pangkat_gol }}
+                                {{ $emailSatker->pangkat_gol }}
                             </p>
 
                         </div>
 
-                        {{-- No HP --}}
+                        {{-- Nomor HP --}}
                         <div>
 
                             <p class="text-sm text-gray-500">
@@ -316,7 +287,7 @@
                             </p>
 
                             <p class="font-semibold">
-                                {{ $subdomain->no_hp }}
+                                {{ $emailSatker->no_hp }}
                             </p>
 
                         </div>
@@ -329,7 +300,7 @@
                             </p>
 
                             <p class="font-semibold">
-                                {{ $subdomain->email }}
+                                {{ $emailSatker->email }}
                             </p>
 
                         </div>
@@ -342,7 +313,7 @@
                             </p>
 
                             <p class="font-semibold">
-                                {{ $subdomain->nama_instansi }}
+                                {{ $emailSatker->nama_instansi }}
                             </p>
 
                         </div>
@@ -351,15 +322,13 @@
 
                 </div>
 
-                @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+                @if ($emailSatker->jenis_layanan == 'ubah_penanggung')
                     <div class="bg-surface rounded-xl border border-outline-variant p-6 mb-8">
 
                         <div class="flex items-center gap-3 mb-6">
 
                             <span class="material-symbols-outlined text-3xl text-on-surface">
-
                                 manage_accounts
-
                             </span>
 
                             <h3 class="text-xl font-semibold text-on-surface">
@@ -370,8 +339,6 @@
 
                         </div>
 
-
-
                         <div class="grid md:grid-cols-2 gap-6">
 
                             <div>
@@ -381,7 +348,7 @@
                                 </p>
 
                                 <p class="font-semibold">
-                                    {{ $subdomain->nama_penanggung_jawab_baru }}
+                                    {{ $emailSatker->nama_penanggung_jawab_baru }}
                                 </p>
 
                             </div>
@@ -393,7 +360,7 @@
                                 </p>
 
                                 <p class="font-semibold">
-                                    {{ $subdomain->nip_penanggung_jawab_baru }}
+                                    {{ $emailSatker->nip_baru }}
                                 </p>
 
                             </div>
@@ -405,7 +372,7 @@
                                 </p>
 
                                 <p class="font-semibold">
-                                    {{ $subdomain->jabatan_baru }}
+                                    {{ $emailSatker->jabatan_baru }}
                                 </p>
 
                             </div>
@@ -417,7 +384,7 @@
                                 </p>
 
                                 <p class="font-semibold">
-                                    {{ $subdomain->pangkat_gol_baru }}
+                                    {{ $emailSatker->pangkat_gol_baru }}
                                 </p>
 
                             </div>
@@ -429,7 +396,7 @@
                                 </p>
 
                                 <p class="font-semibold">
-                                    {{ $subdomain->no_hp_baru }}
+                                    {{ $emailSatker->no_hp_baru }}
                                 </p>
 
                             </div>
@@ -441,7 +408,7 @@
                                 </p>
 
                                 <p class="font-semibold">
-                                    {{ $subdomain->email_baru }}
+                                    {{ $emailSatker->email_baru }}
                                 </p>
 
                             </div>
@@ -457,21 +424,18 @@
                     <div class="flex items-center gap-3 mb-6">
 
                         <span class="material-symbols-outlined text-3xl text-on-surface">
-
                             account_balance
-
                         </span>
 
                         <h3 class="text-xl font-semibold text-on-surface">
-
                             Data Pimpinan
-
                         </h3>
 
                     </div>
 
                     <div class="grid md:grid-cols-2 gap-6">
 
+                        {{-- Nama Pimpinan --}}
                         <div>
 
                             <p class="text-sm text-gray-500">
@@ -479,13 +443,12 @@
                             </p>
 
                             <p class="font-semibold">
-
-                                {{ $subdomain->nama_kadis }}
-
+                                {{ $emailSatker->nama_kadis }}
                             </p>
 
                         </div>
 
+                        {{-- Jabatan --}}
                         <div>
 
                             <p class="text-sm text-gray-500">
@@ -493,13 +456,12 @@
                             </p>
 
                             <p class="font-semibold">
-
-                                {{ $subdomain->jabatan_kadis }}
-
+                                {{ $emailSatker->jabatan_kadis }}
                             </p>
 
                         </div>
 
+                        {{-- NIP --}}
                         <div>
 
                             <p class="text-sm text-gray-500">
@@ -507,9 +469,7 @@
                             </p>
 
                             <p class="font-semibold">
-
-                                {{ $subdomain->nip_kadis }}
-
+                                {{ $emailSatker->nip_kadis }}
                             </p>
 
                         </div>
@@ -537,7 +497,7 @@
 
                     </div>
 
-                    @if ($subdomain->catatan_admin)
+                    @if ($emailSatker->catatan_admin)
                         <div class="rounded-lg border border-yellow-300 bg-yellow-50 p-5">
 
                             <div class="flex gap-3">
@@ -558,7 +518,7 @@
 
                                     <p class="mt-2 text-yellow-700 whitespace-pre-line">
 
-                                        {{ $subdomain->catatan_admin }}
+                                        {{ $emailSatker->catatan_admin }}
 
                                     </p>
 
@@ -618,7 +578,7 @@
 
                                 <ul class="mt-3 space-y-2 text-sm text-gray-700">
 
-                                    <li>✔ Nama Subdomain</li>
+                                    <li>✔ Nama Akun Email Dinas / Unit Kerja</li>
 
                                     <li>✔ Jenis Layanan</li>
 
@@ -632,11 +592,11 @@
 
                                     <li>✔ Nomor HP</li>
 
-                                    <li>✔ Email</li>
+                                    <li>✔ Email Penanggung Jawab</li>
 
-                                    <li>✔ Nama Instansi</li>
+                                    <li>✔ Nama Instansi / Unit Kerja</li>
 
-                                    <li>✔ Nama, NIP dan Jabatan Pimpinan</li>
+                                    <li>✔ Nama, Jabatan dan NIP Pimpinan</li>
 
                                 </ul>
 
@@ -657,8 +617,8 @@
                             </div>
 
                             <div class="flex flex-wrap gap-3 mt-8">
-                                @if (!$subdomain->formulir_subdomain)
-                                    <a href="{{ route('subdomain.edit', $subdomain) }}"
+                                @if (!$emailSatker->formulir_email)
+                                    <a href="{{ route('email-satker.edit', $emailSatker) }}"
                                         class="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium transition">
                                         <span class="material-symbols-outlined text-xl">
                                             edit_square
@@ -693,23 +653,17 @@
                         <div class="border-b px-6 py-5 flex items-center gap-3">
 
                             <span class="material-symbols-outlined text-amber-500 text-4xl">
-
                                 warning
-
                             </span>
 
                             <div>
 
                                 <h3 class="text-xl font-bold">
-
                                     Konfirmasi Cetak Formulir
-
                                 </h3>
 
                                 <p class="text-sm text-gray-500">
-
                                     Mohon pastikan seluruh data sudah benar.
-
                                 </p>
 
                             </div>
@@ -733,24 +687,24 @@
 
                                         <span>Nomor Tiket</span>
 
-                                        <strong>{{ $subdomain->nomor_tiket }}</strong>
+                                        <strong>{{ $emailSatker->nomor_tiket }}</strong>
 
                                     </div>
 
                                     <div class="flex justify-between">
 
-                                        <span>Subdomain</span>
+                                        <span>Nama Akun Email</span>
 
-                                        <strong>{{ $subdomain->nama_subdomain }}</strong>
+                                        <strong>{{ $emailSatker->nama_akun_dinas }}</strong>
 
                                     </div>
 
-                                    @if ($subdomain->jenis_layanan == 'ubah_subdomain')
+                                    @if ($emailSatker->jenis_layanan == 'ubah_akun')
                                         <div class="flex justify-between">
 
-                                            <span>Subdomain Baru</span>
+                                            <span>Nama Akun Email Baru</span>
 
-                                            <strong>{{ $subdomain->nama_subdomain_baru }}</strong>
+                                            <strong>{{ $emailSatker->nama_akun_dinas_baru }}</strong>
 
                                         </div>
                                     @endif
@@ -759,7 +713,7 @@
 
                                         <span>Penanggung Jawab</span>
 
-                                        <strong>{{ $subdomain->nama_penanggung_jawab }}</strong>
+                                        <strong>{{ $emailSatker->nama_penanggung_jawab }}</strong>
 
                                     </div>
 
@@ -767,7 +721,7 @@
 
                                         <span>NIP</span>
 
-                                        <strong>{{ $subdomain->nip_penanggung_jawab }}</strong>
+                                        <strong>{{ $emailSatker->nip }}</strong>
 
                                     </div>
 
@@ -815,7 +769,7 @@
 
                             </button>
 
-                            <a id="btnCetak" href="{{ route('subdomain.cetak', $subdomain) }}" target="_blank"
+                            <a id="btnCetak" href="{{ route('email-satker.cetak', $emailSatker) }}" target="_blank"
                                 onclick="closeCetakModal()"
                                 class="px-5 py-2 rounded-lg bg-primary text-white opacity-50 pointer-events-none">
 
@@ -846,15 +800,15 @@
                             </p>
 
                             <ul class="mt-2 text-sm text-amber-700 list-disc list-inside space-y-1">
+
                                 <li>Cetak formulir yang telah diunduh.</li>
+
                                 <li>Mintakan tanda tangan pimpinan.</li>
+
                                 <li>Scan formulir dalam format PDF.</li>
+
                                 <li>Upload formulir yang telah ditandatangani.</li>
-                                @if ($subdomain->jenis_layanan == 'ubah_penanggung')
-                                    <li class="text-red-600 font-medium">
-                                        Upload Surat Penunjukan Penanggung Jawab sebelumnya sebagai dokumen pendukung.
-                                    </li>
-                                @endif
+
                             </ul>
 
                         </div>
@@ -863,39 +817,7 @@
 
                 </div>
 
-                @if ($subdomain->jenis_layanan == 'ubah_penanggung')
-                    <div class="mb-6 rounded-xl border border-blue-300 bg-blue-50 p-5">
-
-                        <div class="flex items-start gap-3">
-
-                            <span class="material-symbols-outlined text-blue-600 text-3xl">
-                                description
-                            </span>
-
-                            <div>
-
-                                <h3 class="font-semibold text-blue-800">
-                                    Persyaratan Tambahan
-                                </h3>
-
-                                <p class="mt-2 text-sm text-blue-700 leading-relaxed">
-
-                                    Untuk layanan <strong>Perubahan Penanggung Jawab</strong>,
-                                    pemohon wajib mengunggah
-                                    <strong>Surat Penunjukan Penanggung Jawab sebelumnya</strong>
-                                    sebagai dokumen pendukung perubahan penanggung jawab subdomain.
-
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                @endif
-
-
-                @if (!$subdomain->formulir_subdomain)
+                @if (!$emailSatker->formulir_email)
                     <div class="mt-8 bg-white rounded-xl shadow p-6">
 
                         <div class="flex items-center gap-3 mb-5">
@@ -907,30 +829,26 @@
                             <div>
 
                                 <h3 class="text-xl font-semibold">
-
                                     Upload Formulir
-
                                 </h3>
 
                                 <p class="text-sm text-gray-500">
-
-                                    Upload formulir yang telah dicetak dan ditandatangani oleh pimpinan.( max 5MB )
-
+                                    Upload formulir yang telah dicetak dan ditandatangani oleh pimpinan (maks. 5 MB).
                                 </p>
 
                             </div>
 
                         </div>
 
-                        <form action="{{ route('subdomain.upload-formulir', $subdomain) }}" method="POST"
+                        <form action="{{ route('email-satker.upload-formulir', $emailSatker) }}" method="POST"
                             enctype="multipart/form-data">
 
                             @csrf
 
-                            <input type="file" name="formulir_subdomain" accept=".pdf"
+                            <input type="file" name="formulir_email" accept=".pdf"
                                 class="block w-full rounded-lg border border-gray-300 p-3">
 
-                            @error('formulir_subdomain')
+                            @error('formulir_email')
                                 <p class="text-red-500 text-sm mt-2">
                                     {{ $message }}
                                 </p>
@@ -947,7 +865,7 @@
                     </div>
                 @endif
 
-                @if ($subdomain->formulir_subdomain)
+                @if ($emailSatker->formulir_email)
                     <div class="mt-8 bg-green-50 border border-green-300 rounded-xl p-6">
 
                         <div class="flex items-start gap-4">
@@ -974,7 +892,7 @@
 
                                 </p>
 
-                                <a href="{{ route('subdomain.download-formulir', $subdomain) }}" target="_blank"
+                                <a href="{{ route('email-satker.download-formulir', $emailSatker) }}" target="_blank"
                                     class="inline-flex items-center gap-2 mt-5 px-5 py-3 bg-green-600 text-white rounded-lg">
 
                                     <span class="material-symbols-outlined">
@@ -994,135 +912,160 @@
                     </div>
                 @endif
 
+                @if ($emailSatker->status == 'selesai' && $emailSatker->email_sent_at)
+                    @php
+                        $message = '';
 
-                @if ($subdomain->jenis_layanan == 'ubah_penanggung' && !$subdomain->surat_penunjukan_lama)
-                    <div class="mt-8 bg-white rounded-xl shadow p-6">
+                        $recipient = $emailSatker->email;
+
+                        switch ($emailSatker->jenis_layanan) {
+                            case 'baru':
+                                $message =
+                                    'Pengajuan Email Satuan Kerja telah selesai diproses. Informasi akun email telah dikirim ke Email Penanggung Jawab.';
+                                break;
+
+                            case 'reset':
+                                $message =
+                                    'Password akun email telah berhasil direset. Informasi password baru telah dikirim ke Email Penanggung Jawab.';
+                                break;
+
+                            case 'reaktivasi':
+                                $message =
+                                    'Akun email telah berhasil direaktivasi. Informasi akun telah dikirim ke Email Penanggung Jawab.';
+                                break;
+
+                            case 'ubah_akun':
+                                $message =
+                                    'Perubahan nama akun email telah selesai diproses. Informasi akun terbaru telah dikirim ke Email Penanggung Jawab.';
+                                break;
+
+                            case 'ubah_penanggung':
+                                $message =
+                                    'Perubahan Penanggung Jawab telah selesai diproses. Informasi akun telah dikirim ke Email Penanggung Jawab baru.';
+                                $recipient = $emailSatker->email_baru;
+                                break;
+                        }
+                    @endphp
+
+                    <div class="mt-8 rounded-xl border border-green-300 bg-green-50 p-6">
 
                         <div class="flex items-center gap-3 mb-5">
 
-                            <span class="material-symbols-outlined text-primary text-3xl">
-                                description
+                            <span class="material-symbols-outlined text-green-600 text-4xl">
+                                mark_email_read
                             </span>
 
                             <div>
 
-                                <h3 class="text-xl font-semibold">
-                                    Upload Surat Penunjukan Sebelumnya
+                                <h3 class="text-xl font-bold text-green-800">
+                                    Informasi Akun Email
                                 </h3>
 
-                                <p class="text-sm text-gray-500">
-                                    Upload Surat Penunjukan Penanggung Jawab sebelumnya
-                                    yang masih berlaku sebagai dokumen pendukung.( Mak 5 MB )
+                                <p class="text-sm text-green-700">
+                                    Informasi akun telah berhasil dikirim.
                                 </p>
 
                             </div>
 
                         </div>
 
-                        <form action="{{ route('subdomain.upload-surat-lama', $subdomain) }}" method="POST" enctype="multipart/form-data">
+                        <div class="rounded-lg bg-white border border-green-200 p-5">
 
-                            @csrf
+                            <p class="text-gray-700 leading-relaxed">
 
-                            <input type="file" name="surat_penunjukan_lama" accept=".pdf"
-                                class="block w-full rounded-lg border border-gray-300 p-3">
+                                {{ $message }}
 
-                            @error('surat_penunjukan_lama')
-                                <p class="text-red-500 text-sm mt-2">
-                                    {{ $message }}
-                                </p>
-                            @enderror
+                            </p>
 
-                            <button class="mt-5 bg-primary text-white px-6 py-3 rounded-lg hover:opacity-90">
+                            <div class="grid md:grid-cols-3 gap-5 mt-6">
 
-                                Upload Surat Penunjukan
+                                <div>
 
-                            </button>
+                                    <p class="text-sm text-gray-500">
 
-                        </form>
+                                        Email Tujuan
 
-                    </div>
-                @endif
+                                    </p>
 
-                @if ($subdomain->jenis_layanan == 'ubah_penanggung' && $subdomain->surat_penunjukan_lama)
-                    <div class="mt-8 bg-green-50 border border-green-300 rounded-xl p-6">
+                                    <p class="font-semibold break-all">
 
-                        <div class="flex items-start gap-4">
+                                        {{ $recipient }}
 
-                            <span class="material-symbols-outlined text-green-600 text-5xl">
-                                verified
-                            </span>
+                                    </p>
 
-                            <div>
+                                </div>
 
-                                <h3 class="font-bold text-lg text-green-700">
+                                <div>
 
-                                    Surat Penunjukan Sebelumnya Berhasil Diupload
+                                    <p class="text-sm text-gray-500">
 
-                                </h3>
+                                        Tanggal Pengiriman
 
-                                <p class="mt-2 text-green-700">
+                                    </p>
 
-                                    Surat Penunjukan sebelumnya berhasil diupload
-                                    dan siap diverifikasi oleh Admin Diskominfo.
+                                    <p class="font-semibold">
 
-                                </p>
+                                        {{ $emailSatker->email_sent_at->translatedFormat('d F Y H:i') }} WIB
 
-                                <a href="{{ route('subdomain.download-surat-lama', $subdomain) }}" target="_blank"
-                                    class="inline-flex items-center gap-2 mt-5 px-5 py-3 bg-green-600 text-white rounded-lg">
+                                    </p>
 
-                                    <span class="material-symbols-outlined">
-                                        download
-                                    </span>
+                                </div>
 
-                                    Download Surat Penunjukan
+                                <div>
 
-                                </a>
+                                    <p class="text-sm text-gray-500">
 
-                            </div>
+                                        Status
 
-                        </div>
+                                    </p>
 
-                    </div>
-                @endif
+                                    <span
+                                        class="inline-flex mt-1 items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
 
-                @if ($subdomain->surat_penunjukan)
-                    <div class="mt-8 bg-blue-50 border border-blue-300 rounded-xl p-6">
-
-                        <div class="flex items-start gap-4">
-
-                            <span class="material-symbols-outlined text-blue-600 text-5xl">
-
-                                description
-
-                            </span>
-
-                            <div>
-
-                                <h3 class="font-bold text-lg text-blue-700">
-
-                                    Surat Penunjukan Telah Tersedia
-
-                                </h3>
-
-                                <p class="mt-2 text-blue-700">
-
-                                    Surat penunjukan telah diterbitkan oleh Diskominfo
-                                    dan dapat diunduh melalui tombol berikut.
-
-                                </p>
-
-                                <a href="{{ route('subdomain.download-sk-penunjukan', $subdomain) }}" target="_blank"
-                                    class="inline-flex items-center gap-2 mt-5 px-5 py-3 bg-blue-600 text-white rounded-lg">
-
-                                    <span class="material-symbols-outlined">
-
-                                        download
+                                        Berhasil Dikirim
 
                                     </span>
 
-                                    Download Surat Penunjukan
+                                </div>
 
-                                </a>
+                            </div>
+
+                            <div class="mt-6 border-t pt-5">
+
+                                <div class="flex items-start gap-3">
+
+                                    <span class="material-symbols-outlined text-blue-600">
+
+                                        info
+
+                                    </span>
+
+                                    <div>
+
+                                        <p class="font-semibold text-blue-800">
+
+                                            Informasi Penting
+
+                                        </p>
+
+                                        <ul class="mt-2 list-disc list-inside text-sm text-gray-700 space-y-1">
+
+                                            <li>Silakan periksa folder <strong>Inbox</strong> maupun <strong>Spam</strong>.
+                                            </li>
+
+                                            <li>Username dan password hanya dikirim melalui email demi menjaga keamanan
+                                                akun.</li>
+
+                                            <li>Dokumen informasi akun tidak dapat diunduh kembali melalui sistem.</li>
+
+                                            <li>Jika email belum diterima dalam beberapa menit, silakan menghubungi
+                                                Administrator Diskominfo.</li>
+
+                                        </ul>
+
+                                    </div>
+
+                                </div>
 
                             </div>
 
@@ -1130,11 +1073,11 @@
 
                     </div>
                 @endif
+
 
             </div>
         </div>
     </main>
-
 
     <script>
         function openCetakModal() {
