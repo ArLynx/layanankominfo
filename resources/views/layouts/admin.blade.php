@@ -109,7 +109,7 @@
                         </li>
 
                         <li>
-                            <a href=""
+                            <a href="{{ route('admin.email-pribadi') }}"
                                 class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-container-high">
                                 <span class="material-symbols-outlined text-[18px]">mail</span>
                                 <span>Email Pribadi</span>
@@ -127,21 +127,6 @@
                     </ul>
 
                 </div>
-
-            </li {{-- Riwayat --}} <li>
-            <a href=""
-                class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('admin.process.history*') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
-
-                <span class="material-symbols-outlined"
-                    style="font-variation-settings: '{{ request()->routeIs('admin.process.history*') ? '1' : '0' }}';">
-                    history
-                </span>
-
-                <span class="text-label-md font-label-md">
-                    Riwayat
-                </span>
-            </a>
-            </li>
 
             {{-- Profil --}}
             <li>

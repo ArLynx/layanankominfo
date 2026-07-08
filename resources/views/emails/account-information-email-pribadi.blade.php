@@ -5,12 +5,12 @@
 
     <p>
         Yth. Bapak/Ibu
-        <b>{{ $data->nama_penanggung_jawab }}</b>,
+        <b>{{ $data->nama }}</b>,
     </p>
 
     <p>
 
-        Pengajuan layanan Email Resmi Pemerintah Daerah telah selesai diproses.
+        Pengajuan layanan Email Pribadi Pemerintah Daerah telah selesai diproses.
 
     </p>
 

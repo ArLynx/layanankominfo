@@ -25,9 +25,7 @@
     <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
             <h2 class="text-headline-lg font-headline-lg text-on-surface">Pengajuan Email Satuan Kerja</h2>
-            <p class="text-body-md font-body-md text-on-surface-variant mt-1">Daftar pengajuan layanan Email Satuan Kerja
-                yang
-                masuk</p>
+            <p class="text-body-md font-body-md text-on-surface-variant mt-1">Daftar pengajuan layanan Email Satuan Kerja yang masuk</p>
         </div>
     </header>
 
@@ -227,7 +225,7 @@
                                     </a>
 
                                     {{-- Persetujuan Pimpinan --}}
-                                     <a href="{{ route('admin.approval-list') }}"
+                                     <a href=""
                                         class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-red-500 text-white">
 
                                         <span class="material-symbols-outlined text-[18px]">

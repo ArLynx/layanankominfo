@@ -1,4 +1,4 @@
-<x-admin-layout title="Pengajuan Subdomain">
+<x-admin-layout title="Pengajuan Email Pribadi">
 
     @if (session('success'))
         <script>
@@ -24,9 +24,13 @@
 
     <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-            <h2 class="text-headline-lg font-headline-lg text-on-surface">Pengajuan Subdomain</h2>
-            <p class="text-body-md font-body-md text-on-surface-variant mt-1">Daftar pengajuan layanan subdomain yang
-                masuk</p>
+            <h2 class="text-headline-lg font-headline-lg text-on-surface">
+                Pengajuan Email Pribadi
+            </h2>
+
+            <p class="text-body-md font-body-md text-on-surface-variant mt-1">
+                Daftar pengajuan layanan Email Pribadi yang masuk
+            </p>
         </div>
     </header>
 
@@ -37,7 +41,7 @@
 
             <div class="flex-1 min-w-[300px]">
                 <input type="text" name="search" value="{{ request('search') }}"
-                    placeholder="Cari tiket, nama pemohon, atau subdomain..."
+                    placeholder="Cari tiket, nama pemohon, atau email..."
                     class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface">
             </div>
 
@@ -104,7 +108,7 @@
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
-                            Nama Subdomain
+                            Nama Akun
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
@@ -128,37 +132,37 @@
 
                 <tbody>
 
-                    @forelse ($subdomains as $subdomain)
+                    @forelse ($emailPribadis as $emailPribadi)
                         <tr class="border-t border-outline-variant">
 
                             <td class="px-6 py-4 text-center whitespace-nowrap">
-                                {{ $subdomains->firstItem() + $loop->index }}
+                                {{ $emailPribadis->firstItem() + $loop->index }}
                             </td>
 
                             <td class="px-6 py-4 whitespace-nowrap">
-                                {{ $subdomain->nomor_tiket }}
+                                {{ $emailPribadi->nomor_tiket }}
                             </td>
 
                             <td class="px-6 py-4 whitespace-nowrap">
-                                {{ $subdomain->nama_penanggung_jawab }}
+                                {{ $emailPribadi->nama }}
                             </td>
 
                             <td class="px-6 py-4 whitespace-nowrap">
-                                {{ $subdomain->nama_instansi }}
+                                {{ $emailPribadi->nama_instansi }}
                             </td>
 
                             <td class="px-6 py-4 whitespace-nowrap">
-                                {{ $subdomain->nama_subdomain }}
+                                {{ $emailPribadi->nama_akun }}
                             </td>
 
                             <td class="px-6 py-4 whitespace-nowrap">
 
                                 @php
-                                    $jenisLayanan = match ($subdomain->jenis_layanan) {
+                                    $jenisLayanan = match ($emailPribadi->jenis_layanan) {
                                         'baru' => 'Pengajuan Baru',
-                                        'ubah_penanggung' => 'Ubah Penanggung Jawab',
-                                        'ubah_subdomain' => 'Ubah Nama Subdomain',
-                                        'nonaktif' => 'Penonaktifan Subdomain',
+                                        'reset' => 'Reset Password',
+                                        'reaktivasi' => 'Reaktivasi Akun',
+                                        'ubah_akun' => 'Perubahan Nama Akun',
                                         default => '-',
                                     };
                                 @endphp
@@ -173,32 +177,32 @@
 
                             <td class="px-6 py-4 whitespace-nowrap">
 
-                                @if ($subdomain->status == 'terbuka')
+                                @if ($emailPribadi->status == 'terbuka')
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-indigo-100 text-indigo-700 whitespace-nowrap">
                                         Pengajuan
                                     </span>
-                                @elseif ($subdomain->status == 'baru')
+                                @elseif ($emailPribadi->status == 'baru')
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-indigo-100 text-indigo-700 whitespace-nowrap">
                                         Pemeriksaan Dokumen
                                     </span>
-                                @elseif ($subdomain->status == 'tunda')
+                                @elseif ($emailPribadi->status == 'tunda')
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-700 whitespace-nowrap">
                                         Persetujuan Pimpinan
                                     </span>
-                                @elseif ($subdomain->status == 'diproses')
+                                @elseif ($emailPribadi->status == 'diproses')
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-indigo-100 text-indigo-700 whitespace-nowrap">
                                         Proses Pembuatan
                                     </span>
-                                @elseif ($subdomain->status == 'selesai')
+                                @elseif ($emailPribadi->status == 'selesai')
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-700 whitespace-nowrap">
                                         Selesai
                                     </span>
-                                @elseif ($subdomain->status == 'tutup')
+                                @elseif ($emailPribadi->status == 'tutup')
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-red-100 text-red-700 whitespace-nowrap">
                                         Pengajuan Dicancel
@@ -208,14 +212,14 @@
                             </td>
 
                             <td class="px-6 py-4 whitespace-nowrap">
-                                {{ $subdomain->created_at->format('d M Y') }}
+                                {{ $emailPribadi->created_at->format('d M Y') }}
                             </td>
 
                             <td class="px-6 py-4 whitespace-nowrap">
 
                                 <div class="flex justify-center gap-2">
 
-                                    <a href="{{ route('admin.subdomain.show', $subdomain) }}"
+                                    <a href="{{ route('admin.email-pribadi.show', $emailPribadi) }}"
                                         class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-primary text-white">
 
                                         <span class="material-symbols-outlined text-[18px]">
@@ -225,7 +229,7 @@
                                     </a>
 
                                     {{-- Persetujuan Pimpinan --}}
-                                    <a href=""
+                                    <a href="{{ route('admin.approval-list') }}"
                                         class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-red-500 text-white">
 
                                         <span class="material-symbols-outlined text-[18px]">
@@ -300,7 +304,7 @@
 
                         <tr>
                             <td colspan="9" class="py-16 text-center">
-                                Belum ada pengajuan subdomain.
+                                Belum ada pengajuan Email Pribadi.
                             </td>
                         </tr>
                     @endforelse
@@ -317,15 +321,15 @@
 
                 <div class="text-sm text-on-surface-variant">
                     Menampilkan
-                    {{ $subdomains->firstItem() ?? 0 }}
+                    {{ $emailPribadis->firstItem() ?? 0 }}
                     -
-                    {{ $subdomains->lastItem() ?? 0 }}
+                    {{ $emailPribadis->lastItem() ?? 0 }}
                     dari
-                    {{ $subdomains->total() }}
+                    {{ $emailPribadis->total() }}
                     data
                 </div>
 
-                {{ $subdomains->links() }}
+                {{ $emailPribadis->links() }}
 
             </div>
 

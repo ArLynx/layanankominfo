@@ -38,6 +38,12 @@ class RiwayatController extends Controller
             ->oldest()
             ->paginate($perPage, ['*'], 'pribadi_page');
 
-        return view('user.riwayat.index', compact('subdomains', 'emailSatkers', 'emailPribadis'));
+        $subdomainCount = Subdomain::where('user_id', auth()->id())->count();
+
+        $emailSatkerCount = EmailSatker::where('user_id', auth()->id())->count();
+
+        $emailPribadiCount = EmailPribadi::where('user_id', auth()->id())->count();
+
+        return view('user.riwayat.index', compact('subdomains', 'emailSatkers', 'emailPribadis', 'subdomainCount', 'emailSatkerCount', 'emailPribadiCount'));
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\EmailSatker;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -11,23 +10,30 @@ class AccountInformationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $emailSatker;
+    public $data;
 
     protected $pdfPath;
 
+    protected $viewName;
+
     public function __construct(
-        EmailSatker $emailSatker,
-        string $pdfPath
+        $data,
+        string $pdfPath,
+        string $view = 'emails.account-information'
     ) {
-        $this->emailSatker = $emailSatker;
+        $this->data = $data;
         $this->pdfPath = $pdfPath;
+        $this->viewName = $view;
     }
 
     public function build()
     {
         return $this
             ->subject('Informasi Akun Email Resmi')
-            ->view('emails.account-information')
+            ->view($this->viewName)
+            ->with([
+                'data' => $this->data,
+            ])
             ->attach(
                 $this->pdfPath,
                 [

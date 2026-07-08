@@ -8,24 +8,23 @@
     <style>
         body {
             font-family: DejaVu Sans, sans-serif;
-            font-size: 11px;
+            font-size: 12px;
             color: #000;
-            line-height: 1.45;
+            line-height: 1.6;
         }
 
         .box {
             border: 1px solid #000;
-            padding: 14px;
-            margin-top: 15px;
+            padding: 18px;
+            margin-top: 20px;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
         }
 
         td {
-            padding: 4px 6px;
+            padding: 6px;
             vertical-align: top;
         }
 
@@ -35,16 +34,15 @@
         }
 
         .footer {
-            margin-top: 22px;
-            font-size: 10px;
+            margin-top: 35px;
+            font-size: 11px;
         }
 
         .note {
-            margin-top: 15px;
+            margin-top: 25px;
             border: 1px solid #000;
             background: #f5f5f5;
-            padding: 10px;
-            font-size: 10px;
+            padding: 12px;
         }
 
         .watermark {
@@ -90,7 +88,7 @@
 
     <h2 style="text-align:center; margin-bottom:10px;">
 
-        @switch($emailSatker->jenis_layanan)
+        @switch($emailPribadi->jenis_layanan)
             @case('baru')
                 DOKUMEN INFORMASI AKUN EMAIL BARU
             @break
@@ -105,10 +103,6 @@
 
             @case('ubah_akun')
                 DOKUMEN INFORMASI PERUBAHAN NAMA AKUN EMAIL
-            @break
-
-            @case('ubah_penanggung')
-                DOKUMEN INFORMASI PERUBAHAN PENANGGUNG JAWAB EMAIL
             @break
 
             @default
@@ -131,7 +125,7 @@
 
             <td>
 
-                {{ $emailSatker->nomor_tiket }}
+                {{ $emailPribadi->nomor_tiket }}
 
             </td>
 
@@ -161,7 +155,7 @@
 
         <table>
 
-            @if ($emailSatker->jenis_layanan == 'baru')
+            @if ($emailPribadi->jenis_layanan == 'baru')
                 <tr>
                     <td class="label">Jenis Layanan</td>
                     <td>:</td>
@@ -169,21 +163,15 @@
                 </tr>
 
                 <tr>
-                    <td class="label">Nama Instansi</td>
+                    <td class="label">Nama Pemohon</td>
                     <td>:</td>
-                    <td>{{ $emailSatker->nama_instansi }}</td>
+                    <td>{{ $emailPribadi->nama }}</td>
                 </tr>
 
                 <tr>
-                    <td class="label">Penanggung Jawab</td>
+                    <td class="label">Email Pribadi</td>
                     <td>:</td>
-                    <td>{{ $emailSatker->nama_penanggung_jawab }}</td>
-                </tr>
-
-                <tr>
-                    <td class="label">Email Penanggung Jawab</td>
-                    <td>:</td>
-                    <td>{{ $emailSatker->email }}</td>
+                    <td>{{ $emailPribadi->email }}</td>
                 </tr>
 
                 <tr>
@@ -205,7 +193,7 @@
                 </tr>
             @endif
 
-            @if ($emailSatker->jenis_layanan == 'reset')
+            @if ($emailPribadi->jenis_layanan == 'reset')
                 <tr>
                     <td class="label">Jenis Layanan</td>
                     <td>:</td>
@@ -213,21 +201,15 @@
                 </tr>
 
                 <tr>
-                    <td class="label">Nama Instansi</td>
+                    <td class="label">Nama Pemohon</td>
                     <td>:</td>
-                    <td>{{ $emailSatker->nama_instansi }}</td>
+                    <td>{{ $emailPribadi->nama }}</td>
                 </tr>
 
                 <tr>
-                    <td class="label">Penanggung Jawab</td>
+                    <td class="label">Email Pribadi</td>
                     <td>:</td>
-                    <td>{{ $emailSatker->nama_penanggung_jawab }}</td>
-                </tr>
-
-                <tr>
-                    <td class="label">Email Penanggung Jawab</td>
-                    <td>:</td>
-                    <td>{{ $emailSatker->email }}</td>
+                    <td>{{ $emailPribadi->email }}</td>
                 </tr>
 
                 <tr>
@@ -249,7 +231,7 @@
                 </tr>
             @endif
 
-            @if ($emailSatker->jenis_layanan == 'reaktivasi')
+            @if ($emailPribadi->jenis_layanan == 'reaktivasi')
                 <tr>
                     <td class="label">Jenis Layanan</td>
                     <td>:</td>
@@ -257,21 +239,15 @@
                 </tr>
 
                 <tr>
-                    <td class="label">Nama Instansi</td>
+                    <td class="label">Nama Pemohon</td>
                     <td>:</td>
-                    <td>{{ $emailSatker->nama_instansi }}</td>
+                    <td>{{ $emailPribadi->nama }}</td>
                 </tr>
 
                 <tr>
-                    <td class="label">Penanggung Jawab</td>
+                    <td class="label">Email Pribadi</td>
                     <td>:</td>
-                    <td>{{ $emailSatker->nama_penanggung_jawab }}</td>
-                </tr>
-
-                <tr>
-                    <td class="label">Email Penanggung Jawab</td>
-                    <td>:</td>
-                    <td>{{ $emailSatker->email }}</td>
+                    <td>{{ $emailPribadi->email }}</td>
                 </tr>
 
                 <tr>
@@ -293,7 +269,7 @@
                 </tr>
             @endif
 
-            @if ($emailSatker->jenis_layanan == 'ubah_akun')
+            @if ($emailPribadi->jenis_layanan == 'ubah_akun')
                 <tr>
                     <td class="label">Jenis Layanan</td>
                     <td>:</td>
@@ -301,89 +277,27 @@
                 </tr>
 
                 <tr>
-                    <td class="label">Nama Instansi</td>
+                    <td class="label">Nama Pemohon</td>
                     <td>:</td>
-                    <td>{{ $emailSatker->nama_instansi }}</td>
+                    <td>{{ $emailPribadi->nama }}</td>
                 </tr>
 
                 <tr>
-                    <td class="label">Penanggung Jawab</td>
+                    <td class="label">Email Pribadi</td>
                     <td>:</td>
-                    <td>{{ $emailSatker->nama_penanggung_jawab }}</td>
-                </tr>
-
-                <tr>
-                    <td class="label">Email Penanggung Jawab</td>
-                    <td>:</td>
-                    <td>{{ $emailSatker->email }}</td>
+                    <td>{{ $emailPribadi->email }}</td>
                 </tr>
 
                 <tr>
                     <td class="label">Username Lama</td>
                     <td>:</td>
-                    <td>{{ $emailSatker->nama_akun_dinas }}</td>
+                    <td>{{ $emailPribadi->nama_akun }}</td>
                 </tr>
 
                 <tr>
                     <td class="label">Username Baru</td>
                     <td>:</td>
-                    <td>{{ $emailSatker->nama_akun_dinas_baru }}</td>
-                </tr>
-
-                <tr>
-                    <td class="label">Password Baru</td>
-                    <td>:</td>
-                    <td>{{ $password }}</td>
-                </tr>
-
-                <tr>
-                    <td class="label">URL Login</td>
-                    <td>:</td>
-                    <td>https://surel.mail.go.id/multidomain/</td>
-                </tr>
-            @endif
-
-            @if ($emailSatker->jenis_layanan == 'ubah_penanggung')
-                <tr>
-                    <td class="label">Jenis Layanan</td>
-                    <td>:</td>
-                    <td>Perubahan Penanggung Jawab</td>
-                </tr>
-
-                <tr>
-                    <td class="label">Nama Instansi</td>
-                    <td>:</td>
-                    <td>{{ $emailSatker->nama_instansi }}</td>
-                </tr>
-
-                <tr>
-                    <td class="label">Penanggung Jawab Lama</td>
-                    <td>:</td>
-                    <td>{{ $emailSatker->nama_penanggung_jawab }}</td>
-                </tr>
-
-                <tr>
-                    <td class="label">Email Penanggung Jawab Lama</td>
-                    <td>:</td>
-                    <td>{{ $emailSatker->email }}</td>
-                </tr>
-
-                <tr>
-                    <td class="label">Penanggung Jawab Baru</td>
-                    <td>:</td>
-                    <td>{{ $emailSatker->nama_penanggung_jawab_baru }}</td>
-                </tr>
-
-                <tr>
-                    <td class="label">Email Penanggung Jawab Baru</td>
-                    <td>:</td>
-                    <td>{{ $emailSatker->email_baru }}</td>
-                </tr>
-
-                <tr>
-                    <td class="label">Username Email</td>
-                    <td>:</td>
-                    <td>{{ $emailSatker->nama_akun_dinas }}</td>
+                    <td>{{ $emailPribadi->nama_akun_baru }}</td>
                 </tr>
 
                 <tr>
@@ -413,7 +327,7 @@
                 Simpan dokumen ini dengan baik dan jangan diberikan kepada pihak yang tidak berkepentingan.
             </li>
 
-            @if ($emailSatker->jenis_layanan == 'baru')
+            @if ($emailPribadi->jenis_layanan == 'baru')
                 <li>
                     Password yang tercantum merupakan <strong>Password Awal</strong>. Demi keamanan, segera lakukan
                     perubahan password setelah berhasil login pertama kali.
