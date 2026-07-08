@@ -110,6 +110,17 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     ->name('pimpinan.')
     ->group(function () {
         Route::get('/dashboard', [PimpinanController::class, 'index'])->name('dashboard');
+
+        // Subdomain List
+        Route::get('/pengajuan/subdomain', [PimpinanController::class, 'subdomainList'])->name('subdomain.list');
+        Route::get('/pengajuan/subdomain/{subdomain}', [PimpinanController::class, 'showDetail'])->name('subdomain.show');
+        Route::get('/pengajuan/subdomain/{subdomain}/formulir', [PimpinanController::class, 'viewFormulir'])->name('subdomain.formulir');
+
+        // Approval
+        Route::get('/persetujuan-pimpinan', [PimpinanController::class, 'approvalList'])->name('approval-list');
+        Route::get('/persetujuan-pimpinan/{subdomain}', [PimpinanController::class, 'approvalShow'])->name('approval-show');
+        Route::post('/persetujuan-pimpinan/{subdomain}/approve', [PimpinanController::class, 'approve'])->name('approve-subdomain');
+        Route::post('/persetujuan-pimpinan/{subdomain}/reject', [PimpinanController::class, 'reject'])->name('reject-subdomain');
     });
 
 //User Routes
