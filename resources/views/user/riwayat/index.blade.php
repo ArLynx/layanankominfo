@@ -124,28 +124,28 @@
                                             @case('baru')
                                                 <span
                                                     class="inline-flex px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
-                                                    Subdomain Baru
+                                                    Pengajuan Subdomain Baru
                                                 </span>
                                             @break
 
                                             @case('ubah_penanggung')
                                                 <span
                                                     class="inline-flex px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium">
-                                                    Ubah Penanggung Jawab
+                                                    Perubahan Penanggung Jawab Subdomain
                                                 </span>
                                             @break
 
                                             @case('ubah_subdomain')
                                                 <span
                                                     class="inline-flex px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium">
-                                                    Ubah Nama Subdomain
+                                                    Perubahan Nama Subdomain
                                                 </span>
                                             @break
 
                                             @case('nonaktif')
                                                 <span
                                                     class="inline-flex px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-medium">
-                                                    Penonaktifan
+                                                    Penonaktifan Subdomain
                                                 </span>
                                             @break
                                         @endswitch
@@ -301,7 +301,7 @@
                                         </td>
 
                                         <td class="p-3">
-                                            {{ $item->nama_email }}
+                                            {{ $item->nama_akun_dinas }}
                                         </td>
 
                                         <td class="p-3">
@@ -310,7 +310,7 @@
                                                 @case('baru')
                                                     <span
                                                         class="inline-flex px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
-                                                        Permohonan Baru
+                                                        Pengajuan Email Satker Baru
                                                     </span>
                                                 @break
 
@@ -331,14 +331,14 @@
                                                 @case('ubah_akun')
                                                     <span
                                                         class="inline-flex px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium">
-                                                        Ganti Nama Akun
+                                                        Perubahan Nama Akun Email
                                                     </span>
                                                 @break
 
                                                 @case('ubah_penanggung')
                                                     <span
                                                         class="inline-flex px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium">
-                                                        Ubah Penanggung Jawab
+                                                        Perubahan Penanggung Jawab Email
                                                     </span>
                                                 @break
 

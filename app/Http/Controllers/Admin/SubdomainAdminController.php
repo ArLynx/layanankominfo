@@ -202,6 +202,17 @@ class SubdomainAdminController extends Controller
         ]);
     }
 
+    public function suratLama(Subdomain $subdomain)
+    {
+        abort_unless($subdomain->surat_penunjukan_lama, 404);
+
+        $path = Storage::disk('local')->path($subdomain->surat_penunjukan_lama);
+
+        return response()->file($path, [
+            'Content-Disposition' => 'inline',
+        ]);
+    }
+
     //sementara
     public function approve(Request $request, Subdomain $subdomain)
     {
@@ -262,16 +273,5 @@ class SubdomainAdminController extends Controller
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Gagal menolak pengajuan.');
         }
-    }
-
-    public function suratLama(Subdomain $subdomain)
-    {
-        abort_unless($subdomain->surat_penunjukan_lama, 404);
-
-        $path = Storage::disk('local')->path($subdomain->surat_penunjukan_lama);
-
-        return response()->file($path, [
-            'Content-Disposition' => 'inline',
-        ]);
     }
 }

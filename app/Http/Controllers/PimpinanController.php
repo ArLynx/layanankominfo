@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subdomain;
+use App\Models\EmailSatker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -100,5 +101,81 @@ class PimpinanController extends Controller
         }
 
         return response()->file(Storage::disk('local')->path($subdomain->formulir_subdomain));
+    }
+
+    // ===================== EMAIL SATKER =====================
+
+    public function emailSatkerList()
+    {
+        $emailSatkers = EmailSatker::with('user')
+            ->latest()
+            ->paginate(15);
+
+        return view('pimpinan.email-satker-list', compact('emailSatkers'));
+    }
+
+    public function emailSatkerApprovalList()
+    {
+        $emailSatkers = EmailSatker::with('user')
+            ->where('status', 'tunda')
+            ->latest()
+            ->paginate(15);
+
+        return view('pimpinan.email-satker-approval-list', compact('emailSatkers'));
+    }
+
+    public function emailSatkerDetail(EmailSatker $emailSatker)
+    {
+        return view('pimpinan.email-satker-detail', compact('emailSatker'));
+    }
+
+    public function emailSatkerApprovalShow(EmailSatker $emailSatker)
+    {
+        return view('pimpinan.email-satker-approval-show', compact('emailSatker'));
+    }
+
+    public function emailSatkerApprove(Request $request, EmailSatker $emailSatker)
+    {
+        $request->validate([
+            'catatan_pimpinan' => 'nullable|string|max:1000',
+        ]);
+
+        $emailSatker->update([
+            'status' => 'diproses',
+            'catatan_pimpinan' => $request->catatan_pimpinan,
+        ]);
+
+        return redirect()->route('pimpinan.email-satker.approval-list')
+            ->with('success', 'Pengajuan email satuan kerja berhasil disetujui.');
+    }
+
+    public function emailSatkerReject(Request $request, EmailSatker $emailSatker)
+    {
+        $request->validate([
+            'catatan_pimpinan' => 'required|string|max:1000',
+        ], [
+            'catatan_pimpinan.required' => 'Catatan pimpinan wajib diisi saat menolak pengajuan.',
+        ]);
+
+        $emailSatker->update([
+            'status' => 'tutup',
+            'catatan_pimpinan' => $request->catatan_pimpinan,
+        ]);
+
+        return redirect()->route('pimpinan.email-satker.approval-list')
+            ->with('success', 'Pengajuan email satuan kerja ditolak.');
+    }
+
+    public function emailSatkerFormulir(EmailSatker $emailSatker)
+    {
+        if (empty($emailSatker->formulir_email)) {
+            abort(404);
+        }
+
+        if (!Storage::disk('local')->exists($emailSatker->formulir_email)) {
+            abort(404);
+        }
+
+        return response()->file(Storage::disk('local')->path($emailSatker->formulir_email));
     }
 }

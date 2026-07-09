@@ -30,12 +30,12 @@ class RiwayatController extends Controller
 
         $emailSatkers = EmailSatker::query()
             ->where('user_id', auth()->id())
-            ->latest()
+            ->oldest()
             ->paginate($perPage, ['*'], 'satker_page');
 
         $emailPribadis = EmailPribadi::query()
             ->where('user_id', auth()->id())
-            ->latest()
+            ->oldest()
             ->paginate($perPage, ['*'], 'pribadi_page');
 
         return view('user.riwayat.index', compact('subdomains', 'emailSatkers', 'emailPribadis'));

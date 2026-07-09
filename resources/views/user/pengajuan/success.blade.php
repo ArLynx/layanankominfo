@@ -47,7 +47,13 @@
                     </p>
 
                     <h2 class="text-3xl font-bold text-blue-900">
-                        {{ $subdomain->nomor_tiket }}
+                        @if (isset($subdomain))
+                            {{ $subdomain->nomor_tiket }}
+                        @elseif(isset($emailSatker))
+                            {{ $emailSatker->nomor_tiket }}
+                        @elseif(isset($emailPribadi))
+                            {{ $emailPribadi->nomor_tiket }}
+                        @endif
                     </h2>
 
                     @php
@@ -63,7 +69,13 @@
 
                     <p class="text-sm text-gray-500 mt-3">
                         Status Saat Ini:
-                        {{ $statusStep[$subdomain->status] }}
+                        @if (isset($subdomain))
+                            {{ $statusStep[$subdomain->status] }}
+                        @elseif(isset($emailSatker))
+                            {{ $statusStep[$emailSatker->status] }}
+                        @elseif(isset($emailPribadi))
+                            {{ $statusStep[$emailPribadi->status] }}
+                        @endif
                     </p>
 
                 </div>
@@ -75,10 +87,25 @@
                         Riwayat Pengajuan
                     </a>
 
-                    <a href="{{ route('subdomain.show', $subdomain->id) }}" class="px-6 py-3 border rounded-lg">
+                    @if (isset($subdomain))
+                        <a href="{{ route('subdomain.show', $subdomain) }}" class="px-6 py-3 border rounded-lg">
 
-                        Detail Pengajuan
-                    </a>
+                            Detail Pengajuan
+
+                        </a>
+                    @elseif(isset($emailSatker))
+                        <a href="{{ route('email-satker.show', $emailSatker) }}" class="px-6 py-3 border rounded-lg">
+
+                            Detail Pengajuan
+
+                        </a>
+                    @elseif(isset($emailPribadi))
+                        <a href="{{ route('email-pribadi.show', $emailPribadi) }}" class="px-6 py-3 border rounded-lg">
+
+                            Detail Pengajuan
+
+                        </a>
+                    @endif
 
                 </div>
 

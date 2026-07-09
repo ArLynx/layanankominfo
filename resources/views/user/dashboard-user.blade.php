@@ -39,167 +39,212 @@
             </div>
         </div>
 
+        {{-- Tabs Layanan --}}
+        <div class="bg-surface rounded-xl border border-border-subtle mb-6">
+
+            <div class="flex overflow-x-auto">
+
+                <button type="button"
+                    class="dashboard-tab px-6 py-4 border-b-2 border-primary text-primary font-semibold whitespace-nowrap"
+                    data-target="tab-subdomain">
+
+                    Subdomain
+                    <span class="ml-1 text-xs bg-primary text-white rounded-full px-2 py-0.5">
+                        {{ $subdomains->count() }}
+                    </span>
+
+                </button>
+
+                <button type="button"
+                    class="dashboard-tab px-6 py-4 border-b-2 border-transparent text-gray-500 whitespace-nowrap"
+                    data-target="tab-email-satker">
+
+                    Email Satker
+                    <span class="ml-1 text-xs bg-gray-300 rounded-full px-2 py-0.5">
+                        {{ $emailSatkers->count() }}
+                    </span>
+
+                </button>
+
+                <button type="button"
+                    class="dashboard-tab px-6 py-4 border-b-2 border-transparent text-gray-500 whitespace-nowrap"
+                    data-target="tab-email-pribadi">
+
+                    Email Pribadi
+                    <span class="ml-1 text-xs bg-gray-300 rounded-full px-2 py-0.5">
+                        {{ $emailPribadis->count() }}
+                    </span>
+
+                </button>
+
+            </div>
+
+        </div>
+
         <section class="flex flex-col gap-6">
 
-            @if ($subdomains->count())
-                @foreach ($subdomains as $subdomain)
-                    @php
+            {{-- TAB SUBDOMAIN --}}
+            <div id="tab-subdomain">
 
-                        $statusMap = [
-                            'terbuka' => 1,
-                            'baru' => 2,
-                            'tunda' => 3,
-                            'diproses' => 4,
-                            'selesai' => 5,
-                            'tutup' => 5,
-                        ];
+                @if ($subdomains->count())
+                    @foreach ($subdomains as $subdomain)
+                        @php
 
-                        $currentStep = $statusMap[$subdomain->status] ?? 1;
+                            $statusMap = [
+                                'terbuka' => 1,
+                                'baru' => 2,
+                                'tunda' => 3,
+                                'diproses' => 4,
+                                'selesai' => 5,
+                                'tutup' => 5,
+                            ];
 
-                        $isRejected = $subdomain->status === 'tutup';
+                            $currentStep = $statusMap[$subdomain->status] ?? 1;
 
-                        $steps = [
-                            'Pengajuan',
-                            'Pemeriksaan Dokumen',
-                            'Persetujuan',
-                            'Proses Pembuatan',
-                            $isRejected ? 'Pengajuan Ditolak' : 'Selesai',
-                        ];
+                            $isRejected = $subdomain->status === 'tutup';
 
-                        $icons = ['description', 'fact_check', 'sync', 'verified', $isRejected ? 'cancel' : 'flag'];
+                            $steps = [
+                                'Pengajuan',
+                                'Pemeriksaan Dokumen',
+                                'Persetujuan',
+                                'Proses Pembuatan',
+                                $isRejected ? 'Pengajuan Ditolak' : 'Selesai',
+                            ];
 
-                    @endphp
+                            $icons = ['description', 'fact_check', 'sync', 'verified', $isRejected ? 'cancel' : 'flag'];
 
-                    <!-- Card Line -->
+                        @endphp
 
-                    <!--SUbdomain Line -->
-                    <article
-                        class="bg-surface rounded-xl border border-border-subtle p-6 flex flex-col gap-8 relative overflow-hidden transition-all duration-300 hover:shadow-[0_4px_12px_rgba(0,30,64,0.04)]">
+                        <!-- Card Line -->
 
-                        {{-- garis kiri --}}
-                        <div
-                            class="absolute left-0 top-0 bottom-0 w-1
+                        <!--SUbdomain Line -->
+                        <article
+                            class="bg-surface rounded-xl border border-border-subtle p-6 flex flex-col gap-8 relative overflow-hidden transition-all duration-300 hover:shadow-[0_4px_12px_rgba(0,30,64,0.04)]">
+
+                            {{-- garis kiri --}}
+                            <div
+                                class="absolute left-0 top-0 bottom-0 w-1
         {{ $isRejected ? 'bg-red-500' : ($subdomain->status == 'selesai' ? 'bg-green-500' : 'bg-blue-500') }}">
-                        </div>
+                            </div>
 
-                        <div class="flex justify-between items-start">
+                            <div class="flex justify-between items-start">
 
-                            <div>
+                                <div>
 
-                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="flex items-center gap-2 mb-2">
 
-                                    <span
-                                        class="bg-surface-container-low text-primary text-label-sm font-label-sm px-2 py-0.5 rounded border border-border-subtle">
-                                        {{ $subdomain->nomor_tiket }}
-                                    </span>
+                                        <span
+                                            class="bg-surface-container-low text-primary text-label-sm font-label-sm px-2 py-0.5 rounded border border-border-subtle">
+                                            {{ $subdomain->nomor_tiket }}
+                                        </span>
 
-                                    @switch($subdomain->status)
-                                        @case('terbuka')
-                                            <span
-                                                class="bg-blue-100 text-blue-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-blue-200 flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[14px]">
-                                                    description
+                                        @switch($subdomain->status)
+                                            @case('terbuka')
+                                                <span
+                                                    class="bg-blue-100 text-blue-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-blue-200 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        description
+                                                    </span>
+                                                    Pengajuan
                                                 </span>
-                                                Pengajuan
-                                            </span>
-                                        @break
+                                            @break
 
-                                        @case('baru')
-                                            <span
-                                                class="bg-gray-100 text-gray-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-gray-200 flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[14px]">
-                                                    fact_check
+                                            @case('baru')
+                                                <span
+                                                    class="bg-gray-100 text-gray-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-gray-200 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        fact_check
+                                                    </span>
+                                                    Pemeriksaan Dokumen
                                                 </span>
-                                                Pemeriksaan Dokumen
-                                            </span>
-                                        @break
+                                            @break
 
-                                        @case('tunda')
-                                            <span
-                                                class="bg-orange-100 text-orange-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-orange-200 flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[14px]">
-                                                    approval
+                                            @case('tunda')
+                                                <span
+                                                    class="bg-orange-100 text-orange-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-orange-200 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        approval
+                                                    </span>
+                                                    Persetujuan Pimpinan
                                                 </span>
-                                                Persetujuan Pimpinan
-                                            </span>
-                                        @break
+                                            @break
 
-                                        @case('diproses')
-                                            <span
-                                                class="bg-secondary-container/30 text-on-secondary-container text-label-sm font-label-sm px-2 py-0.5 rounded border border-secondary-container/50 flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[14px]">
-                                                    pending
+                                            @case('diproses')
+                                                <span
+                                                    class="bg-secondary-container/30 text-on-secondary-container text-label-sm font-label-sm px-2 py-0.5 rounded border border-secondary-container/50 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        pending
+                                                    </span>
+                                                    Proses Pembuatan
                                                 </span>
-                                                Proses Pembuatan
-                                            </span>
-                                        @break
+                                            @break
 
-                                        @case('selesai')
-                                            <span
-                                                class="bg-success-emerald/10 text-success-emerald text-label-sm font-label-sm px-2 py-0.5 rounded border border-success-emerald/20 flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[14px]">
-                                                    check_circle
+                                            @case('selesai')
+                                                <span
+                                                    class="bg-success-emerald/10 text-success-emerald text-label-sm font-label-sm px-2 py-0.5 rounded border border-success-emerald/20 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        check_circle
+                                                    </span>
+                                                    Selesai
                                                 </span>
-                                                Selesai
-                                            </span>
-                                        @break
+                                            @break
 
-                                        @case('tutup')
-                                            <span
-                                                class="bg-red-100 text-red-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-red-200 flex items-center gap-1">
-                                                <span class="material-symbols-outlined text-[14px]">
-                                                    cancel
+                                            @case('tutup')
+                                                <span
+                                                    class="bg-red-100 text-red-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-red-200 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        cancel
+                                                    </span>
+                                                    Pengajuan Dicancel
                                                 </span>
-                                                Pengajuan Dicancel
-                                            </span>
-                                        @break
-                                    @endswitch
+                                            @break
+                                        @endswitch
+
+                                    </div>
+
+                                    <h3 class="text-headline-md font-headline-md text-primary">
+                                        Pengajuan Subdomain Dinas/Unit Kerja @murungrayakab.go.id
+                                    </h3>
+
+                                    <p class="text-label-sm font-label-sm text-on-surface-variant mt-1">
+                                        Diajukan:
+                                        {{ $subdomain->created_at->format('d M Y') }}
+                                    </p>
 
                                 </div>
 
-                                <h3 class="text-headline-md font-headline-md text-primary">
-                                    Pengajuan Subdomain Dinas/Unit Kerja @murungrayakab.go.id
-                                </h3>
+                                <a href="{{ route('subdomain.show', $subdomain->id) }}"
+                                    class="bg-primary text-on-primary text-label-md font-label-md px-5 py-2.5 rounded-lg shadow-sm hover:bg-primary-container transition-colors">
 
-                                <p class="text-label-sm font-label-sm text-on-surface-variant mt-1">
-                                    Diajukan:
-                                    {{ $subdomain->created_at->format('d M Y') }}
-                                </p>
+                                    Detail
+
+                                </a>
 
                             </div>
 
-                            <a href="{{ route('subdomain.show', $subdomain->id) }}"
-                                class="bg-primary text-on-primary text-label-md font-label-md px-5 py-2.5 rounded-lg shadow-sm hover:bg-primary-container transition-colors">
+                            {{-- TRACKER --}}
+                            <div class="relative mt-6">
 
-                                Detail
+                                <div class="absolute top-5 left-5 right-5 h-1 bg-gray-200"></div>
 
-                            </a>
-
-                        </div>
-
-                        {{-- TRACKER --}}
-                        <div class="relative mt-6">
-
-                            <div class="absolute top-5 left-5 right-5 h-1 bg-gray-200"></div>
-
-                            <div class="absolute top-5 left-5 h-1
+                                <div class="absolute top-5 left-5 h-1
                 {{ $isRejected ? 'bg-red-500' : 'bg-blue-500' }}"
-                                style="width: {{ (($currentStep - 1) / 4) * 100 }}%;">
-                            </div>
+                                    style="width: {{ (($currentStep - 1) / 4) * 100 }}%;">
+                                </div>
 
-                            <div class="flex justify-between relative z-10">
+                                <div class="flex justify-between relative z-10">
 
-                                @foreach ($steps as $index => $step)
-                                    @php
-                                        $number = $index + 1;
-                                        $completed = $number < $currentStep;
-                                        $active = $number == $currentStep;
-                                    @endphp
+                                    @foreach ($steps as $index => $step)
+                                        @php
+                                            $number = $index + 1;
+                                            $completed = $number < $currentStep;
+                                            $active = $number == $currentStep;
+                                        @endphp
 
-                                    <div class="flex flex-col items-center w-1/5">
+                                        <div class="flex flex-col items-center w-1/5">
 
-                                        <div
-                                            class="w-8 h-8 rounded-full border-2 border-surface flex items-center justify-center shrink-0
+                                            <div
+                                                class="w-8 h-8 rounded-full border-2 border-surface flex items-center justify-center shrink-0
 
      @if ($completed) {{ $isRejected ? 'bg-red-500 border-red-500 text-white' : 'bg-blue-500 border-blue-500 text-white' }}
 
@@ -216,30 +261,30 @@
     bg-white border-gray-300 text-gray-400 @endif
                             ">
 
-                                            @if ($completed)
-                                                <span class="material-symbols-outlined text-[16px]">
-                                                    check
-                                                </span>
-                                            @elseif($active)
-                                                <span
-                                                    class="material-symbols-outlined text-[16px]
+                                                @if ($completed)
+                                                    <span class="material-symbols-outlined text-[16px]">
+                                                        check
+                                                    </span>
+                                                @elseif($active)
+                                                    <span
+                                                        class="material-symbols-outlined text-[16px]
         {{ $subdomain->status == 'diproses' ? 'animate-spin' : '' }}">
-                                                    {{ $icons[$index] }}
-                                                </span>
-                                            @elseif($isRejected && $number == 5)
-                                                <span class="material-symbols-outlined text-[16px]">
-                                                    close
-                                                </span>
-                                            @else
-                                                <span class="material-symbols-outlined text-[16px]">
-                                                    {{ $icons[$index] }}
-                                                </span>
-                                            @endif
+                                                        {{ $icons[$index] }}
+                                                    </span>
+                                                @elseif($isRejected && $number == 5)
+                                                    <span class="material-symbols-outlined text-[16px]">
+                                                        close
+                                                    </span>
+                                                @else
+                                                    <span class="material-symbols-outlined text-[16px]">
+                                                        {{ $icons[$index] }}
+                                                    </span>
+                                                @endif
 
-                                        </div>
+                                            </div>
 
-                                        <p
-                                            class="text-label-sm font-label-sm text-center mt-2
+                                            <p
+                                                class="text-label-sm font-label-sm text-center mt-2
 
                         @if ($active && $isRejected) text-red-600 font-semibold
                         @elseif($number <= $currentStep)
@@ -247,44 +292,370 @@
                         @else
                             text-gray-500 @endif">
 
-                                            {{ $step }}
+                                                {{ $step }}
 
-                                        </p>
+                                            </p>
 
-                                    </div>
-                                @endforeach
+                                        </div>
+                                    @endforeach
+
+                                </div>
 
                             </div>
 
-                        </div>
+                        </article>
+                    @endforeach
+                @else
+                    <div class="bg-surface rounded-xl border border-border-subtle p-12 text-center">
 
-                    </article>
-                @endforeach
-            @else
+                        <span class="material-symbols-outlined text-[72px] text-outline mb-4">
+                            assignment_late
+                        </span>
+
+                        <h3 class="text-headline-md font-headline-md text-primary mb-2">
+                            Belum Ada Pengajuan
+                        </h3>
+
+                        <p class="text-body-md font-body-md text-on-surface-variant mb-6">
+                            Anda belum mengajukan permohonan layanan apapun.
+                        </p>
+
+                        <a href="{{ route('jenis-layanan') }}"
+                            class="bg-primary text-on-primary px-6 py-3 rounded-lg text-label-lg font-label-lg">
+
+                            Buat Pengajuan Sekarang
+
+                        </a>
+
+                    </div>
+                @endif
+
+            </div>
+
+            {{-- TAB EMAIL SATKER --}}
+            <div id="tab-email-satker" class="hidden">
+
+                 @if ($emailSatkers->count())
+                   @foreach ($emailSatkers as $emailSatker)
+                        @php
+
+                            $statusMap = [
+                                'terbuka' => 1,
+                                'baru' => 2,
+                                'tunda' => 3,
+                                'diproses' => 4,
+                                'selesai' => 5,
+                                'tutup' => 5,
+                            ];
+
+                            $currentStep = $statusMap[$emailSatker->status] ?? 1;
+
+                            $isRejected = $emailSatker->status === 'tutup';
+
+                            $steps = [
+                                'Pengajuan',
+                                'Pemeriksaan Dokumen',
+                                'Persetujuan',
+                                'Proses Pembuatan',
+                                $isRejected ? 'Pengajuan Ditolak' : 'Selesai',
+                            ];
+
+                            $icons = ['description', 'fact_check', 'sync', 'verified', $isRejected ? 'cancel' : 'flag'];
+
+                        @endphp
+
+                        <!-- Card Line -->
+
+                        <!--SUbdomain Line -->
+                        <article
+                            class="bg-surface rounded-xl border border-border-subtle p-6 flex flex-col gap-8 relative overflow-hidden transition-all duration-300 hover:shadow-[0_4px_12px_rgba(0,30,64,0.04)]">
+
+                            {{-- garis kiri --}}
+                            <div
+                                class="absolute left-0 top-0 bottom-0 w-1
+        {{ $isRejected ? 'bg-red-500' : ($emailSatker->status == 'selesai' ? 'bg-green-500' : 'bg-blue-500') }}">
+                            </div>
+
+                            <div class="flex justify-between items-start">
+
+                                <div>
+
+                                    <div class="flex items-center gap-2 mb-2">
+
+                                        <span
+                                            class="bg-surface-container-low text-primary text-label-sm font-label-sm px-2 py-0.5 rounded border border-border-subtle">
+                                            {{ $emailSatker->nomor_tiket }}
+                                        </span>
+
+                                        @switch($emailSatker->status)
+                                            @case('terbuka')
+                                                <span
+                                                    class="bg-blue-100 text-blue-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-blue-200 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        description
+                                                    </span>
+                                                    Pengajuan
+                                                </span>
+                                            @break
+
+                                            @case('baru')
+                                                <span
+                                                    class="bg-gray-100 text-gray-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-gray-200 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        fact_check
+                                                    </span>
+                                                    Pemeriksaan Dokumen
+                                                </span>
+                                            @break
+
+                                            @case('tunda')
+                                                <span
+                                                    class="bg-orange-100 text-orange-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-orange-200 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        approval
+                                                    </span>
+                                                    Persetujuan Pimpinan
+                                                </span>
+                                            @break
+
+                                            @case('diproses')
+                                                <span
+                                                    class="bg-secondary-container/30 text-on-secondary-container text-label-sm font-label-sm px-2 py-0.5 rounded border border-secondary-container/50 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        pending
+                                                    </span>
+                                                    Proses Pembuatan
+                                                </span>
+                                            @break
+
+                                            @case('selesai')
+                                                <span
+                                                    class="bg-success-emerald/10 text-success-emerald text-label-sm font-label-sm px-2 py-0.5 rounded border border-success-emerald/20 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        check_circle
+                                                    </span>
+                                                    Selesai
+                                                </span>
+                                            @break
+
+                                            @case('tutup')
+                                                <span
+                                                    class="bg-red-100 text-red-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-red-200 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        cancel
+                                                    </span>
+                                                    Pengajuan Dicancel
+                                                </span>
+                                            @break
+                                        @endswitch
+
+                                    </div>
+
+                                    <h3 class="text-headline-md font-headline-md text-primary">
+                                        Pengajuan Email Dinas/Unit Kerja @murungrayakab.go.id
+                                    </h3>
+
+                                    <p class="text-label-sm font-label-sm text-on-surface-variant mt-1">
+                                        Diajukan:
+                                        {{ $emailSatker->created_at->format('d M Y') }}
+                                    </p>
+
+                                </div>
+
+                                <a href="{{ route('email-satker.show', $emailSatker->id) }}"
+                                    class="bg-primary text-on-primary text-label-md font-label-md px-5 py-2.5 rounded-lg shadow-sm hover:bg-primary-container transition-colors">
+
+                                    Detail
+
+                                </a>
+
+                            </div>
+
+                            {{-- TRACKER --}}
+                            <div class="relative mt-6">
+
+                                <div class="absolute top-5 left-5 right-5 h-1 bg-gray-200"></div>
+
+                                <div class="absolute top-5 left-5 h-1
+                {{ $isRejected ? 'bg-red-500' : 'bg-blue-500' }}"
+                                    style="width: {{ (($currentStep - 1) / 4) * 100 }}%;">
+                                </div>
+
+                                <div class="flex justify-between relative z-10">
+
+                                    @foreach ($steps as $index => $step)
+                                        @php
+                                            $number = $index + 1;
+                                            $completed = $number < $currentStep;
+                                            $active = $number == $currentStep;
+                                        @endphp
+
+                                        <div class="flex flex-col items-center w-1/5">
+
+                                            <div
+                                                class="w-8 h-8 rounded-full border-2 border-surface flex items-center justify-center shrink-0
+
+     @if ($completed) {{ $isRejected ? 'bg-red-500 border-red-500 text-white' : 'bg-blue-500 border-blue-500 text-white' }}
+
+@elseif($active)
+
+    {{ $isRejected
+        ? 'bg-red-500 border-red-500 text-white'
+        : ($emailSatker->status == 'selesai'
+            ? 'bg-green-500 border-green-500 text-white'
+            : 'bg-yellow-500 border-yellow-500 text-white') }}
+
+@else
+
+    bg-white border-gray-300 text-gray-400 @endif
+                            ">
+
+                                                @if ($completed)
+                                                    <span class="material-symbols-outlined text-[16px]">
+                                                        check
+                                                    </span>
+                                                @elseif($active)
+                                                    <span
+                                                        class="material-symbols-outlined text-[16px]
+        {{ $emailSatker->status == 'diproses' ? 'animate-spin' : '' }}">
+                                                        {{ $icons[$index] }}
+                                                    </span>
+                                                @elseif($isRejected && $number == 5)
+                                                    <span class="material-symbols-outlined text-[16px]">
+                                                        close
+                                                    </span>
+                                                @else
+                                                    <span class="material-symbols-outlined text-[16px]">
+                                                        {{ $icons[$index] }}
+                                                    </span>
+                                                @endif
+
+                                            </div>
+
+                                            <p
+                                                class="text-label-sm font-label-sm text-center mt-2
+
+                        @if ($active && $isRejected) text-red-600 font-semibold
+                        @elseif($number <= $currentStep)
+                            text-primary font-semibold
+                        @else
+                            text-gray-500 @endif">
+
+                                                {{ $step }}
+
+                                            </p>
+
+                                        </div>
+                                    @endforeach
+
+                                </div>
+
+                            </div>
+
+                        </article>
+                    @endforeach
+                @else
+                    <div class="bg-surface rounded-xl border border-border-subtle p-12 text-center">
+
+                        <span class="material-symbols-outlined text-[72px] text-outline mb-4">
+                            assignment_late
+                        </span>
+
+                        <h3 class="text-headline-md font-headline-md text-primary mb-2">
+                            Belum Ada Pengajuan
+                        </h3>
+
+                        <p class="text-body-md font-body-md text-on-surface-variant mb-6">
+                            Anda belum mengajukan permohonan layanan apapun.
+                        </p>
+
+                        <a href="{{ route('jenis-layanan') }}"
+                            class="bg-primary text-on-primary px-6 py-3 rounded-lg text-label-lg font-label-lg">
+
+                            Buat Pengajuan Sekarang
+
+                        </a>
+
+                    </div>
+                @endif
+
+            </div>
+
+            {{-- TAB EMAIL PRIBADI --}}
+            <div id="tab-email-pribadi" class="hidden">
+
                 <div class="bg-surface rounded-xl border border-border-subtle p-12 text-center">
 
-                    <span class="material-symbols-outlined text-[72px] text-outline mb-4">
-                        assignment_late
+                    <span class="material-symbols-outlined text-[60px]">
+                        alternate_email
                     </span>
 
-                    <h3 class="text-headline-md font-headline-md text-primary mb-2">
-                        Belum Ada Pengajuan
+                    <h3 class="text-xl font-bold mt-4">
+                        Email Pribadi
                     </h3>
 
-                    <p class="text-body-md font-body-md text-on-surface-variant mb-6">
-                        Anda belum mengajukan permohonan layanan apapun.
+                    <p class="text-gray-500 mt-2">
+                        Nanti card Email Pribadi tampil di sini.
                     </p>
 
-                    <a href="{{ route('jenis-layanan') }}"
-                        class="bg-primary text-on-primary px-6 py-3 rounded-lg text-label-lg font-label-lg">
-
-                        Buat Pengajuan Sekarang
-
-                    </a>
-
                 </div>
-            @endif
+
+            </div>
 
         </section>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const tabs = document.querySelectorAll('.dashboard-tab');
+
+            tabs.forEach(tab => {
+
+                tab.addEventListener('click', function() {
+
+                    // sembunyikan semua isi tab
+                    document.getElementById('tab-subdomain').classList.add('hidden');
+                    document.getElementById('tab-email-satker').classList.add('hidden');
+                    document.getElementById('tab-email-pribadi').classList.add('hidden');
+
+                    // reset style semua tombol
+                    tabs.forEach(btn => {
+
+                        btn.classList.remove(
+                            'border-primary',
+                            'text-primary',
+                            'font-semibold'
+                        );
+
+                        btn.classList.add(
+                            'border-transparent',
+                            'text-gray-500'
+                        );
+
+                    });
+
+                    // tampilkan tab yg dipilih
+                    document
+                        .getElementById(this.dataset.target)
+                        .classList.remove('hidden');
+
+                    // aktifkan warna tombol
+                    this.classList.remove(
+                        'border-transparent',
+                        'text-gray-500'
+                    );
+
+                    this.classList.add(
+                        'border-primary',
+                        'text-primary',
+                        'font-semibold'
+                    );
+
+                });
+
+            });
+
+        });
+    </script>
 @endsection
