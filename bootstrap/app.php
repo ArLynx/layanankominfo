@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,11 +17,33 @@ return Application::configure(basePath: dirname(__DIR__))
          $middleware->alias([
              'role' => \App\Http\Middleware\RoleMiddleware::class,
              '2fa.ensure' => \App\Http\Middleware\EnsureTwoFactorIsEnabled::class,
+             '2fa.admin' => \App\Http\Middleware\EnsureTwoFactorForAdmins::class,
              'profile.complete' => \App\Http\Middleware\EnsureProfileIsComplete::class,
          ]);
+
+         $middleware->redirectGuestsTo(function (Request $request) {
+             if ($request->is('admin/*') || $request->is('pimpinan/*')) {
+                 return route('admin.login');
+             }
+
+             return route('login');
+         });
+
+         $middleware->redirectUsersTo(function (Request $request) {
+             if ($request->is('pimpinan/*')) {
+                 return route('pimpinan.dashboard');
+             }
+
+             if ($request->is('admin/*')) {
+                 return route('admin.dashboard');
+             }
+
+             return route('dashboard');
+         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
             fn(Request $request) => $request->is('api/*'),
         );
+
     })->create();

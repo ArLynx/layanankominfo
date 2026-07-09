@@ -170,7 +170,7 @@
                     Buat Laporan
                 </button>
             </div>
-            <form method="POST" action="{{ route('logout') }}">
+            <form method="POST" action="{{ route('admin.logout') }}">
                 @csrf
                 <button type="submit"
                     class="flex items-center gap-3 py-2 text-error hover:text-on-error-container transition-colors">

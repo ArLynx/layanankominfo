@@ -11,7 +11,11 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, $role): Response
     {
         if (!auth()->check()) {
-            return redirect()->route('login');
+            $guard = $request->is('admin/*') || $request->is('pimpinan/*')
+                ? 'admin'
+                : 'web';
+
+            return redirect()->route($guard === 'admin' ? 'admin.login' : 'login');
         }
 
         if (auth()->user()->role !== $role) {

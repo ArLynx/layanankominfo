@@ -8,7 +8,17 @@ class TwoFactorSetupController extends Controller
 {
     public function index()
     {
-        if (auth()->user()->two_factor_secret) {
+        $user = auth()->user();
+
+        if ($user->two_factor_secret) {
+            if ($user instanceof \App\Models\Admin) {
+                $route = $user->role === 'pimpinan'
+                    ? 'pimpinan.dashboard'
+                    : 'admin.dashboard';
+
+                return redirect()->route($route);
+            }
+
             return redirect()->route('dashboard');
         }
 

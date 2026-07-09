@@ -25,6 +25,25 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Admin Auth Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/login', [App\Http\Controllers\Admin\AuthController::class, 'showLoginForm'])
+        ->middleware('guest:admin')
+        ->name('login');
+    Route::post('/login', [App\Http\Controllers\Admin\AuthController::class, 'login'])
+        ->middleware('guest:admin')
+        ->name('login');
+    Route::get('/two-factor-challenge', [App\Http\Controllers\Admin\AuthController::class, 'showChallengeForm'])
+        ->middleware('guest:admin')
+        ->name('2fa.challenge');
+    Route::post('/two-factor-challenge', [App\Http\Controllers\Admin\AuthController::class, 'challenge'])
+        ->middleware('guest:admin')
+        ->name('2fa.challenge');
+    Route::post('/logout', [App\Http\Controllers\Admin\AuthController::class, 'logout'])
+        ->middleware('auth:admin')
+        ->name('logout');
+});
+
 // 2FA Reset (unauthenticated - from login page)
 Route::get('/two-factor/reset/request', [App\Http\Controllers\TwoFactorResetController::class, 'showRequestForm'])->name('2fa.reset.request');
 Route::post('/two-factor/reset/request', [App\Http\Controllers\TwoFactorResetController::class, 'sendOtpByEmail'])->name('2fa.reset.send-email');
@@ -49,12 +68,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     // Di routes/web.php
     Route::get('/dashboard', function () {
-        if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        }
-        if (auth()->user()->role === 'pimpinan') {
-            return redirect()->route('pimpinan.dashboard');
-        }
         $applications = App\Models\RequestApplication::where('user_id', auth()->id())
             ->latest()
             ->get();
@@ -64,8 +77,16 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         ->name('dashboard');
 });
 
-// Admin Routes
-Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'role:admin', '2fa.ensure'])
+// Admin 2FA Setup — tanpa role filter biar admin & pimpinan bisa akses
+Route::middleware(['auth:admin', '2fa.admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/2fa-setup', [App\Http\Controllers\TwoFactorSetupController::class, 'index'])->name('2fa.setup');
+    });
+
+// Admin Routes (superadmin & admin)
+Route::middleware(['auth:admin', 'role:admin', '2fa.admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -135,7 +156,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     });
 
 // Pimpinan Routes
-Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'role:pimpinan', '2fa.ensure'])
+Route::middleware(['auth:admin', 'role:pimpinan', '2fa.admin'])
     ->prefix('pimpinan')
     ->name('pimpinan.')
     ->group(function () {
