@@ -162,6 +162,17 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('/persetujuan-email-satker/{emailSatker}', [PimpinanController::class, 'emailSatkerApprovalShow'])->name('email-satker.approval-show');
         Route::post('/persetujuan-email-satker/{emailSatker}/approve', [PimpinanController::class, 'emailSatkerApprove'])->name('email-satker.approve');
         Route::post('/persetujuan-email-satker/{emailSatker}/reject', [PimpinanController::class, 'emailSatkerReject'])->name('email-satker.reject');
+
+        // Email Pribadi
+        Route::get('/pengajuan/email-pribadi', [PimpinanController::class, 'emailPribadiList'])->name('email-pribadi.list');
+        Route::get('/pengajuan/email-pribadi/{emailPribadi}', [PimpinanController::class, 'emailPribadiDetail'])->name('email-pribadi.detail');
+        Route::get('/pengajuan/email-pribadi/{emailPribadi}/formulir', [PimpinanController::class, 'emailPribadiFormulir'])->name('email-pribadi.formulir');
+
+        // Email Pribadi Approval
+        Route::get('/persetujuan-email-pribadi', [PimpinanController::class, 'emailPribadiApprovalList'])->name('email-pribadi.approval-list');
+        Route::get('/persetujuan-email-pribadi/{emailPribadi}', [PimpinanController::class, 'emailPribadiApprovalShow'])->name('email-pribadi.approval-show');
+        Route::post('/persetujuan-email-pribadi/{emailPribadi}/approve', [PimpinanController::class, 'emailPribadiApprove'])->name('email-pribadi.approve');
+        Route::post('/persetujuan-email-pribadi/{emailPribadi}/reject', [PimpinanController::class, 'emailPribadiReject'])->name('email-pribadi.reject');
     });
 
 //User Routes

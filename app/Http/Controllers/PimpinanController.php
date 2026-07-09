@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Subdomain;
 use App\Models\EmailSatker;
+use App\Models\EmailPribadi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -177,5 +178,81 @@ class PimpinanController extends Controller
         }
 
         return response()->file(Storage::disk('local')->path($emailSatker->formulir_email));
+    }
+
+    // ===================== EMAIL PRIBADI =====================
+
+    public function emailPribadiList()
+    {
+        $emailPribadis = EmailPribadi::with('user')
+            ->latest()
+            ->paginate(15);
+
+        return view('pimpinan.email-pribadi-list', compact('emailPribadis'));
+    }
+
+    public function emailPribadiApprovalList()
+    {
+        $emailPribadis = EmailPribadi::with('user')
+            ->where('status', 'tunda')
+            ->latest()
+            ->paginate(15);
+
+        return view('pimpinan.email-pribadi-approval-list', compact('emailPribadis'));
+    }
+
+    public function emailPribadiDetail(EmailPribadi $emailPribadi)
+    {
+        return view('pimpinan.email-pribadi-detail', compact('emailPribadi'));
+    }
+
+    public function emailPribadiApprovalShow(EmailPribadi $emailPribadi)
+    {
+        return view('pimpinan.email-pribadi-approval-show', compact('emailPribadi'));
+    }
+
+    public function emailPribadiApprove(Request $request, EmailPribadi $emailPribadi)
+    {
+        $request->validate([
+            'catatan_pimpinan' => 'nullable|string|max:1000',
+        ]);
+
+        $emailPribadi->update([
+            'status' => 'diproses',
+            'catatan_pimpinan' => $request->catatan_pimpinan,
+        ]);
+
+        return redirect()->route('pimpinan.email-pribadi.approval-list')
+            ->with('success', 'Pengajuan email pribadi berhasil disetujui.');
+    }
+
+    public function emailPribadiReject(Request $request, EmailPribadi $emailPribadi)
+    {
+        $request->validate([
+            'catatan_pimpinan' => 'required|string|max:1000',
+        ], [
+            'catatan_pimpinan.required' => 'Catatan pimpinan wajib diisi saat menolak pengajuan.',
+        ]);
+
+        $emailPribadi->update([
+            'status' => 'tutup',
+            'catatan_pimpinan' => $request->catatan_pimpinan,
+        ]);
+
+        return redirect()->route('pimpinan.email-pribadi.approval-list')
+            ->with('success', 'Pengajuan email pribadi ditolak.');
+    }
+
+    public function emailPribadiFormulir(EmailPribadi $emailPribadi)
+    {
+        if (empty($emailPribadi->formulir_email)) {
+            abort(404);
+        }
+
+        if (!Storage::disk('local')->exists($emailPribadi->formulir_email)) {
+            abort(404);
+        }
+
+        return response()->file(Storage::disk('local')->path($emailPribadi->formulir_email));
     }
 }

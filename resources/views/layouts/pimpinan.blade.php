@@ -108,6 +108,37 @@
                     </ul>
                 </div>
             </li>
+
+            {{-- Pengajuan Email Pribadi --}}
+            <li x-data="{ open: {{ request()->routeIs('pimpinan.email-pribadi.*') ? 'true' : 'false' }} }">
+                <button @click="open = !open"
+                    class="w-full flex items-center justify-between px-4 py-3 mx-2 rounded-lg hover:bg-surface-container-high">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined">contact_mail</span>
+                        <span class="text-label-md font-label-md">Pengajuan Email Pribadi</span>
+                    </div>
+                    <span class="material-symbols-outlined transition-transform duration-200" :class="{ 'rotate-180': open }">expand_more</span>
+                </button>
+
+                <div x-show="open" x-transition class="overflow-hidden">
+                    <ul class="ml-8 mt-1 border-l border-outline-variant pl-4 space-y-1">
+                        <li>
+                            <a href="{{ route('pimpinan.email-pribadi.list') }}"
+                                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-container-high {{ request()->routeIs('pimpinan.email-pribadi.list') ? 'bg-surface-container-high font-semibold' : '' }}">
+                                <span class="material-symbols-outlined text-[18px]">list_alt</span>
+                                <span>Semua Pengajuan</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('pimpinan.email-pribadi.approval-list') }}"
+                                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-container-high {{ request()->routeIs('pimpinan.email-pribadi.approval-list') ? 'bg-surface-container-high font-semibold' : '' }}">
+                                <span class="material-symbols-outlined text-[18px]">approval</span>
+                                <span>Persetujuan</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
         </ul>
 
         {{-- Logout --}}
