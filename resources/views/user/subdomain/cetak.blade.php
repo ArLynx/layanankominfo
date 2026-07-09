@@ -29,48 +29,53 @@
 
 
     <title>
-        Formulir Permohonan Subdomain
+        FORMULIR PERMOHONAN LAYANAN SUBDOMAIN
     </title>
 
     <style>
         @page {
             size: 210mm 330mm;
-            margin: 15mm;
+            /* F4 / Folio */
+            margin: 10mm 12mm;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            font-size: 11px;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 12pt;
             color: #000;
-            margin: 20px;
+            margin: 0;
+            line-height: 1.25;
         }
 
         .kop {
             width: 100%;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .kop img {
             width: 100%;
+            display: block;
         }
 
         .judul {
             text-align: center;
-            font-size: 18px;
+            font-size: 16pt;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-top: 2px;
+            margin-bottom: 14px;
+            text-transform: uppercase;
         }
 
         .section {
-            margin-top: 15px;
+            margin-top: 8px;
             page-break-inside: avoid;
         }
 
         .section-title {
+            text-align: center;
+            font-size: 13pt;
             font-weight: bold;
-            font-size: 13px;
-            margin-bottom: 10px;
-            padding-bottom: 3px;
+            margin-bottom: 6px;
         }
 
         table {
@@ -79,45 +84,49 @@
         }
 
         td {
-            padding: 4px;
+            padding: 2px 4px;
             vertical-align: top;
+            font-size: 12pt;
         }
 
         .label {
-            width: 220px;
+            width: 215px;
+            font-weight: normal;
         }
 
         .separator {
             width: 10px;
+            text-align: center;
         }
 
         .deskripsi {
             border: 1px solid #000;
-            padding: 10px;
-            min-height: 60px;
-            line-height: 1.5;
+            padding: 8px;
+            min-height: 55px;
+            line-height: 1.25;
+            font-size: 12pt;
+            text-align: justify;
         }
 
         .pernyataan {
-            margin-top: 10px;
+            margin-top: 8px;
             text-align: justify;
-            line-height: 1.4;
+            line-height: 1.3;
+            font-size: 12pt;
         }
 
         .ttd {
-            margin-top: 25px;
             width: 100%;
-            page-break-inside: avoid;
+            margin-top: 12px;
+            border-collapse: collapse;
         }
 
         .ttd td {
-            text-align: center;
-            width: 50%;
+            border: none;
+            vertical-align: top;
         }
 
-        .space-sign {
-            height: 55px;
-        }
+      
 
         .nama {
             font-weight: bold;
@@ -125,9 +134,44 @@
         }
 
         .catatan {
-            margin-top: 15px;
-            font-size: 10px;
+            margin-top: 8px;
+            font-size: 10pt;
+            line-height: 1.2;
         }
+
+        /* =======================================================
+   KHUSUS LAYANAN YANG ISINYA LEBIH BANYAK
+======================================================= */
+
+        @if ($subdomain->jenis_layanan == 'ubah_penanggung' || $subdomain->jenis_layanan == 'ubah_subdomain')
+
+            body {
+                font-size: 11pt;
+            }
+
+            td {
+                font-size: 11pt;
+                padding: 2px 4px;
+            }
+
+            .section-title {
+                font-size: 12pt;
+            }
+
+            .judul {
+                font-size: 15pt;
+                margin-bottom: 12px;
+            }
+
+            .ttd {
+                margin-top: 12px;
+            }
+
+            .space-sign {
+                height: 65px;
+            }
+
+        @endif
     </style>
 
 
@@ -355,39 +399,51 @@
 
             <tr>
 
-                <td></td>
+                <td style="width:45%;"></td>
 
-                <td>
+                <td style="width:10%;"></td>
+
+                <td style="width:45%; text-align:center;">
+
                     Puruk Cahu,
                     {{ $subdomain->created_at->locale('id')->translatedFormat('d F Y') }}
+
                 </td>
 
             </tr>
 
             <tr>
 
-                <td>
+                <td style="text-align:center;">
+
                     Mengetahui,<br>
                     {{ $subdomain->jabatan_kadis }}
+
                 </td>
 
-                <td>
+                <td></td>
+
+                <td style="text-align:center;">
+
                     Penanggung Jawab
+
                 </td>
 
             </tr>
 
             <tr>
 
-                <td class="space-sign"></td>
+                <td style="height:50px;"></td>
 
-                <td class="space-sign"></td>
+                <td></td>
+
+                <td style="height:50px;"></td>
 
             </tr>
 
             <tr>
 
-                <td>
+                <td style="text-align:center;">
 
                     <div class="nama">
                         {{ $subdomain->nama_kadis }}
@@ -397,20 +453,33 @@
 
                 </td>
 
-                <td>
+                <td></td>
+
+                <td style="text-align:center;">
 
                     <div class="nama">
-                        {{ $subdomain->nama_penanggung_jawab }}
+
+                        @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+                            {{ $subdomain->nama_penanggung_jawab_baru }}
+                        @else
+                            {{ $subdomain->nama_penanggung_jawab }}
+                        @endif
+
                     </div>
 
-                    NIP. {{ $subdomain->nip_penanggung_jawab }}
+                    NIP.
+
+                    @if ($subdomain->jenis_layanan == 'ubah_penanggung')
+                        {{ $subdomain->nip_penanggung_jawab_baru }}
+                    @else
+                        {{ $subdomain->nip_penanggung_jawab }}
+                    @endif
 
                 </td>
 
             </tr>
 
         </table>
-
 </body>
 
 </html>

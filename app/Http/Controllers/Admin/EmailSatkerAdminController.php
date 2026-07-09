@@ -207,7 +207,7 @@ class EmailSatkerAdminController extends Controller
             $recipient = $emailSatker->jenis_layanan == 'ubah_penanggung' ? $emailSatker->email_baru : $emailSatker->email;
 
             // Kirim email
-            Mail::to($recipient)->send(new AccountInformationMail($emailSatker, Storage::disk('local')->path($tempFile)));
+            Mail::to($recipient)->send(new AccountInformationMail($emailSatker, Storage::disk('local')->path($tempFile), 'emails.account-information'));
 
             // Kalau email berhasil
 

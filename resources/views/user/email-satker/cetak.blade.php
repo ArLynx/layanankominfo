@@ -29,42 +29,47 @@
     <style>
         @page {
             size: 210mm 330mm;
-            margin: 15mm;
+            /* F4 / Folio */
+            margin: 10mm 12mm;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            font-size: 11px;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11pt;
             color: #000;
-            margin: 20px;
+            margin: 0;
+            line-height: 1.2;
         }
 
         .kop {
             width: 100%;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .kop img {
             width: 100%;
+            display: block;
         }
 
         .judul {
             text-align: center;
-            font-size: 18px;
+            font-size: 15pt;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-top: 2px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
         }
 
         .section {
-            margin-top: 15px;
+            margin-top: 8px;
             page-break-inside: avoid;
         }
 
         .section-title {
+            text-align: center;
+            font-size: 12pt;
             font-weight: bold;
-            font-size: 13px;
-            margin-bottom: 10px;
-            padding-bottom: 3px;
+            margin-bottom: 5px;
         }
 
         table {
@@ -73,44 +78,54 @@
         }
 
         td {
-            padding: 4px;
+            padding: 2px 4px;
             vertical-align: top;
+            font-size: 11pt;
         }
 
         .label {
-            width: 220px;
+            width: 215px;
+            font-weight: normal;
         }
 
         .separator {
             width: 10px;
+            text-align: center;
         }
 
         .deskripsi {
             border: 1px solid #000;
-            padding: 10px;
-            min-height: 60px;
-            line-height: 1.5;
+            padding: 8px;
+            min-height: 55px;
+            line-height: 1.25;
+            font-size: 11pt;
+            text-align: justify;
         }
 
         .pernyataan {
-            margin-top: 10px;
+            margin-top: 8px;
             text-align: justify;
-            line-height: 1.4;
+            line-height: 1.25;
+            font-size: 11pt;
         }
 
         .ttd {
-            margin-top: 25px;
             width: 100%;
+            margin-top: 14px;
             page-break-inside: avoid;
+            break-inside: avoid;
+            border-collapse: collapse;
         }
 
         .ttd td {
-            text-align: center;
             width: 50%;
+            text-align: center;
+            vertical-align: top;
+            font-size: 11pt;
         }
 
         .space-sign {
-            height: 55px;
+            height: 50px;
         }
 
         .nama {
@@ -119,11 +134,65 @@
         }
 
         .catatan {
-            margin-top: 15px;
-            font-size: 10px;
+            margin-top: 8px;
+            font-size: 9pt;
+            line-height: 1.2;
         }
-    </style>
 
+        /* =======================================================
+   KHUSUS UBAH PENANGGUNG JAWAB
+======================================================= */
+
+        @if ($emailSatker->jenis_layanan == 'ubah_penanggung')
+
+            body {
+                font-size: 10pt;
+                line-height: 1.15;
+            }
+
+            .judul {
+                font-size: 14pt;
+                margin-bottom: 10px;
+            }
+
+            .section {
+                margin-top: 6px;
+            }
+
+            .section-title {
+                font-size: 11pt;
+                margin-bottom: 4px;
+            }
+
+            td {
+                padding: 1.5px 4px;
+                font-size: 10pt;
+            }
+
+            .deskripsi,
+            .pernyataan {
+                font-size: 10pt;
+                line-height: 1.2;
+            }
+
+            .ttd {
+                margin-top: 14px;
+            }
+
+            .ttd td {
+                font-size: 10pt;
+            }
+
+            .space-sign {
+                height: 50px;
+            }
+
+            .catatan {
+                font-size: 8.5pt;
+            }
+
+        @endif
+    </style>
 
 </head>
 
@@ -137,7 +206,7 @@
     @endif
 
     <div class="judul">
-        FORMULIR PERMOHONAN EMAIL SATUAN KERJA
+        FORMULIR PERMOHONAN PEMBUATAN ALAMAT E-MAIL SATUAN KERJA
     </div>
 
     {{-- DATA EMAIL SATUAN KERJA --}}
@@ -461,17 +530,29 @@
             <td>
 
                 <div class="nama">
-                    {{ $emailSatker->nama_penanggung_jawab }}
+
+                    @if ($emailSatker->jenis_layanan == 'ubah_penanggung')
+                        {{ $emailSatker->nama_penanggung_jawab_baru }}
+                    @else
+                        {{ $emailSatker->nama_penanggung_jawab }}
+                    @endif
+
                 </div>
 
-                NIP. {{ $emailSatker->nip }}
+                NIP.
+
+                @if ($emailSatker->jenis_layanan == 'ubah_penanggung')
+                    {{ $emailSatker->nip_baru }}
+                @else
+                    {{ $emailSatker->nip }}
+                @endif
 
             </td>
 
         </tr>
 
     </table>
-
+    
 </body>
 
 </html>

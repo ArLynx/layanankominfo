@@ -9,6 +9,7 @@ use App\Http\Controllers\PimpinanController;
 
 use App\Http\Controllers\Admin\SubdomainAdminController;
 use App\Http\Controllers\Admin\EmailSatkerAdminController;
+use App\Http\Controllers\Admin\EmailPribadiAdminController;
 
 use App\Http\Controllers\TwoFactorSetupController;
 
@@ -117,6 +118,20 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::post('/email-satker/{emailSatker}/send-information', [EmailSatkerAdminController::class, 'sendInformation'])->name('email-satker.send-information');
         Route::get('/email-satker/{emailSatker}/preview-information', [EmailSatkerAdminController::class, 'previewInformation'])->name('email-satker.preview-information');
         Route::get('/email-satker/{emailSatker}/information-account', [EmailSatkerAdminController::class, 'previewInformation'])->name('email-satker.information-account');
+
+        // Pengajuan Email Pribadi
+        Route::get('/pengajuan/email-pribadi', [EmailPribadiAdminController::class, 'index'])->name('email-pribadi');
+        Route::get('/pengajuan/email-pribadi/{emailPribadi}', [EmailPribadiAdminController::class, 'show'])->name('email-pribadi.show');
+        Route::delete('/email-pribadi/{emailPribadi}', [EmailPribadiAdminController::class, 'destroy'])->name('email-pribadi.destroy');
+        Route::patch('/email-pribadi/{emailPribadi}/update-status', [EmailPribadiAdminController::class, 'updateStatus'])->name('email-pribadi.update-status');
+        Route::get('/email-pribadi/{emailPribadi}/karpeg', [EmailPribadiAdminController::class, 'viewKarpeg'])->name('email-pribadi.karpeg');
+        Route::get('/email-pribadi/{emailPribadi}/formulir', [EmailPribadiAdminController::class, 'viewFormulir'])->name('email-pribadi.formulir');
+        Route::delete('/email-pribadi/{emailPribadi}/delete-formulir', [EmailPribadiAdminController::class, 'deleteFormulir'])->name('email-pribadi.delete-formulir');
+        Route::get('/email-pribadi/{emailPribadi}/cetak-formulir', [EmailPribadiAdminController::class, 'cetakFormulir'])->name('email-pribadi.cetak-formulir');
+        Route::post('/email-pribadi/{emailPribadi}/send-information', [EmailPribadiAdminController::class, 'sendInformation'])->name('email-pribadi.send-information');
+
+        Route::get('/email-pribadi/{emailPribadi}/preview-information', [EmailPribadiAdminController::class, 'previewInformation'])->name('email-pribadi.preview-information');
+        Route::get('/email-pribadi/{emailPribadi}/information-account', [EmailPribadiAdminController::class, 'previewInformation'])->name('email-pribadi.information-account');
     });
 
 // Pimpinan Routes

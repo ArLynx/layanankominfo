@@ -27,27 +27,45 @@
             <div class="flex gap-3 mb-6">
 
                 <a href="{{ route('riwayat.index', ['tab' => 'subdomain']) }}"
-                    class="px-4 py-2 rounded-lg transition
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-lg transition
         {{ request('tab', 'subdomain') == 'subdomain'
             ? 'bg-primary text-white'
             : 'border border-outline-variant text-on-surface hover:bg-surface-container' }}">
-                    Subdomain
+
+                    <span>Subdomain</span>
+
+                    <span class="text-xs font-semibold opacity-80">
+                        ({{ $subdomainCount }})
+                    </span>
+
                 </a>
 
                 <a href="{{ route('riwayat.index', ['tab' => 'email-satker']) }}"
-                    class="px-4 py-2 rounded-lg transition
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-lg transition
         {{ request('tab') == 'email-satker'
             ? 'bg-primary text-white'
             : 'border border-outline-variant text-on-surface hover:bg-surface-container' }}">
-                    Email Satker
+
+                    <span>Email Satker</span>
+
+                    <span class="text-xs font-semibold opacity-80">
+                        ({{ $emailSatkerCount }})
+                    </span>
+
                 </a>
 
                 <a href="{{ route('riwayat.index', ['tab' => 'email-pribadi']) }}"
-                    class="px-4 py-2 rounded-lg transition
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-lg transition
         {{ request('tab') == 'email-pribadi'
             ? 'bg-primary text-white'
             : 'border border-outline-variant text-on-surface hover:bg-surface-container' }}">
-                    Email Pribadi
+
+                    <span>Email Pribadi</span>
+
+                    <span class="text-xs font-semibold opacity-80">
+                        ({{ $emailPribadiCount }})
+                    </span>
+
                 </a>
 
             </div>

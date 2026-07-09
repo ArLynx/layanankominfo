@@ -207,24 +207,24 @@ class EmailSatkerController extends Controller
             'nama_akun_dinas_baru' => $request->jenis_layanan == 'ubah_akun' ? ['required', 'regex:/^(?!.*@)[a-z0-9._-]+$/'] : ['nullable'],
 
             'nama_penanggung_jawab' => 'required',
-            'nip' => 'required|digits:18',
+            'nip' => 'required|min:18',
             'jabatan' => 'required',
             'pangkat_gol' => 'required',
-            'no_hp' => 'required|digits_between:10,15',
+            'no_hp' => 'required|min:12',
             'email' => 'required|email',
 
             'nama_penanggung_jawab_baru' => 'nullable|required_if:jenis_layanan,ubah_penanggung',
-            'nip_baru' => 'nullable|required_if:jenis_layanan,ubah_penanggung|digits:18',
+            'nip_baru' => 'nullable|required_if:jenis_layanan,ubah_penanggung|min:18',
             'jabatan_baru' => 'nullable|required_if:jenis_layanan,ubah_penanggung',
             'pangkat_gol_baru' => 'nullable|required_if:jenis_layanan,ubah_penanggung',
-            'no_hp_baru' => 'nullable|required_if:jenis_layanan,ubah_penanggung|digits_between:10,15',
+            'no_hp_baru' => 'nullable|required_if:jenis_layanan,ubah_penanggung|min:12',
             'email_baru' => 'nullable|required_if:jenis_layanan,ubah_penanggung|email',
 
             'jenis_layanan' => 'required|in:baru,reset,reaktivasi,ubah_akun,ubah_penanggung',
 
             'nama_kadis' => 'required',
             'jabatan_kadis' => 'required',
-            'nip_kadis' => 'required|digits:18',
+            'nip_kadis' => 'required|min:18',
 
             // nullable karena edit
             'karpeg' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',

@@ -335,8 +335,8 @@
             {{-- TAB EMAIL SATKER --}}
             <div id="tab-email-satker" class="hidden">
 
-                 @if ($emailSatkers->count())
-                   @foreach ($emailSatkers as $emailSatker)
+                @if ($emailSatkers->count())
+                    @foreach ($emailSatkers as $emailSatker)
                         @php
 
                             $statusMap = [
@@ -584,23 +584,302 @@
             {{-- TAB EMAIL PRIBADI --}}
             <div id="tab-email-pribadi" class="hidden">
 
-                <div class="bg-surface rounded-xl border border-border-subtle p-12 text-center">
+                @if ($emailPribadis->count())
+                    @foreach ($emailPribadis as $emailPribadi)
+                        @php
 
-                    <span class="material-symbols-outlined text-[60px]">
-                        alternate_email
-                    </span>
+                            $needApproval = $emailPribadi->jenis_layanan == 'baru';
 
-                    <h3 class="text-xl font-bold mt-4">
-                        Email Pribadi
-                    </h3>
+                            if ($needApproval) {
+                                $statusMap = [
+                                    'terbuka' => 1,
+                                    'baru' => 2,
+                                    'tunda' => 3,
+                                    'diproses' => 4,
+                                    'selesai' => 5,
+                                    'tutup' => 5,
+                                ];
 
-                    <p class="text-gray-500 mt-2">
-                        Nanti card Email Pribadi tampil di sini.
-                    </p>
+                                $steps = [
+                                    'Pengajuan',
+                                    'Pemeriksaan Dokumen',
+                                    'Persetujuan',
+                                    'Proses Pembuatan',
+                                    $emailPribadi->status == 'tutup' ? 'Pengajuan Ditolak' : 'Selesai',
+                                ];
 
-                </div>
+                                $icons = [
+                                    'description',
+                                    'fact_check',
+                                    'approval',
+                                    'pending',
+                                    $emailPribadi->status == 'tutup' ? 'cancel' : 'check_circle',
+                                ];
+
+                                $progressWidth = (($statusMap[$emailPribadi->status] - 1) / 4) * 100;
+                            } else {
+                                $statusMap = [
+                                    'terbuka' => 1,
+                                    'baru' => 2,
+                                    'diproses' => 3,
+                                    'selesai' => 4,
+                                    'tutup' => 4,
+                                ];
+
+                                $steps = [
+                                    'Pengajuan',
+                                    'Pemeriksaan Dokumen',
+                                    'Proses Pembuatan',
+                                    $emailPribadi->status == 'tutup' ? 'Pengajuan Ditolak' : 'Selesai',
+                                ];
+
+                                $icons = [
+                                    'description',
+                                    'fact_check',
+                                    'pending',
+                                    $emailPribadi->status == 'tutup' ? 'cancel' : 'check_circle',
+                                ];
+
+                                $progressWidth = (($statusMap[$emailPribadi->status] - 1) / 3) * 100;
+                            }
+
+                            $currentStep = $statusMap[$emailPribadi->status] ?? 1;
+
+                            $isRejected = $emailPribadi->status == 'tutup';
+
+                        @endphp
+
+                        <article
+                            class="bg-surface rounded-xl border border-border-subtle p-6 flex flex-col gap-8 relative overflow-hidden transition-all duration-300 hover:shadow-[0_4px_12px_rgba(0,30,64,0.04)]">
+
+                            {{-- Garis kiri --}}
+                            <div
+                                class="absolute left-0 top-0 bottom-0 w-1
+                    {{ $isRejected ? 'bg-red-500' : ($emailPribadi->status == 'selesai' ? 'bg-green-500' : 'bg-blue-500') }}">
+                            </div>
+
+                            <div class="flex justify-between items-start">
+
+                                <div>
+
+                                    <div class="flex items-center gap-2 mb-2">
+
+                                        <span
+                                            class="bg-surface-container-low text-primary text-label-sm font-label-sm px-2 py-0.5 rounded border border-border-subtle">
+
+                                            {{ $emailPribadi->nomor_tiket }}
+
+                                        </span>
+
+                                        @switch($emailPribadi->status)
+                                            @case('terbuka')
+                                                <span
+                                                    class="bg-blue-100 text-blue-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-blue-200 flex items-center gap-1">
+
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        description
+                                                    </span>
+
+                                                    Pengajuan
+
+                                                </span>
+                                            @break
+
+                                            @case('baru')
+                                                <span
+                                                    class="bg-gray-100 text-gray-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-gray-200 flex items-center gap-1">
+
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        fact_check
+                                                    </span>
+
+                                                    Pemeriksaan Dokumen
+
+                                                </span>
+                                            @break
+
+                                            @case('tunda')
+                                                <span
+                                                    class="bg-orange-100 text-orange-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-orange-200 flex items-center gap-1">
+
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        approval
+                                                    </span>
+
+                                                    Persetujuan Pimpinan
+
+                                                </span>
+                                            @break
+
+                                            @case('diproses')
+                                                <span
+                                                    class="bg-secondary-container/30 text-on-secondary-container text-label-sm font-label-sm px-2 py-0.5 rounded border border-secondary-container/50 flex items-center gap-1">
+
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        pending
+                                                    </span>
+
+                                                    Proses Pembuatan
+
+                                                </span>
+                                            @break
+
+                                            @case('selesai')
+                                                <span
+                                                    class="bg-success-emerald/10 text-success-emerald text-label-sm font-label-sm px-2 py-0.5 rounded border border-success-emerald/20 flex items-center gap-1">
+
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        check_circle
+                                                    </span>
+
+                                                    Selesai
+
+                                                </span>
+                                            @break
+
+                                            @case('tutup')
+                                                <span
+                                                    class="bg-red-100 text-red-700 text-label-sm font-label-sm px-2 py-0.5 rounded border border-red-200 flex items-center gap-1">
+
+                                                    <span class="material-symbols-outlined text-[14px]">
+                                                        cancel
+                                                    </span>
+
+                                                    Pengajuan Dicancel
+
+                                                </span>
+                                            @break
+                                        @endswitch
+
+                                    </div>
+
+                                    <h3 class="text-headline-md font-headline-md text-primary">
+                                        Pengajuan Email Pribadi @murungrayakab.go.id
+                                    </h3>
+
+                                    <p class="text-label-sm font-label-sm text-on-surface-variant mt-1">
+                                        Diajukan:
+                                        {{ $emailPribadi->created_at->format('d M Y') }}
+                                    </p>
+
+                                </div>
+
+                                <a href="{{ route('email-pribadi.show', $emailPribadi->id) }}"
+                                    class="bg-primary text-on-primary text-label-md font-label-md px-5 py-2.5 rounded-lg shadow-sm hover:bg-primary-container transition-colors">
+
+                                    Detail
+
+                                </a>
+
+                            </div>
+
+                            {{-- TRACKER --}}
+                            <div class="relative mt-6">
+
+                                <div class="absolute top-5 left-5 right-5 h-1 bg-gray-200"></div>
+
+                                <div class="absolute top-5 left-5 h-1
+        {{ $isRejected ? 'bg-red-500' : 'bg-blue-500' }}"
+                                    style="width: {{ $progressWidth }}%;">
+                                </div>
+
+                                <div class="flex justify-between relative z-10">
+
+                                    @foreach ($steps as $index => $step)
+                                        @php
+                                            $number = $index + 1;
+                                            $completed = $number < $currentStep;
+                                            $active = $number == $currentStep;
+                                        @endphp
+
+                                        <div class="flex flex-col items-center flex-1">
+
+                                            <div
+                                                class="w-8 h-8 rounded-full border-2 border-surface flex items-center justify-center shrink-0
+
+                    @if ($completed) {{ $isRejected ? 'bg-red-500 border-red-500 text-white' : 'bg-blue-500 border-blue-500 text-white' }}
+                    @elseif($active)
+                        {{ $isRejected
+                            ? 'bg-red-500 border-red-500 text-white'
+                            : ($emailPribadi->status == 'selesai'
+                                ? 'bg-green-500 border-green-500 text-white'
+                                : 'bg-yellow-500 border-yellow-500 text-white') }}
+                    @else
+                        bg-white border-gray-300 text-gray-400 @endif">
+
+                                                @if ($completed)
+                                                    <span class="material-symbols-outlined text-[16px]">
+                                                        check
+                                                    </span>
+                                                @elseif($active)
+                                                    <span
+                                                        class="material-symbols-outlined text-[16px]
+                            {{ $emailPribadi->status == 'diproses' ? 'animate-spin' : '' }}">
+
+                                                        {{ $icons[$index] }}
+
+                                                    </span>
+                                                @elseif($isRejected && $number == count($steps))
+                                                    <span class="material-symbols-outlined text-[16px]">
+                                                        close
+                                                    </span>
+                                                @else
+                                                    <span class="material-symbols-outlined text-[16px]">
+                                                        {{ $icons[$index] }}
+                                                    </span>
+                                                @endif
+
+                                            </div>
+
+                                            <p
+                                                class="text-label-sm font-label-sm text-center mt-2
+
+                    @if ($active && $isRejected) text-red-600 font-semibold
+                    @elseif($number <= $currentStep)
+                        text-primary font-semibold
+                    @else
+                        text-gray-500 @endif">
+
+                                                {{ $step }}
+
+                                            </p>
+
+                                        </div>
+                                    @endforeach
+
+                                </div>
+
+                            </div>
+
+                        </article>
+                    @endforeach
+                @else
+                    <div class="bg-surface rounded-xl border border-border-subtle p-12 text-center">
+
+                        <span class="material-symbols-outlined text-[72px] text-outline mb-4">
+                            assignment_late
+                        </span>
+
+                        <h3 class="text-headline-md font-headline-md text-primary mb-2">
+                            Belum Ada Pengajuan
+                        </h3>
+
+                        <p class="text-body-md font-body-md text-on-surface-variant mb-6">
+                            Anda belum mengajukan layanan Email Pribadi.
+                        </p>
+
+                        <a href="{{ route('jenis-layanan') }}"
+                            class="bg-primary text-on-primary px-6 py-3 rounded-lg text-label-lg font-label-lg">
+
+                            Buat Pengajuan Sekarang
+
+                        </a>
+
+                    </div>
+                @endif
 
             </div>
+
 
         </section>
     </div>

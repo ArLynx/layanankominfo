@@ -580,9 +580,17 @@
 
                                     <li>✔ Nama Akun Email Dinas / Unit Kerja</li>
 
+                                    @if ($emailSatker->jenis_layanan == 'ubah_akun')
+                                        <li>✔ Nama Akun Email Baru</li>
+                                    @endif
+
                                     <li>✔ Jenis Layanan</li>
 
                                     <li>✔ Nama Penanggung Jawab</li>
+
+                                    @if ($emailSatker->jenis_layanan == 'ubah_penanggung')
+                                        <li>✔ Data Penanggung Jawab Baru</li>
+                                    @endif
 
                                     <li>✔ NIP Penanggung Jawab</li>
 
@@ -717,6 +725,16 @@
 
                                     </div>
 
+                                    @if ($emailSatker->jenis_layanan == 'ubah_penanggung')
+                                        <div class="flex justify-between">
+
+                                            <span>Penanggung Jawab Baru</span>
+
+                                            <strong>{{ $emailSatker->nama_penanggung_jawab_baru }}</strong>
+
+                                        </div>
+                                    @endif
+
                                     <div class="flex justify-between">
 
                                         <span>NIP</span>
@@ -724,6 +742,16 @@
                                         <strong>{{ $emailSatker->nip }}</strong>
 
                                     </div>
+
+                                    @if ($emailSatker->jenis_layanan == 'ubah_penanggung')
+                                        <div class="flex justify-between">
+
+                                            <span>NIP Baru</span>
+
+                                            <strong>{{ $emailSatker->nip_baru }}</strong>
+
+                                        </div>
+                                    @endif
 
                                 </div>
 
