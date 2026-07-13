@@ -25,7 +25,8 @@
     <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
             <h2 class="text-headline-lg font-headline-lg text-on-surface">Pengajuan Email Satuan Kerja</h2>
-            <p class="text-body-md font-body-md text-on-surface-variant mt-1">Daftar pengajuan layanan Email Satuan Kerja yang masuk</p>
+            <p class="text-body-md font-body-md text-on-surface-variant mt-1">Daftar pengajuan layanan Email Satuan Kerja
+                yang masuk</p>
         </div>
     </header>
 
@@ -36,13 +37,16 @@
 
             <div class="flex-1 min-w-[300px]">
                 <input type="text" name="search" value="{{ request('search') }}"
-                    placeholder="Cari tiket, nama pemohon, atau email satker..."
+                    placeholder="Cari tiket, nama penanggung jawab, atau email satker..."
                     class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface">
             </div>
 
             <div>
                 <select name="status"
                     class="px-4 py-3 rounded-lg border border-outline-variant bg-surface min-w-[180px]">
+
+                    <option value="">Semua Status</option>
+
                     <option value="terbuka" {{ request('status') == 'terbuka' ? 'selected' : '' }}>
                         Pengajuan
                     </option>
@@ -66,6 +70,7 @@
                     <option value="tutup" {{ request('status') == 'tutup' ? 'selected' : '' }}>
                         Pengajuan Dicancel
                     </option>
+
                 </select>
             </div>
 
@@ -95,7 +100,7 @@
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
-                            Pemohon
+                            Penanggung Jawab
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
@@ -220,16 +225,6 @@
 
                                         <span class="material-symbols-outlined text-[18px]">
                                             visibility
-                                        </span>
-
-                                    </a>
-
-                                    {{-- Persetujuan Pimpinan --}}
-                                     <a href=""
-                                        class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-red-500 text-white">
-
-                                        <span class="material-symbols-outlined text-[18px]">
-                                            approval
                                         </span>
 
                                     </a>

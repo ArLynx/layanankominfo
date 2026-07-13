@@ -73,21 +73,21 @@
             {{-- FILTER --}}
             <form method="GET" class="flex gap-3 mb-6">
 
+                <input type="hidden" name="tab" value="{{ request('tab', 'subdomain') }}">
+
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari tiket..."
                     class="border rounded-lg px-3 py-2">
 
                 <select name="status" class="border rounded-lg px-3 py-2">
-
                     <option value="">Semua Status</option>
-
-                    <option>Semua Status</option>
-                    <option value="terbuka">Pengajuan</option>
-                    <option value="baru">Pemeriksaan Dokumen</option>
-                    <option value="diproses">Proses Pembuatan</option>
-                    <option value="tunda">Persetujuan Pimpinan</option>
-                    <option value="selesai">Selesai</option>
-                    <option value="tutup">Pengajuan Dicancel</option>
-
+                    <option value="terbuka" {{ request('status') == 'terbuka' ? 'selected' : '' }}>Pengajuan</option>
+                    <option value="baru" {{ request('status') == 'baru' ? 'selected' : '' }}>Pemeriksaan Dokumen</option>
+                    <option value="diproses" {{ request('status') == 'diproses' ? 'selected' : '' }}>Proses Pembuatan
+                    </option>
+                    <option value="tunda" {{ request('status') == 'tunda' ? 'selected' : '' }}>Persetujuan Pimpinan
+                    </option>
+                    <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                    <option value="tutup" {{ request('status') == 'tutup' ? 'selected' : '' }}>Pengajuan Dicancel</option>
                 </select>
 
                 <button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg">
@@ -121,7 +121,7 @@
 
                         <tbody>
 
-                            @forelse($subdomains as $item)
+                            @forelse($subdomains ?? [] as $item)
                                 <tr>
 
                                     <td class="p-3 text-center">
@@ -278,7 +278,11 @@
 
                     <div class="mt-5">
 
-                        {{ $subdomains->links() }}
+                        @if ($subdomains && $subdomains->hasPages())
+                            <div class="mt-5">
+                                {{ $subdomains->links() }}
+                            </div>
+                        @endif
 
                     </div>
                 @elseif (request('tab') == 'email-satker')
@@ -307,7 +311,7 @@
 
                             <tbody>
 
-                                @forelse($emailSatkers as $item)
+                                @forelse($emailSatkers ?? [] as $item)
                                     <tr>
 
                                         <td class="p-3 text-center">
@@ -465,7 +469,11 @@
 
                         <div class="mt-5">
 
-                            {{ $emailSatkers->links() }}
+                            @if ($emailSatkers && $emailSatkers->hasPages())
+                                <div class="mt-5">
+                                    {{ $emailSatkers->links() }}
+                                </div>
+                            @endif
 
                         </div>
                     @elseif (request('tab') == 'email-pribadi')
@@ -495,7 +503,7 @@
 
                                 <tbody>
 
-                                    @forelse($emailPribadis as $item)
+                                    @forelse($emailPribadis ?? [] as $item)
                                         <tr>
 
                                             <td class="p-3 text-center">
@@ -507,7 +515,7 @@
                                             </td>
 
                                             <td class="p-3">
-                                                {{ $item->nama_lengkap }}
+                                                {{ $item->nama }}
                                             </td>
 
                                             <td class="p-3">
@@ -650,7 +658,11 @@
 
                             <div class="mt-5">
 
-                                {{ $emailPribadis->links() }}
+                                @if ($emailPribadis && $emailPribadis->hasPages())
+                                    <div class="mt-5">
+                                        {{ $emailPribadis->links() }}
+                                    </div>
+                                @endif
 
                             </div>
                         @endif

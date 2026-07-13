@@ -10,6 +10,7 @@ use App\Http\Controllers\PimpinanController;
 use App\Http\Controllers\Admin\SubdomainAdminController;
 use App\Http\Controllers\Admin\EmailSatkerAdminController;
 use App\Http\Controllers\Admin\EmailPribadiAdminController;
+use App\Http\Controllers\Admin\LaporanController;
 
 use App\Http\Controllers\TwoFactorSetupController;
 
@@ -20,6 +21,8 @@ use App\Http\Controllers\User\SubdomainController;
 use App\Http\Controllers\User\RiwayatController;
 use App\Http\Controllers\User\EmailPribadiController;
 use App\Http\Controllers\User\EmailSatkerController;
+
+use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -95,6 +98,15 @@ Route::middleware(['auth:admin', 'role:admin', '2fa.admin'])
 
         // User Management
         Route::get('/users', [UserController::class, 'index'])->name('users');
+
+        // Laporan
+        Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
+        // ========================
+        // Export Laporan
+        // ========================
+        Route::get('/laporan/export/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export.pdf');
+
+        Route::get('/laporan/export/excel', [LaporanController::class, 'exportExcel'])->name('laporan.export.excel');
 
         // Proses Permohonan
         Route::get('/process', [ProcessController::class, 'index'])->name('process');

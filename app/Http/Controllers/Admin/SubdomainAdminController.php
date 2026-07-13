@@ -15,11 +15,12 @@ class SubdomainAdminController extends Controller
         $query = Subdomain::query();
 
         if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('nomor_tiket', 'like', '%' . $request->search . '%')
-                    ->orWhere('nama_subdomain', 'like', '%' . $request->search . '%')
-                    ->orWhere('nama_penanggung_jawab', 'like', '%' . $request->search . '%')
-                    ->orWhere('instansi', 'like', '%' . $request->search . '%');
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('nomor_tiket', 'like', "%{$search}%")
+                    ->orWhere('nama_subdomain', 'like', "%{$search}%")
+                    ->orWhere('nama_penanggung_jawab', 'like', "%{$search}%");
             });
         }
 
@@ -27,7 +28,7 @@ class SubdomainAdminController extends Controller
             $query->where('status', $request->status);
         }
 
-        $subdomains = $query->oldest()->paginate(10)->withQueryString();
+        $subdomains = $query->latest()->paginate(10)->withQueryString();
 
         return view('admin.pengajuan-subdomain', compact('subdomains'));
     }

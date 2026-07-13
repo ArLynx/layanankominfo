@@ -23,7 +23,6 @@ class EmailSatkerAdminController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('nomor_tiket', 'like', "%{$search}%")
                     ->orWhere('nama_penanggung_jawab', 'like', "%{$search}%")
-                    ->orWhere('nama_instansi', 'like', "%{$search}%")
                     ->orWhere('nama_akun_dinas', 'like', "%{$search}%");
             });
         }

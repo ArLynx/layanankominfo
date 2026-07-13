@@ -25,11 +25,9 @@ class EmailPribadiAdminController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('nomor_tiket', 'like', "%{$search}%")
                     ->orWhere('nama', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('nama_akun', 'like', "%{$search}%");
-
-                // Jika layanan ubah akun, ikut cari nama akun baru
-                $q->orWhere('nama_akun_baru', 'like', "%{$search}%");
+                    ->orWhere('nama_instansi', 'like', "%{$search}%")
+                    ->orWhere('nama_akun', 'like', "%{$search}%")
+                    ->orWhere('nama_akun_baru', 'like', "%{$search}%");
             });
         }
 
@@ -38,7 +36,7 @@ class EmailPribadiAdminController extends Controller
             $query->where('status', $request->status);
         }
 
-        $emailPribadis = $query->oldest()->paginate(10)->withQueryString();
+        $emailPribadis = $query->latest()->paginate(10)->withQueryString();
 
         return view('admin.pengajuan-email-pribadi', compact('emailPribadis'));
     }

@@ -47,58 +47,63 @@
                     <h3 class="text-headline-md font-headline-md mb-6">Pilih Jenis Layanan</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                        <!-- Subdomain -->
-                        <label class="cursor-pointer">
-                            <a href="{{ route('subdomain.create') }}" class="block">
+                        {{-- Subdomain --}}
+                        <a href="{{ route('subdomain.create') }}" class="block">
+                            <div
+                                class="p-6 border-2 border-border-subtle rounded-xl hover:border-primary hover:bg-primary-fixed/20 transition-all h-full flex flex-col items-center text-center">
                                 <div
-                                    class="p-6 border-2 border-border-subtle rounded-xl hover:border-primary hover:bg-primary-fixed/20 transition-all h-full flex flex-col items-center text-center">
-
-                                    <div
-                                        class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-4 text-primary">
-                                        <span class="material-symbols-outlined text-[32px]">language</span>
-                                    </div>
-
-                                    <h4 class="text-label-md font-label-md text-on-surface">
-                                        Subdomain
-                                    </h4>
-
-                                    <p class="text-caption font-caption text-on-surface-variant mt-2">
-                                        Untuk website unit kerja atau program khusus.
-                                    </p>
+                                    class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-4 text-primary">
+                                    <span class="material-symbols-outlined text-[32px]">language</span>
                                 </div>
-                            </a>
-                        </label>
 
-                        <!-- Email Pribadi -->
-                        <label class="cursor-pointer">
-                            <a href="{{ route('email-pribadi.create') }}" class="block">
+                                <h4 class="text-label-md font-label-md text-on-surface">
+                                    Subdomain
+                                </h4>
+
+                                <p class="text-caption font-caption text-on-surface-variant mt-2">
+                                    Untuk website unit kerja atau program khusus.
+                                </p>
+                            </div>
+                        </a>
+
+                        {{-- Email Pribadi --}}
+                        <a href="{{ route('email-pribadi.create') }}" class="block">
+                            <div
+                                class="p-6 border-2 border-border-subtle rounded-xl hover:border-primary hover:bg-primary-fixed/20 transition-all h-full flex flex-col items-center text-center">
                                 <div
-                                    class="p-6 border-2 border-border-subtle rounded-xl peer-checked:border-primary peer-checked:bg-primary-fixed/20 hover:border-outline-variant transition-all h-full flex flex-col items-center text-center">
-                                    <div
-                                        class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-4 text-primary">
-                                        <span class="material-symbols-outlined text-[32px]">mail</span>
-                                    </div>
-                                    <h4 class="text-label-md font-label-md text-on-surface">Email Kedinasan (Personal)</h4>
-                                    <p class="text-caption font-caption text-on-surface-variant mt-2">Alamat email resmi
-                                        dengan
-                                        domain @murungrayakab.go.id untuk ASN.</p>
+                                    class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-4 text-primary">
+                                    <span class="material-symbols-outlined text-[32px]">mail</span>
                                 </div>
-                        </label>
 
-                        <!-- Email Satker -->
-                        <label class="cursor-pointer">
-                            <a href="{{ route('email-satker.create') }}" class="block">
+                                <h4 class="text-label-md font-label-md text-on-surface">
+                                    Email Kedinasan (Personal)
+                                </h4>
+
+                                <p class="text-caption font-caption text-on-surface-variant mt-2">
+                                    Alamat email resmi dengan domain @murungrayakab.go.id untuk ASN.
+                                </p>
+                            </div>
+                        </a>
+
+                        {{-- Email Satker --}}
+                        <a href="{{ route('email-satker.create') }}" class="block md:col-start-1">
+                            <div
+                                class="p-6 border-2 border-border-subtle rounded-xl hover:border-primary hover:bg-primary-fixed/20 transition-all h-full flex flex-col items-center text-center">
                                 <div
-                                    class="p-6 border-2 border-border-subtle rounded-xl peer-checked:border-primary peer-checked:bg-primary-fixed/20 hover:border-outline-variant transition-all h-full flex flex-col items-center text-center">
-                                    <div
-                                        class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-4 text-primary">
-                                        <span class="material-symbols-outlined text-[32px]">corporate_fare</span>
-                                    </div>
-                                    <h4 class="text-label-md font-label-md text-on-surface">Email Satker</h4>
-                                    <p class="text-caption font-caption text-on-surface-variant mt-2">Email resmi untuk unit
-                                        kerja/satker (@murungrayakab.go.id).</p>
+                                    class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-4 text-primary">
+                                    <span class="material-symbols-outlined text-[32px]">corporate_fare</span>
                                 </div>
-                        </label>
+
+                                <h4 class="text-label-md font-label-md text-on-surface">
+                                    Email Satker
+                                </h4>
+
+                                <p class="text-caption font-caption text-on-surface-variant mt-2">
+                                    Email resmi untuk unit kerja/satker (@murungrayakab.go.id).
+                                </p>
+                            </div>
+                        </a>
+
                     </div>
                 </div>
 
