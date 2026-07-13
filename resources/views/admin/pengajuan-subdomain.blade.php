@@ -100,7 +100,7 @@
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
-                            Pemohon
+                            Penanggung Jawab
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
