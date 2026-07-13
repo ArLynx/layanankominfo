@@ -45,131 +45,228 @@
             {{-- Dashboard --}}
             <li>
                 <a href="{{ route('admin.dashboard') }}"
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('superadmin.dashboard') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
+                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg
+            {{ request()->routeIs('admin.dashboard') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }}
+            transition-all">
 
-                    <span class="material-symbols-outlined"
-                        style="font-variation-settings: '{{ request()->routeIs('superadmin.dashboard') ? '1' : '0' }}';">
+                    <span class="material-symbols-outlined">
                         dashboard
                     </span>
 
                     <span class="text-label-md font-label-md">
                         Dashboard
                     </span>
+
                 </a>
             </li>
-
-            {{-- Manajemen User --}}
-            <li>
-                <a href=""
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('admin.users*') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
-
-                    <span class="material-symbols-outlined"
-                        style="font-variation-settings: '{{ request()->routeIs('admin.users*') ? '1' : '0' }}';">
-                        manage_accounts
-                    </span>
-
-                    <span class="text-label-md font-label-md">
-                        Manajemen User
-                    </span>
-                </a>
-            </li>
-
-            <li x-data="{ open: false }">
-
-                <button @click="open = !open"
-                    class="w-full flex items-center justify-between px-4 py-3 mx-2 rounded-lg hover:bg-surface-container-high">
-
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined">
-                            assignment
-                        </span>
-
-                        <span class="text-label-md font-label-md">
-                            Pengajuan :
-                        </span>
-                    </div>
-
-                    <span class="material-symbols-outlined transition-transform duration-200"
-                        :class="{ 'rotate-180': open }">
-                        expand_more
-                    </span>
-
-                </button>
-
-                <div x-show="open" x-transition class="overflow-hidden">
-
-                    <ul class="ml-8 mt-1 border-l border-outline-variant pl-4 space-y-1">
-
-                        <li>
-                            <a href="{{ route('admin.subdomain') }}"
-                                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-container-high">
-                                <span class="material-symbols-outlined text-[18px]">dns</span>
-                                <span>Subdomain</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="{{ route('admin.email-pribadi') }}"
-                                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-container-high">
-                                <span class="material-symbols-outlined text-[18px]">mail</span>
-                                <span>Email Pribadi</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="{{ route('admin.email-satker') }}"
-                                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-container-high">
-                                <span class="material-symbols-outlined text-[18px]">alternate_email</span>
-                                <span>Email Satker</span>
-                            </a>
-                        </li>
-
-                    </ul>
-
-                </div>
 
             {{-- Profil --}}
             <li>
                 <a href=""
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('profile') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
+                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg
+            {{ request()->routeIs('profile') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }}
+            transition-all">
 
-                    <span class="material-symbols-outlined"
-                        style="font-variation-settings: '{{ request()->routeIs('profile') ? '1' : '0' }}';">
+                    <span class="material-symbols-outlined">
                         account_circle
                     </span>
 
                     <span class="text-label-md font-label-md">
                         Profil Saya
                     </span>
+
                 </a>
+            </li>
+
+            {{-- Manajemen User --}}
+            <li>
+                <a href=""
+                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg
+            {{ request()->routeIs('admin.users*') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }}
+            transition-all">
+
+                    <span class="material-symbols-outlined">
+                        manage_accounts
+                    </span>
+
+                    <span class="text-label-md font-label-md">
+                        Manajemen User
+                    </span>
+
+                </a>
+            </li>
+
+            {{-- Pengajuan --}}
+            <li x-data="{
+                open: {{ request()->routeIs('admin.subdomain*') ||
+                request()->routeIs('admin.email-pribadi*') ||
+                request()->routeIs('admin.email-satker*')
+                    ? 'true'
+                    : 'false' }}
+            }">
+
+                <button @click="open=!open"
+                    class="w-full flex items-center justify-between px-4 py-3 mx-2 rounded-lg transition-all
+            {{ request()->routeIs('admin.subdomain*') ||
+            request()->routeIs('admin.email-pribadi*') ||
+            request()->routeIs('admin.email-satker*')
+                ? 'bg-primary text-on-primary'
+                : 'text-on-surface-variant hover:bg-surface-container-high' }}">
+
+                    <div class="flex items-center gap-3">
+
+                        <span class="material-symbols-outlined">
+
+                            assignment
+
+                        </span>
+
+                        <span class="text-label-md font-label-md">
+
+                            Pengajuan
+
+                        </span>
+
+                    </div>
+
+                    <span class="material-symbols-outlined transition-transform duration-300"
+                        :class="{ 'rotate-180': open }">
+
+                        expand_more
+
+                    </span>
+
+                </button>
+
+                <div x-show="open" x-transition class="overflow-hidden">
+
+                    <ul class="ml-8 mt-2 border-l border-outline-variant pl-4 space-y-1">
+
+                        <li>
+
+                            <a href="{{ route('admin.subdomain') }}"
+                                class="flex items-center gap-3 px-3 py-2 rounded-lg transition-all
+                        {{ request()->routeIs('admin.subdomain*') ? 'bg-primary text-on-primary' : 'hover:bg-surface-container-high' }}">
+
+                                <span class="material-symbols-outlined text-[18px]">
+
+                                    dns
+
+                                </span>
+
+                                <span>
+
+                                    Subdomain
+
+                                </span>
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a href="{{ route('admin.email-pribadi') }}"
+                                class="flex items-center gap-3 px-3 py-2 rounded-lg transition-all
+                        {{ request()->routeIs('admin.email-pribadi*')
+                            ? 'bg-primary text-on-primary'
+                            : 'hover:bg-surface-container-high' }}">
+
+                                <span class="material-symbols-outlined text-[18px]">
+
+                                    mail
+
+                                </span>
+
+                                <span>
+
+                                    Email Pribadi
+
+                                </span>
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a href="{{ route('admin.email-satker') }}"
+                                class="flex items-center gap-3 px-3 py-2 rounded-lg transition-all
+                        {{ request()->routeIs('admin.email-satker*') ? 'bg-primary text-on-primary' : 'hover:bg-surface-container-high' }}">
+
+                                <span class="material-symbols-outlined text-[18px]">
+
+                                    alternate_email
+
+                                </span>
+
+                                <span>
+
+                                    Email Satker
+
+                                </span>
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </li>
+
+            {{-- Laporan --}}
+            <li>
+
+                <a href="{{ route('admin.laporan') }}"
+                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg
+            {{ request()->routeIs('admin.laporan*') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }}
+            transition-all">
+
+                    <span class="material-symbols-outlined">
+
+                        assessment
+
+                    </span>
+
+                    <span class="text-label-md font-label-md">
+
+                        Laporan
+
+                    </span>
+
+                </a>
+
             </li>
 
             {{-- Log Aktivitas --}}
             <li>
-                <a href=""
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg {{ request()->routeIs('admin.activity_logs*') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }} transition-all">
 
-                    <span class="material-symbols-outlined"
-                        style="font-variation-settings: '{{ request()->routeIs('admin.activity_logs*') ? '1' : '0' }}';">
+                <a href=""
+                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg
+            {{ request()->routeIs('admin.activity_logs*') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }}
+            transition-all">
+
+                    <span class="material-symbols-outlined">
+
                         history_toggle_off
+
                     </span>
 
                     <span class="text-label-md font-label-md">
+
                         Log Aktivitas
+
                     </span>
+
                 </a>
+
             </li>
 
         </ul>
 
         <div class="mt-auto px-gutter pt-4 border-t border-border-subtle">
-            <div class="mb-4">
-                <button
-                    class="w-full bg-primary text-on-primary py-2.5 px-4 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-primary-container transition-colors shadow-sm">
-                    <span class="material-symbols-outlined">add</span>
-                    Buat Laporan
-                </button>
-            </div>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit"

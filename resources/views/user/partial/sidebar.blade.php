@@ -12,42 +12,82 @@
             <h1 class="text-headline-md font-headline-md text-primary dark:text-inverse-primary truncate">Portal
                 Pemohon</h1>
             <p class="text-label-sm font-label-sm text-on-surface-variant truncate">Dinas Kominfo</p>
-            <a class="text-caption font-caption text-primary hover:underline mt-0.5 inline-block" href="#">Edit
-                Profil</a>
         </div>
     </div>
     <!-- Main Navigation Links -->
     <nav class="flex-1 flex flex-col gap-1 px-3">
-        <!-- Active Item: Dashboard -->
-        <a class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all translate-x-1 shadow-sm"
-            href="{{ route('dashboard-user') }}">
+
+        {{-- Dashboard --}}
+        <a href="{{ route('dashboard-user') }}"
+            class="flex items-center gap-3 px-4 py-3 mx-2 my-1 rounded-lg transition-all
+        {{ request()->routeIs('dashboard-user')
+            ? 'bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container translate-x-1 shadow-sm'
+            : 'text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-highest dark:hover:bg-surface-variant hover:text-primary' }}">
+
             <span class="material-symbols-outlined text-[20px]"
-                style="font-variation-settings: 'FILL' 1;">dashboard</span>
-            <span class="text-label-md font-label-md">Dashboard</span>
+                style="font-variation-settings: 'FILL' {{ request()->routeIs('dashboard-user') ? 1 : 0 }};">
+                dashboard
+            </span>
+
+            <span class="text-label-md font-label-md">
+                Dashboard
+            </span>
         </a>
-        <!-- Inactive Items -->
-        <a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high mx-2 my-1 px-4 py-3 rounded-lg flex items-center gap-3 hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all hover:text-primary"
-            href="{{ route('jenis-layanan') }}">
-            <span class="material-symbols-outlined text-[20px]">add_circle</span>
-            <span class="text-label-md font-label-md">Layanan Baru</span>
+
+        {{-- Layanan Baru --}}
+        <a href="{{ route('jenis-layanan') }}"
+            class="flex items-center gap-3 px-4 py-3 mx-2 my-1 rounded-lg transition-all
+        {{ request()->routeIs('jenis-layanan')
+            ? 'bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container translate-x-1 shadow-sm'
+            : 'text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-highest dark:hover:bg-surface-variant hover:text-primary' }}">
+
+            <span class="material-symbols-outlined text-[20px]"
+                style="font-variation-settings: 'FILL' {{ request()->routeIs('jenis-layanan') ? 1 : 0 }};">
+                add_circle
+            </span>
+
+            <span class="text-label-md font-label-md">
+                Layanan Baru
+            </span>
         </a>
-        <a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high mx-2 my-1 px-4 py-3 rounded-lg flex items-center gap-3 hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all hover:text-primary"
-            href="{{ route('riwayat.index') }}">
-            <span class="material-symbols-outlined text-[20px]">history</span>
-            <span class="text-label-md font-label-md">Riwayat</span>
+
+        {{-- Riwayat --}}
+        <a href="{{ route('riwayat.index') }}"
+            class="flex items-center gap-3 px-4 py-3 mx-2 my-1 rounded-lg transition-all
+        {{ request()->routeIs('riwayat.*')
+            ? 'bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container translate-x-1 shadow-sm'
+            : 'text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-highest dark:hover:bg-surface-variant hover:text-primary' }}">
+
+            <span class="material-symbols-outlined text-[20px]"
+                style="font-variation-settings: 'FILL' {{ request()->routeIs('riwayat.*') ? 1 : 0 }};">
+                history
+            </span>
+
+            <span class="text-label-md font-label-md">
+                Riwayat
+            </span>
         </a>
-        <a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high mx-2 my-1 px-4 py-3 rounded-lg flex items-center gap-3 hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all hover:text-primary"
-            href="{{ route('profile.show') }}">
-            <span class="material-symbols-outlined text-[20px]">person</span>
-            <span class="text-label-md font-label-md">Profil Saya</span>
+
+        {{-- Profil --}}
+        <a href="{{ route('profile.show') }}"
+            class="flex items-center gap-3 px-4 py-3 mx-2 my-1 rounded-lg transition-all
+        {{ request()->routeIs('profile.*')
+            ? 'bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container translate-x-1 shadow-sm'
+            : 'text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-highest dark:hover:bg-surface-variant hover:text-primary' }}">
+
+            <span class="material-symbols-outlined text-[20px]"
+                style="font-variation-settings: 'FILL' {{ request()->routeIs('profile.*') ? 1 : 0 }};">
+                person
+            </span>
+
+            <span class="text-label-md font-label-md">
+                Profil Saya
+            </span>
         </a>
+
     </nav>
     <!-- CTA & Footer Nav -->
-    <div class="px-5 mt-auto pt-4 border-t border-border-subtle flex flex-col gap-4"><button
-            class="w-full bg-primary text-on-primary text-label-md font-label-md py-3 rounded-lg shadow-[0_4px_6px_rgba(0,51,102,0.1)] hover:bg-primary-container transition-colors flex justify-center items-center gap-2">
-            <span class="material-symbols-outlined text-[18px]">edit_document</span>
-            Buat Laporan
-        </button>
+    <div class="px-5 mt-auto pt-4 border-t border-border-subtle flex flex-col gap-4">
         <form action="{{ route('logout') }}" method="POST">
             @csrf
 
