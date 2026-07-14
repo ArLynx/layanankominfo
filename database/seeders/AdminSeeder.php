@@ -11,7 +11,16 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         Admin::create([
-            'name' => 'Super Admin',
+            'name' => 'Superadmin',
+            'email' => 'superadmin@kominfo.go.id',
+            'password' => 'password',
+            'role' => 'superadmin',
+            'status' => 'active',
+            'email_verified_at' => now(),
+        ]);
+
+        Admin::create([
+            'name' => 'Admin',
             'email' => 'admin@kominfo.go.id',
             'password' => 'password',
             'role' => 'admin',

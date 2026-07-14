@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
              '2fa.ensure' => \App\Http\Middleware\EnsureTwoFactorIsEnabled::class,
              '2fa.admin' => \App\Http\Middleware\EnsureTwoFactorForAdmins::class,
              'profile.complete' => \App\Http\Middleware\EnsureProfileIsComplete::class,
+             'nocache' => \App\Http\Middleware\PreventBackHistory::class,
          ]);
 
          $middleware->redirectGuestsTo(function (Request $request) {
@@ -30,7 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
          });
 
          $middleware->redirectUsersTo(function (Request $request) {
-             if ($request->is('pimpinan/*')) {
+             if ($request->is('pimpinan/*') || auth('admin')->user()?->role === 'pimpinan') {
                  return route('pimpinan.dashboard');
              }
 

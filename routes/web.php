@@ -22,8 +22,6 @@ use App\Http\Controllers\User\RiwayatController;
 use App\Http\Controllers\User\EmailPribadiController;
 use App\Http\Controllers\User\EmailSatkerController;
 
-use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -81,31 +79,29 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 });
 
 // Admin 2FA Setup — tanpa role filter biar admin & pimpinan bisa akses
-Route::middleware(['auth:admin', '2fa.admin'])
+Route::middleware(['auth:admin', '2fa.admin', 'nocache'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
         Route::get('/2fa-setup', [App\Http\Controllers\TwoFactorSetupController::class, 'index'])->name('2fa.setup');
     });
 
-// Admin Routes (superadmin & admin)
-Route::middleware(['auth:admin', 'role:admin', '2fa.admin'])
+// Shared Admin & Superadmin Routes
+Route::middleware(['auth:admin', '2fa.admin', 'nocache'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    });
 
-        // User Management
-        Route::get('/users', [UserController::class, 'index'])->name('users');
-
+// Admin-only Routes
+Route::middleware(['auth:admin', 'role:admin', '2fa.admin', 'nocache'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
         // Laporan
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
-        // ========================
-        // Export Laporan
-        // ========================
         Route::get('/laporan/export/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export.pdf');
-
         Route::get('/laporan/export/excel', [LaporanController::class, 'exportExcel'])->name('laporan.export.excel');
 
         // Proses Permohonan
@@ -128,14 +124,9 @@ Route::middleware(['auth:admin', 'role:admin', '2fa.admin'])
         Route::post('/subdomain/{subdomain}/upload-sk', [SubdomainAdminController::class, 'uploadSkPenunjukan'])->name('subdomain.upload-sk');
         Route::get('/subdomain/{subdomain}/download-sk', [SubdomainAdminController::class, 'downloadSkPenunjukan'])->name('subdomain.download-sk');
         Route::get('/admin/subdomain/{subdomain}/surat-lama', [SubdomainAdminController::class, 'suratLama'])->name('subdomain.surat-lama');
-
-        //sementara
         Route::get('/persetujuan-pimpinan', [SubdomainAdminController::class, 'approvalList'])->name('approval-list');
-
         Route::get('/persetujuan-pimpinan/{subdomain}', [SubdomainAdminController::class, 'approvalShow'])->name('approval-show');
-
         Route::post('/persetujuan-pimpinan/{subdomain}/approve', [SubdomainAdminController::class, 'approve'])->name('approve-subdomain');
-
         Route::post('/persetujuan-pimpinan/{subdomain}/reject', [SubdomainAdminController::class, 'reject'])->name('reject-subdomain');
 
         // Pengajuan Email Satker
@@ -147,7 +138,6 @@ Route::middleware(['auth:admin', 'role:admin', '2fa.admin'])
         Route::get('/email-satker/{emailSatker}/formulir', [EmailSatkerAdminController::class, 'viewFormulir'])->name('email-satker.formulir');
         Route::delete('/email-satker/{emailSatker}/delete-formulir', [EmailSatkerAdminController::class, 'deleteFormulir'])->name('email-satker.delete-formulir');
         Route::get('/email-satker/{emailSatker}/cetak-formulir', [EmailSatkerAdminController::class, 'cetakFormulir'])->name('email-satker.cetak-formulir');
-
         Route::post('/email-satker/{emailSatker}/send-information', [EmailSatkerAdminController::class, 'sendInformation'])->name('email-satker.send-information');
         Route::get('/email-satker/{emailSatker}/preview-information', [EmailSatkerAdminController::class, 'previewInformation'])->name('email-satker.preview-information');
         Route::get('/email-satker/{emailSatker}/information-account', [EmailSatkerAdminController::class, 'previewInformation'])->name('email-satker.information-account');
@@ -162,13 +152,20 @@ Route::middleware(['auth:admin', 'role:admin', '2fa.admin'])
         Route::delete('/email-pribadi/{emailPribadi}/delete-formulir', [EmailPribadiAdminController::class, 'deleteFormulir'])->name('email-pribadi.delete-formulir');
         Route::get('/email-pribadi/{emailPribadi}/cetak-formulir', [EmailPribadiAdminController::class, 'cetakFormulir'])->name('email-pribadi.cetak-formulir');
         Route::post('/email-pribadi/{emailPribadi}/send-information', [EmailPribadiAdminController::class, 'sendInformation'])->name('email-pribadi.send-information');
-
         Route::get('/email-pribadi/{emailPribadi}/preview-information', [EmailPribadiAdminController::class, 'previewInformation'])->name('email-pribadi.preview-information');
         Route::get('/email-pribadi/{emailPribadi}/information-account', [EmailPribadiAdminController::class, 'previewInformation'])->name('email-pribadi.information-account');
     });
 
+// Superadmin-only Routes
+Route::middleware(['auth:admin', 'role:superadmin', '2fa.admin', 'nocache'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/users', [UserController::class, 'index'])->name('users');
+    });
+
 // Pimpinan Routes
-Route::middleware(['auth:admin', 'role:pimpinan', '2fa.admin'])
+Route::middleware(['auth:admin', 'role:pimpinan', '2fa.admin', 'nocache'])
     ->prefix('pimpinan')
     ->name('pimpinan.')
     ->group(function () {

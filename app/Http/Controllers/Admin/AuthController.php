@@ -52,11 +52,12 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        $redirectRoute = $admin->role === 'pimpinan'
-            ? route('pimpinan.dashboard')
-            : route('admin.dashboard');
+        $redirectRoute = match ($admin->role) {
+            'pimpinan' => route('pimpinan.dashboard'),
+            default => route('admin.dashboard'),
+        };
 
-        return redirect()->intended($redirectRoute);
+        return redirect($redirectRoute);
     }
 
     public function showChallengeForm()
@@ -110,11 +111,12 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        $redirectRoute = $admin->role === 'pimpinan'
-            ? route('pimpinan.dashboard')
-            : route('admin.dashboard');
+        $redirectRoute = match ($admin->role) {
+            'pimpinan' => route('pimpinan.dashboard'),
+            default => route('admin.dashboard'),
+        };
 
-        return redirect()->intended($redirectRoute);
+        return redirect($redirectRoute);
     }
 
     public function logout(Request $request)

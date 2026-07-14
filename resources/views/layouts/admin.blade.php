@@ -78,9 +78,10 @@
                 </a>
             </li>
 
+            @if(auth()->user()->role === 'superadmin')
             {{-- Manajemen User --}}
             <li>
-                <a href=""
+                <a href="{{ route('admin.users') }}"
                     class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg
             {{ request()->routeIs('admin.users*') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }}
             transition-all">
@@ -95,7 +96,9 @@
 
                 </a>
             </li>
+            @endif
 
+            @if(auth()->user()->role === 'admin')
             {{-- Pengajuan --}}
             <li x-data="{
                 open: {{ request()->routeIs('admin.subdomain*') ||
@@ -239,6 +242,7 @@
                 </a>
 
             </li>
+            @endif
 
             {{-- Log Aktivitas --}}
             <li>
@@ -267,7 +271,7 @@
         </ul>
 
         <div class="mt-auto px-gutter pt-4 border-t border-border-subtle">
-            <form method="POST" action="{{ route('logout') }}">
+            <form method="POST" action="{{ route('admin.logout') }}">
                 @csrf
                 <button type="submit"
                     class="flex items-center gap-3 py-2 text-error hover:text-on-error-container transition-colors">
