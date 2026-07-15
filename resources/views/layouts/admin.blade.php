@@ -244,29 +244,28 @@
                 </li>
             @endif
 
-            {{-- Log Aktivitas --}}
-            <li>
+            @if (auth()->user()->role === 'superadmin')
+                <li>
 
-                <a href=""
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg
-            {{ request()->routeIs('admin.activity_logs*') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }}
-            transition-all">
+                    <a href=""
+                        class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg
+        {{ request()->routeIs('admin.activity-logs*')
+            ? 'bg-primary text-on-primary translate-x-1'
+            : 'text-on-surface-variant hover:bg-surface-container-high' }}
+        transition-all">
 
-                    <span class="material-symbols-outlined">
+                        <span class="material-symbols-outlined">
+                            history_toggle_off
+                        </span>
 
-                        history_toggle_off
+                        <span class="text-label-md font-label-md">
+                            Log Aktivitas
+                        </span>
 
-                    </span>
+                    </a>
 
-                    <span class="text-label-md font-label-md">
-
-                        Log Aktivitas
-
-                    </span>
-
-                </a>
-
-            </li>
+                </li>
+            @endif
 
         </ul>
 
@@ -329,15 +328,23 @@
                         style="width:420px;">
 
                         {{-- Header --}}
-                        <div class="px-4 py-3 border-b border-outline-variant flex items-center justify-between">
+                        <div
+                            class="flex gap-4 px-5 py-4 transition border-b border-outline-variant flex items-center justify-between">
 
-                            <h3 class="font-semibold text-base">
+                            <h3 class="font-semibold text-base flex items-center gap-2">
 
-                                🔔 Notifikasi
+                                <span class="material-symbols-outlined text-primary">
+
+                                    notifications
+
+                                </span>
+
+                                Notifikasi
 
                             </h3>
 
-                            <a href="#" class="text-xs text-primary hover:underline">
+                            <a href="{{ route('admin.notifications.index') }}"
+                                class="text-xs text-primary hover:underline">
 
                                 Lihat Semua
 
@@ -345,9 +352,9 @@
 
                         </div>
 
-                        <div class="divide-y divide-outline-variant">
+                        <div class="divide-y divide-outline-variant max-h-[420px] overflow-y-auto">
 
-                            @forelse($notifications as $notification)
+                            @forelse($headerNotifications as $notification)
                                 <a href="{{ route('admin.notifications.read', $notification->id) }}"
                                     class="flex gap-3 px-4 py-3 transition
                                     {{ !$notification->is_read
@@ -432,6 +439,7 @@
                     </div>
 
                 </div>
+
             </header>
 
             <div class="p-gutter max-w-container-max mx-auto space-y-8">

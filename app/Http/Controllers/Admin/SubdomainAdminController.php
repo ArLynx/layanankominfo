@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Subdomain;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
 
 class SubdomainAdminController extends Controller
 {

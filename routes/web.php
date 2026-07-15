@@ -109,6 +109,7 @@ Route::middleware(['auth:admin', 'role:admin', '2fa.admin', 'nocache'])
 
         //notif
         Route::get('/notifications/read/{notification}', [NotificationController::class, 'read'])->name('notifications.read');
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
         // Proses Permohonan
         Route::get('/process', [ProcessController::class, 'index'])->name('process');
@@ -167,7 +168,11 @@ Route::middleware(['auth:admin', 'role:superadmin', '2fa.admin', 'nocache'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
+        // Manajemen User
         Route::get('/users', [UserController::class, 'index'])->name('users');
+
+        // Log Aktivitas
+        // Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
     });
 
 // Pimpinan Routes

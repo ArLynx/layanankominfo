@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Notification;
+use Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
                 return;
             }
 
-            $notifications = Notification::where('recipient_type', Auth::user()->role)
+            $headerNotifications = Notification::where('recipient_type', Auth::user()->role)
                 ->where('recipient_id', Auth::id())
                 ->latest()
                 ->take(5)
@@ -31,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
                 ->count();
 
             $view->with([
-                'notifications' => $notifications,
+                'headerNotifications' => $headerNotifications,
                 'unreadNotifications' => $unreadNotifications,
             ]);
         });
@@ -40,5 +41,8 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void {}
+    public function boot(): void
+    {
+        Carbon::setLocale('id');
+    }
 }

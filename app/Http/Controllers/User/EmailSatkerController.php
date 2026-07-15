@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Admin;
 use App\Models\Notification;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PengajuanBaruMail;
+
 class EmailSatkerController extends Controller
 {
     public function create()
@@ -154,11 +157,12 @@ class EmailSatkerController extends Controller
             ]);
 
             // ===============================
-            // Notifikasi Admin
+            // Notifikasi & Email Admin
             // ===============================
             $admins = Admin::where('role', 'admin')->get();
 
             foreach ($admins as $admin) {
+                // Simpan Notifikasi
                 Notification::create([
                     'recipient_type' => 'admin',
                     'recipient_id' => $admin->id,
@@ -175,6 +179,25 @@ class EmailSatkerController extends Controller
 
                     'url' => route('admin.email-satker.show', $emailSatker->id),
                 ]);
+
+                // Kirim Email
+                Mail::to($admin->email)->send(
+                    new PengajuanBaruMail([
+                        'jenis_layanan' => 'Email Satker',
+
+                        'nomor_tiket' => $emailSatker->nomor_tiket,
+
+                        'instansi' => $emailSatker->nama_instansi,
+
+                        'nama' => $emailSatker->nama_penanggung_jawab,
+
+                        'status' => 'Menunggu Pemeriksaan',
+
+                        'tanggal' => $emailSatker->created_at,
+
+                        'url' => route('admin.email-satker.show', $emailSatker->id),
+                    ]),
+                );
             }
 
             return redirect()->route('email-satker.success', $emailSatker->id);

@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Admin;
 use App\Models\Notification;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PengajuanBaruMail;
+
 class EmailPribadiController extends Controller
 {
     public function create()
@@ -143,11 +146,12 @@ class EmailPribadiController extends Controller
             ]);
 
             // ===============================
-            // Notifikasi Admin
+            // Notifikasi & Email Admin
             // ===============================
             $admins = Admin::where('role', 'admin')->get();
 
             foreach ($admins as $admin) {
+                // Simpan Notifikasi
                 Notification::create([
                     'recipient_type' => 'admin',
                     'recipient_id' => $admin->id,
@@ -164,8 +168,27 @@ class EmailPribadiController extends Controller
 
                     'url' => route('admin.email-pribadi.show', $emailPribadi->id),
                 ]);
-            }
 
+                // Kirim Email
+                Mail::to($admin->email)->send(
+                    new PengajuanBaruMail([
+                        'jenis_layanan' => 'Email Pribadi',
+
+                        'nomor_tiket' => $emailPribadi->nomor_tiket,
+
+                        'instansi' => $emailPribadi->nama_instansi,
+
+                        'nama' => $emailPribadi->nama,
+
+                        'status' => 'Menunggu Pemeriksaan',
+
+                        'tanggal' => $emailPribadi->created_at,
+
+                        'url' => route('admin.email-pribadi.show', $emailPribadi->id),
+                    ]),
+                );
+            }
+            
             return redirect()->route('email-pribadi.success', $emailPribadi)->with('success', 'Pengajuan Email Pribadi berhasil dibuat.');
         } catch (\Exception $e) {
             return back()->withInput()->with('error', $e->getMessage());

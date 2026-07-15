@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Notification;
 use App\Models\Admin;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PengajuanBaruMail;
+
 class SubdomainController extends Controller
 {
     // public function index()
@@ -135,12 +138,12 @@ class SubdomainController extends Controller
             ]);
 
             // ===============================
-            // Notifikasi Admin
+            // Notifikasi & Email Admin
             // ===============================
-
             $admins = Admin::where('role', 'admin')->get();
 
             foreach ($admins as $admin) {
+                // Simpan Notifikasi
                 Notification::create([
                     'recipient_type' => 'admin',
                     'recipient_id' => $admin->id,
@@ -157,6 +160,25 @@ class SubdomainController extends Controller
 
                     'url' => route('admin.subdomain.show', $subdomain->id),
                 ]);
+
+                // Kirim Email
+                Mail::to($admin->email)->send(
+                    new PengajuanBaruMail([
+                        'jenis_layanan' => 'Subdomain',
+
+                        'nomor_tiket' => $subdomain->nomor_tiket,
+
+                        'instansi' => $subdomain->nama_instansi,
+
+                        'nama' => $subdomain->nama_penanggung_jawab,
+
+                        'status' => 'Menunggu Pemeriksaan',
+
+                        'tanggal' => $subdomain->created_at,
+
+                        'url' => route('admin.subdomain.show', $subdomain->id),
+                    ]),
+                );
             }
 
             return redirect()->route('subdomain.success', $subdomain->id);
