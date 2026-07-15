@@ -276,13 +276,19 @@
 
                     </div>
 
-                    <div class="mt-5">
+                    <div class="mt-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-                        @if ($subdomains && $subdomains->hasPages())
-                            <div class="mt-5">
-                                {{ $subdomains->links() }}
-                            </div>
-                        @endif
+                        <div class="text-sm text-on-surface-variant">
+                            Menampilkan
+                            <span class="font-semibold">{{ $subdomains->firstItem() ?? 0 }}</span>
+                            -
+                            <span class="font-semibold">{{ $subdomains->lastItem() ?? 0 }}</span>
+                            dari
+                            <span class="font-semibold">{{ $subdomains->total() }}</span>
+                            data
+                        </div>
+
+                        {{ $subdomains->withQueryString()->links() }}
 
                     </div>
                 @elseif (request('tab') == 'email-satker')
@@ -467,13 +473,19 @@
 
                         </div>
 
-                        <div class="mt-5">
+                        <div class="mt-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-                            @if ($emailSatkers && $emailSatkers->hasPages())
-                                <div class="mt-5">
-                                    {{ $emailSatkers->links() }}
-                                </div>
-                            @endif
+                            <div class="text-sm text-on-surface-variant">
+                                Menampilkan
+                                <span class="font-semibold">{{ $emailSatkers->firstItem() ?? 0 }}</span>
+                                -
+                                <span class="font-semibold">{{ $emailSatkers->lastItem() ?? 0 }}</span>
+                                dari
+                                <span class="font-semibold">{{ $emailSatkers->total() }}</span>
+                                data
+                            </div>
+
+                            {{ $emailSatkers->withQueryString()->links() }}
 
                         </div>
                     @elseif (request('tab') == 'email-pribadi')
@@ -656,15 +668,22 @@
 
                             </div>
 
-                            <div class="mt-5">
+                            <div class="mt-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-                                @if ($emailPribadis && $emailPribadis->hasPages())
-                                    <div class="mt-5">
-                                        {{ $emailPribadis->links() }}
-                                    </div>
-                                @endif
+                                <div class="text-sm text-on-surface-variant">
+                                    Menampilkan
+                                    <span class="font-semibold">{{ $emailPribadis->firstItem() ?? 0 }}</span>
+                                    -
+                                    <span class="font-semibold">{{ $emailPribadis->lastItem() ?? 0 }}</span>
+                                    dari
+                                    <span class="font-semibold">{{ $emailPribadis->total() }}</span>
+                                    data
+                                </div>
+
+                                {{ $emailPribadis->withQueryString()->links() }}
 
                             </div>
+                            
                         @endif
 
                     </div>

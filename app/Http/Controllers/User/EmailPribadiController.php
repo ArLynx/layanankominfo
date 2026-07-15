@@ -9,6 +9,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Admin;
+use App\Models\Notification;
 
 class EmailPribadiController extends Controller
 {
@@ -139,6 +141,30 @@ class EmailPribadiController extends Controller
                 'status' => 'terbuka',
                 'nomor_tiket' => $ticketService->generateEmailPribadiTicket(),
             ]);
+
+            // ===============================
+            // Notifikasi Admin
+            // ===============================
+            $admins = Admin::where('role', 'admin')->get();
+
+            foreach ($admins as $admin) {
+                Notification::create([
+                    'recipient_type' => 'admin',
+                    'recipient_id' => $admin->id,
+
+                    'title' => 'Pengajuan Email Pribadi Baru',
+
+                    'message' => 'Nomor Tiket: ' . $emailPribadi->nomor_tiket,
+
+                    'type' => 'email_pribadi',
+
+                    'reference_type' => 'email_pribadi',
+
+                    'reference_id' => $emailPribadi->id,
+
+                    'url' => route('admin.email-pribadi.show', $emailPribadi->id),
+                ]);
+            }
 
             return redirect()->route('email-pribadi.success', $emailPribadi)->with('success', 'Pengajuan Email Pribadi berhasil dibuat.');
         } catch (\Exception $e) {

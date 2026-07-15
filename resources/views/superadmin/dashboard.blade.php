@@ -1,147 +1,803 @@
 <x-admin-layout title="Dashboard Superadmin">
-    <!-- Statistics Bento Grid -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div
-            class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle flex items-center justify-between">
-            <div>
-                <p class="text-label-md font-label-md text-on-surface-variant mb-1">Total Pengguna</p>
-                <p class="text-headline-lg font-headline-lg text-primary">{{ $totalUsers ?? '1,248' }}</p>
-            </div>
-            <div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary">
-                <span class="material-symbols-outlined text-3xl">group</span>
-            </div>
-        </div>
-        <div
-            class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle flex items-center justify-between">
-            <div>
-                <p class="text-label-md font-label-md text-on-surface-variant mb-1">Admin Aktif</p>
-                <p class="text-headline-lg font-headline-lg text-success-emerald">{{ $activeAdmins ?? '42' }}</p>
-            </div>
-            <div class="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center text-success-emerald">
-                <span class="material-symbols-outlined text-3xl">admin_panel_settings</span>
-            </div>
-        </div>
-        <div
-            class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle flex items-center justify-between">
-            <div>
-                <p class="text-label-md font-label-md text-on-surface-variant mb-1">User Biasa</p>
-                <p class="text-headline-lg font-headline-lg text-surface-tint">{{ $regularUsers ?? '1,206' }}</p>
-            </div>
-            <div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-surface-tint">
-                <span class="material-symbols-outlined text-3xl">person</span>
-            </div>
-        </div>
-    </section>
 
-    <!-- User Management Table -->
-    <section class="bg-surface-container-lowest rounded-xl border border-border-subtle overflow-hidden">
-        <div
-            class="px-6 py-4 border-b border-border-subtle bg-surface flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <h3 class="text-headline-md font-headline-md text-on-surface">Daftar Manajemen Pengguna</h3>
-            <div class="flex gap-2 w-full md:w-auto">
-                <input type="text" placeholder="Cari pengguna..."
-                    class="flex-1 md:flex-none border border-border-subtle rounded-lg px-4 py-2 text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
-                <button
-                    class="bg-primary text-on-primary px-4 py-2 rounded-lg text-label-md font-label-md hover:bg-primary-container transition-colors whitespace-nowrap">Tambah
-                    User</button>
-            </div>
-        </div>
-
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr
-                        class="bg-surface-gray border-b border-border-subtle text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">
-                        <th class="px-6 py-3">Nama</th>
-                        <th class="px-6 py-3">Email</th>
-                        <th class="px-6 py-3">Peran</th>
-                        <th class="px-6 py-3">Status</th>
-                        <th class="px-6 py-3 text-right">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="text-body-md font-body-md text-on-surface divide-y divide-border-subtle">
-                    @forelse($users ?? [] as $user)
-                        <tr class="hover:bg-surface-gray transition-colors">
-                            <td class="px-6 py-4 font-medium">{{ $user->name }}</td>
-                            <td class="px-6 py-4 text-on-surface-variant">{{ $user->email }}</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $user->role === 'admin' ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container text-surface-tint' }}">
-                                    {{ ucfirst($user->role ?? 'user') }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $user->status === 'active' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-status-pending' }}">
-                                    {{ ucfirst($user->status ?? 'active') }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-right space-x-2">
-                                <button class="text-secondary font-label-md text-label-md hover:underline">Edit</button>
-                                <button class="text-error font-label-md text-label-md hover:underline">Reset
-                                    Password</button>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-8 text-center text-on-surface-variant">Belum ada data pengguna
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        <div
-            class="px-6 py-4 border-t border-border-subtle bg-surface flex flex-col md:flex-row justify-between items-center gap-4 text-body-md">
-            <span class="text-on-surface-variant">Menampilkan {{ $users->firstItem() ?? 0 }} hingga
-                {{ $users->lastItem() ?? 0 }} dari {{ $users->total() ?? 0 }} pengguna</span>
-            @if(isset($users) && $users instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                {{ $users->links() }}
-            @else
-                <div class="flex gap-1">
-                    <button
-                        class="px-3 py-1 border border-border-subtle rounded text-on-surface hover:bg-surface-container">Prev</button>
-                    <button class="px-3 py-1 bg-primary text-on-primary rounded">1</button>
-                    <button
-                        class="px-3 py-1 border border-border-subtle rounded text-on-surface hover:bg-surface-container">2</button>
-                    <button
-                        class="px-3 py-1 border border-border-subtle rounded text-on-surface hover:bg-surface-container">Next</button>
-                </div>
-            @endif
-        </div>
-    </section>
-
-    <!-- SOP Section -->
+    {{-- Header --}}
     <section class="bg-surface-container-lowest rounded-xl border border-border-subtle p-6">
-        <h3 class="text-headline-md font-headline-md text-on-surface mb-4 flex items-center gap-2">
-            <span class="material-symbols-outlined text-secondary">policy</span>
-            Standar Operasional Prosedur (SOP) Superadmin
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-surface p-4 rounded-lg border border-border-subtle">
-                <h4 class="text-label-md font-label-md text-on-surface mb-2 font-bold">1. Pengelolaan Akun Baru</h4>
-                <p class="text-body-md text-on-surface-variant">Pastikan memverifikasi identitas pengguna sebelum
-                    memberikan akses Admin. Akun User biasa dapat di-approve setelah email terverifikasi oleh sistem
-                    otomatis.</p>
+
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+            <div>
+
+                <h1 class="text-headline-large font-headline-large text-on-surface">
+
+                    Dashboard Admin
+
+                </h1>
+
+                <p class="mt-2 text-on-surface-variant">
+
+                    Selamat datang kembali,
+                    <span class="font-semibold">{{ auth()->user()->name }}</span>.
+                    Berikut ringkasan pelayanan hari ini.
+
+                </p>
+
             </div>
-            <div class="bg-surface p-4 rounded-lg border border-border-subtle">
-                <h4 class="text-label-md font-label-md text-on-surface mb-2 font-bold">2. Keamanan Data (Reset Password)
-                </h4>
-                <p class="text-body-md text-on-surface-variant">Gunakan fitur 'Reset Password' hanya atas permintaan
-                    resmi dari pengguna. Sistem akan mengirimkan link reset sekali pakai ke email terdaftar untuk
-                    menghindari akses tidak sah.</p>
+
+            <div
+                class="flex items-center gap-3 bg-surface-container-low rounded-xl border border-border-subtle px-5 py-4">
+
+                <span class="material-symbols-outlined text-primary text-3xl">
+
+                    calendar_month
+
+                </span>
+
+                <div>
+
+                    <p class="text-xs text-on-surface-variant">
+
+                        Hari Ini
+
+                    </p>
+
+                    <p class="font-semibold text-on-surface">
+
+                        {{ now()->locale('id')->translatedFormat('l, d F Y') }}
+
+                    </p>
+
+                </div>
+
             </div>
-            <div class="bg-surface p-4 rounded-lg border border-border-subtle">
-                <h4 class="text-label-md font-label-md text-on-surface mb-2 font-bold">3. Audit Log Periodik</h4>
-                <p class="text-body-md text-on-surface-variant">Lakukan pengecekan log aktivitas Admin setiap minggu.
-                    Laporkan anomali akses ke Kepala Divisi IT untuk tindakan preventif lebih lanjut.</p>
-            </div>
-            <div class="bg-surface p-4 rounded-lg border border-border-subtle">
-                <h4 class="text-label-md font-label-md text-on-surface mb-2 font-bold">4. Penonaktifan Akun</h4>
-                <p class="text-body-md text-on-surface-variant">Akun pegawai yang mutasi atau resign harus segera diubah
-                    statusnya menjadi 'Nonaktif' dalam waktu maksimal 1x24 jam kerja.</p>
-            </div>
+
         </div>
+
     </section>
+
+    {{-- Statistik --}}
+    <section class="grid gap-5 mb-8" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));">
+
+        {{-- Total Akun --}}
+        <div class="bg-surface rounded-xl border border-outline-variant p-5 hover:shadow-lg transition-all">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <p class="text-sm text-on-surface-variant">
+                        Total Akun
+                    </p>
+
+                    <h2 class="text-4xl font-bold mt-2 text-on-surface">
+                        {{ number_format($totalAkun) }}
+                    </h2>
+
+                    <p class="text-xs text-on-surface-variant mt-2">
+                        Admin, Pimpinan dan User
+                    </p>
+
+                </div>
+
+                <div class="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center">
+
+                    <span class="material-symbols-outlined text-blue-600 text-3xl">
+                        groups
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {{-- Admin --}}
+        <div class="bg-surface rounded-xl border border-outline-variant p-5 hover:shadow-lg transition-all">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <p class="text-sm text-on-surface-variant">
+                        Admin
+                    </p>
+
+                    <h2 class="text-4xl font-bold mt-2 text-indigo-600">
+                        {{ number_format($totalAdmin) }}
+                    </h2>
+
+                    <p class="text-xs text-on-surface-variant mt-2">
+                        Pengelola sistem
+                    </p>
+
+                </div>
+
+                <div class="w-14 h-14 rounded-xl bg-indigo-100 flex items-center justify-center">
+
+                    <span class="material-symbols-outlined text-indigo-600 text-3xl">
+                        admin_panel_settings
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {{-- Pimpinan --}}
+        <div class="bg-surface rounded-xl border border-outline-variant p-5 hover:shadow-lg transition-all">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <p class="text-sm text-on-surface-variant">
+                        Pimpinan
+                    </p>
+
+                    <h2 class="text-4xl font-bold mt-2 text-amber-600">
+                        {{ number_format($totalPimpinan) }}
+                    </h2>
+
+                    <p class="text-xs text-on-surface-variant mt-2">
+                        Persetujuan layanan
+                    </p>
+
+                </div>
+
+                <div class="w-14 h-14 rounded-xl bg-amber-100 flex items-center justify-center">
+
+                    <span class="material-symbols-outlined text-amber-600 text-3xl">
+                        badge
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {{-- User --}}
+        <div class="bg-surface rounded-xl border border-outline-variant p-5 hover:shadow-lg transition-all">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <p class="text-sm text-on-surface-variant">
+                        User
+                    </p>
+
+                    <h2 class="text-4xl font-bold mt-2 text-green-600">
+                        {{ number_format($totalUser) }}
+                    </h2>
+
+                    <p class="text-xs text-on-surface-variant mt-2">
+                        Pengguna layanan
+                    </p>
+
+                </div>
+
+                <div class="w-14 h-14 rounded-xl bg-green-100 flex items-center justify-center">
+
+                    <span class="material-symbols-outlined text-green-600 text-3xl">
+                        person
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    {{-- Statistik Akun --}}
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+        {{-- Distribusi Role --}}
+        <div class="bg-surface-container-lowest rounded-xl border border-border-subtle p-6 min-h-[420px] flex flex-col">
+
+            <div class="mb-6">
+
+                <h2 class="text-title-large font-semibold">
+
+                    Distribusi Role
+
+                </h2>
+
+                <p class="text-sm text-on-surface-variant">
+
+                    Perbandingan jumlah akun berdasarkan role.
+
+                </p>
+
+            </div>
+
+            <div class="h-72">
+
+                <canvas id="chartRole"></canvas>
+
+            </div>
+
+        </div>
+
+        {{-- Status Akun --}}
+        <div class="bg-surface-container-lowest rounded-xl border border-border-subtle p-6 min-h-[420px] flex flex-col">
+
+            <div class="mb-6">
+
+                <h2 class="text-title-large font-semibold">
+
+                    Status Akun
+
+                </h2>
+
+                <p class="text-sm text-on-surface-variant">
+
+                    Distribusi akun berdasarkan status aktif dan nonaktif.
+
+                </p>
+
+            </div>
+
+            <div class="h-72">
+
+                <canvas id="chartStatus"></canvas>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    {{-- Admin & User Terbaru --}}
+    <section class="grid gap-6 mb-8" style="grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));">
+
+        {{-- Admin Terbaru --}}
+        <div class="bg-surface rounded-xl border border-outline-variant overflow-hidden">
+
+            <div class="px-6 py-4 border-b border-outline-variant">
+
+                <h2 class="text-title-large font-semibold">
+                    Admin Terbaru
+                </h2>
+
+                <p class="text-sm text-on-surface-variant">
+                    5 akun admin yang terakhir dibuat.
+                </p>
+
+            </div>
+
+            <div class="divide-y divide-outline-variant">
+
+                @forelse($adminTerbaru as $admin)
+                    <div class="flex items-center justify-between px-6 py-4">
+
+                        <div class="flex items-center gap-4">
+
+                            <div
+                                class="w-11 h-11 rounded-full bg-primary-container text-white flex items-center justify-center">
+
+                                <span class="material-symbols-outlined">
+
+                                    person
+
+                                </span>
+
+                            </div>
+
+                            <div>
+
+                                <h4 class="font-semibold">
+
+                                    {{ $admin->name }}
+
+                                </h4>
+
+                                <p class="text-sm text-on-surface-variant">
+
+                                    {{ ucfirst($admin->role) }}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="text-right">
+
+                            <p class="text-xs text-on-surface-variant">
+
+                                {{ $admin->created_at->translatedFormat('d M Y') }}
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                @empty
+
+                    <div class="py-8 text-center text-on-surface-variant">
+
+                        Belum ada data admin.
+
+                    </div>
+                @endforelse
+
+            </div>
+
+            <div class="px-6 py-4 border-t border-outline-variant text-right">
+
+                <a href="" class="text-primary font-medium hover:underline">
+
+                    Lihat Manajemen Admin →
+
+                </a>
+
+            </div>
+
+        </div>
+
+        {{-- User Terbaru --}}
+        <div class="bg-surface rounded-xl border border-outline-variant overflow-hidden">
+
+            <div class="px-6 py-4 border-b border-outline-variant">
+
+                <h2 class="text-title-large font-semibold">
+                    User Terbaru
+                </h2>
+
+                <p class="text-sm text-on-surface-variant">
+                    5 akun pengguna yang terakhir mendaftar.
+                </p>
+
+            </div>
+
+            <div class="divide-y divide-outline-variant">
+
+                @forelse($userTerbaru as $user)
+                    <div class="flex items-center justify-between px-6 py-4">
+
+                        <div class="flex items-center gap-4">
+
+                            <div
+                                class="w-11 h-11 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
+
+                                <span class="material-symbols-outlined">
+
+                                    person
+
+                                </span>
+
+                            </div>
+
+                            <div>
+
+                                <h4 class="font-semibold">
+
+                                    {{ $user->name }}
+
+                                </h4>
+
+                                <p class="text-sm text-on-surface-variant">
+
+                                    Pengguna Layanan
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="text-right">
+
+                            <p class="text-xs text-on-surface-variant">
+
+                                {{ $user->created_at->translatedFormat('d M Y') }}
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                @empty
+
+                    <div class="py-8 text-center text-on-surface-variant">
+
+                        Belum ada data user.
+
+                    </div>
+                @endforelse
+
+            </div>
+
+            <div class="px-6 py-4 border-t border-outline-variant text-right">
+
+                <a href="" class="text-primary font-medium hover:underline">
+
+                    Lihat Manajemen User →
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    {{-- Standar Operasional Prosedur --}}
+    <section class="bg-surface rounded-xl border border-outline-variant p-6">
+
+        <div class="mb-6">
+
+            <h2 class="text-title-large font-semibold flex items-center gap-2">
+
+                <span class="material-symbols-outlined text-primary">
+
+                    policy
+
+                </span>
+
+                Standar Operasional Prosedur
+
+            </h2>
+
+            <p class="text-sm text-on-surface-variant mt-1">
+
+                Pedoman bagi Superadmin dalam mengelola akun dan menjaga keamanan sistem.
+
+            </p>
+
+        </div>
+
+        <div class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(250px,1fr));">
+
+            {{-- Card 1 --}}
+            <div
+                class="bg-surface-container-low rounded-xl border border-outline-variant p-5 hover:shadow-md transition">
+
+                <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4">
+
+                    <span class="material-symbols-outlined text-blue-600">
+
+                        manage_accounts
+
+                    </span>
+
+                </div>
+
+                <h3 class="font-semibold text-on-surface mb-2">
+
+                    Manajemen Akun
+
+                </h3>
+
+                <p class="text-sm text-on-surface-variant leading-relaxed">
+
+                    Kelola akun Admin, Pimpinan, dan User sesuai hak akses.
+                    Pastikan data akun selalu valid sebelum diberikan akses ke sistem.
+
+                </p>
+
+            </div>
+
+            {{-- Card 2 --}}
+            <div
+                class="bg-surface-container-low rounded-xl border border-outline-variant p-5 hover:shadow-md transition">
+
+                <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mb-4">
+
+                    <span class="material-symbols-outlined text-green-600">
+
+                        shield_lock
+
+                    </span>
+
+                </div>
+
+                <h3 class="font-semibold text-on-surface mb-2">
+
+                    Keamanan Sistem
+
+                </h3>
+
+                <p class="text-sm text-on-surface-variant leading-relaxed">
+
+                    Reset password hanya dilakukan atas permintaan resmi.
+                    Hindari memberikan akses kepada pihak yang tidak berwenang.
+
+                </p>
+
+            </div>
+
+            {{-- Card 3 --}}
+            <div
+                class="bg-surface-container-low rounded-xl border border-outline-variant p-5 hover:shadow-md transition">
+
+                <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center mb-4">
+
+                    <span class="material-symbols-outlined text-amber-600">
+
+                        history
+
+                    </span>
+
+                </div>
+
+                <h3 class="font-semibold text-on-surface mb-2">
+
+                    Audit Aktivitas
+
+                </h3>
+
+                <p class="text-sm text-on-surface-variant leading-relaxed">
+
+                    Lakukan pemeriksaan Log Aktivitas secara berkala untuk
+                    mendeteksi aktivitas yang tidak wajar pada sistem.
+
+                </p>
+
+            </div>
+
+            {{-- Card 4 --}}
+            <div
+                class="bg-surface-container-low rounded-xl border border-outline-variant p-5 hover:shadow-md transition">
+
+                <div class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center mb-4">
+
+                    <span class="material-symbols-outlined text-red-600">
+
+                        person_off
+
+                    </span>
+
+                </div>
+
+                <h3 class="font-semibold text-on-surface mb-2">
+
+                    Status Akun
+
+                </h3>
+
+                <p class="text-sm text-on-surface-variant leading-relaxed">
+
+                    Nonaktifkan akun yang sudah tidak digunakan agar keamanan
+                    sistem tetap terjaga dan data tetap terkendali.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    {{-- Informasi Sistem --}}
+    <section class="bg-surface rounded-xl border border-outline-variant p-6">
+
+        <div class="mb-6">
+
+            <h2 class="text-title-large font-semibold flex items-center gap-2">
+
+                <span class="material-symbols-outlined text-primary">
+                    info
+                </span>
+
+                Informasi Sistem
+
+            </h2>
+
+            <p class="text-sm text-on-surface-variant mt-1">
+
+                Informasi umum mengenai aplikasi layanan Diskominfo Kabupaten Murung Raya.
+
+            </p>
+
+        </div>
+
+        <div class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(250px,1fr));">
+
+            {{-- Versi Sistem --}}
+            <div class="bg-surface-container-low rounded-xl border border-outline-variant p-5">
+
+                <div class="flex items-center gap-3 mb-3">
+
+                    <span class="material-symbols-outlined text-primary">
+                        deployed_code
+                    </span>
+
+                    <h3 class="font-semibold">
+                        Versi Sistem
+                    </h3>
+
+                </div>
+
+                <p class="text-on-surface-variant text-sm">
+
+                    Sistem Layanan Diskominfo
+
+                </p>
+
+                <p class="font-semibold mt-2">
+
+                    Version 1.0.0
+
+                </p>
+
+            </div>
+
+            {{-- Framework --}}
+            <div class="bg-surface-container-low rounded-xl border border-outline-variant p-5">
+
+                <div class="flex items-center gap-3 mb-3">
+
+                    <span class="material-symbols-outlined text-green-600">
+                        code
+                    </span>
+
+                    <h3 class="font-semibold">
+                        Framework
+                    </h3>
+
+                </div>
+
+                <p class="text-on-surface-variant text-sm">
+
+                    Laravel & PHP
+
+                </p>
+
+                <p class="font-semibold mt-2">
+
+                    Laravel 13 • PHP 8.3
+
+                </p>
+
+            </div>
+
+            {{-- Database --}}
+            <div class="bg-surface-container-low rounded-xl border border-outline-variant p-5">
+
+                <div class="flex items-center gap-3 mb-3">
+
+                    <span class="material-symbols-outlined text-amber-600">
+                        storage
+                    </span>
+
+                    <h3 class="font-semibold">
+                        Database
+                    </h3>
+
+                </div>
+
+                <p class="text-on-surface-variant text-sm">
+
+                    Basis data aplikasi
+
+                </p>
+
+                <p class="font-semibold mt-2">
+
+                    MySQL 8.4
+
+                </p>
+
+            </div>
+
+            {{-- Status Sistem --}}
+            <div class="bg-surface-container-low rounded-xl border border-outline-variant p-5">
+
+                <div class="flex items-center gap-3 mb-3">
+
+                    <span class="material-symbols-outlined text-green-600">
+                        verified
+                    </span>
+
+                    <h3 class="font-semibold">
+                        Status Sistem
+                    </h3>
+
+                </div>
+
+                <p class="text-on-surface-variant text-sm">
+
+                    Kondisi aplikasi
+
+                </p>
+
+                <span
+                    class="inline-flex items-center rounded-full bg-green-100 text-green-700 px-3 py-1 text-sm font-medium mt-2">
+
+                    ● Sistem Berjalan Normal
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const chartRole = @json($chartRole);
+        const chartStatus = @json($chartStatus);
+
+        // Pie Chart
+        new Chart(document.getElementById('chartRole'), {
+
+            type: 'pie',
+
+            data: {
+
+                labels: Object.keys(chartRole),
+                datasets: [{
+                    data: Object.values(chartRole),
+                    backgroundColor: [
+                        '#2563EB',
+                        '#F59E0B',
+                        '#10B981'
+                    ]
+
+                }]
+
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+
+                    legend: {
+                        position: 'bottom'
+                    }
+
+                }
+
+            }
+
+        });
+
+        // Bar Chart
+        new Chart(document.getElementById('chartStatus'), {
+
+            type: 'bar',
+
+            data: {
+                labels: Object.keys(chartStatus),
+                datasets: [{
+                    data: Object.values(chartStatus),
+                    backgroundColor: [
+                        '#10B981',
+                        '#EF4444'
+                    ],
+                    borderRadius: 8
+
+                }]
+
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+
+            }
+
+        });
+    </script>
 </x-admin-layout>

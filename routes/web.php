@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\SubdomainAdminController;
 use App\Http\Controllers\Admin\EmailSatkerAdminController;
 use App\Http\Controllers\Admin\EmailPribadiAdminController;
 use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\Admin\NotificationController;
 
 use App\Http\Controllers\TwoFactorSetupController;
 
@@ -27,23 +28,25 @@ Route::get('/', function () {
 });
 
 // Admin Auth Routes
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/login', [App\Http\Controllers\Admin\AuthController::class, 'showLoginForm'])
-        ->middleware('guest:admin')
-        ->name('login');
-    Route::post('/login', [App\Http\Controllers\Admin\AuthController::class, 'login'])
-        ->middleware('guest:admin')
-        ->name('login');
-    Route::get('/two-factor-challenge', [App\Http\Controllers\Admin\AuthController::class, 'showChallengeForm'])
-        ->middleware('guest:admin')
-        ->name('2fa.challenge');
-    Route::post('/two-factor-challenge', [App\Http\Controllers\Admin\AuthController::class, 'challenge'])
-        ->middleware('guest:admin')
-        ->name('2fa.challenge');
-    Route::post('/logout', [App\Http\Controllers\Admin\AuthController::class, 'logout'])
-        ->middleware('auth:admin')
-        ->name('logout');
-});
+Route::prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/login', [App\Http\Controllers\Admin\AuthController::class, 'showLoginForm'])
+            ->middleware('guest:admin')
+            ->name('login');
+        Route::post('/login', [App\Http\Controllers\Admin\AuthController::class, 'login'])
+            ->middleware('guest:admin')
+            ->name('login');
+        Route::get('/two-factor-challenge', [App\Http\Controllers\Admin\AuthController::class, 'showChallengeForm'])
+            ->middleware('guest:admin')
+            ->name('2fa.challenge');
+        Route::post('/two-factor-challenge', [App\Http\Controllers\Admin\AuthController::class, 'challenge'])
+            ->middleware('guest:admin')
+            ->name('2fa.challenge');
+        Route::post('/logout', [App\Http\Controllers\Admin\AuthController::class, 'logout'])
+            ->middleware('auth:admin')
+            ->name('logout');
+    });
 
 // 2FA Reset (unauthenticated - from login page)
 Route::get('/two-factor/reset/request', [App\Http\Controllers\TwoFactorResetController::class, 'showRequestForm'])->name('2fa.reset.request');
@@ -103,6 +106,9 @@ Route::middleware(['auth:admin', 'role:admin', '2fa.admin', 'nocache'])
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
         Route::get('/laporan/export/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export.pdf');
         Route::get('/laporan/export/excel', [LaporanController::class, 'exportExcel'])->name('laporan.export.excel');
+
+        //notif
+        Route::get('/notifications/read/{notification}', [NotificationController::class, 'read'])->name('notifications.read');
 
         // Proses Permohonan
         Route::get('/process', [ProcessController::class, 'index'])->name('process');
