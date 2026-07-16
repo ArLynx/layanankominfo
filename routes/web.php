@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\SuperAdmin\UserController as SuperAdminUserController;
+use App\Http\Controllers\SuperAdmin\AdminController;
 use App\Http\Controllers\Admin\ProcessController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\PimpinanController;
@@ -161,7 +162,23 @@ Route::middleware(['auth:admin', 'role:superadmin', '2fa.admin', 'nocache'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::get('/users', [UserController::class, 'index'])->name('users');
+        // User Management (users table)
+        Route::get('/users', [SuperAdminUserController::class, 'index'])->name('users');
+        Route::get('/users/create', [SuperAdminUserController::class, 'create'])->name('users.create');
+        Route::post('/users', [SuperAdminUserController::class, 'store'])->name('users.store');
+        Route::get('/users/{user}/edit', [SuperAdminUserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{user}', [SuperAdminUserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{user}', [SuperAdminUserController::class, 'destroy'])->name('users.destroy');
+        Route::post('/users/{user}/reset-password', [SuperAdminUserController::class, 'resetPassword'])->name('users.reset-password');
+
+        // Admin Management (admins table)
+        Route::get('/admins', [AdminController::class, 'index'])->name('admins');
+        Route::get('/admins/create', [AdminController::class, 'create'])->name('admins.create');
+        Route::post('/admins', [AdminController::class, 'store'])->name('admins.store');
+        Route::get('/admins/{admin}/edit', [AdminController::class, 'edit'])->name('admins.edit');
+        Route::put('/admins/{admin}', [AdminController::class, 'update'])->name('admins.update');
+        Route::delete('/admins/{admin}', [AdminController::class, 'destroy'])->name('admins.destroy');
+        Route::post('/admins/{admin}/reset-password', [AdminController::class, 'resetPassword'])->name('admins.reset-password');
     });
 
 // Pimpinan Routes
