@@ -519,7 +519,7 @@
                         <input type="text" name="nama_kadis"
                             value="{{ old('nama_kadis', $subdomain->nama_kadis ?? '') }}"
                             class="w-full px-4 py-3 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
-                            placeholder="Nama Instansi/Unit Kerja">
+                            placeholder="Nama Kepala Instansi/Unit Kerja">
                         @error('nama_kadis')
                             <p class="text-red-500 text-sm mt-1">
                                 {{ $message }}

@@ -9,6 +9,11 @@ use App\Models\EmailSatker;
 use App\Services\TicketService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Admin;
+use App\Models\Notification;
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PengajuanBaruMail;
 
 class EmailSatkerController extends Controller
 {
@@ -150,6 +155,50 @@ class EmailSatkerController extends Controller
                 // Nomor Tiket
                 'nomor_tiket' => $ticketService->generateEmailSatkerTicket(),
             ]);
+
+            // ===============================
+            // Notifikasi & Email Admin
+            // ===============================
+            $admins = Admin::where('role', 'admin')->get();
+
+            foreach ($admins as $admin) {
+                // Simpan Notifikasi
+                Notification::create([
+                    'recipient_type' => 'admin',
+                    'recipient_id' => $admin->id,
+
+                    'title' => 'Pengajuan Email Satker Baru',
+
+                    'message' => 'Nomor Tiket: ' . $emailSatker->nomor_tiket,
+
+                    'type' => 'email_satker',
+
+                    'reference_type' => 'email_satker',
+
+                    'reference_id' => $emailSatker->id,
+
+                    'url' => route('admin.email-satker.show', $emailSatker->id),
+                ]);
+
+                // Kirim Email
+                Mail::to($admin->email)->send(
+                    new PengajuanBaruMail([
+                        'jenis_layanan' => 'Email Satker',
+
+                        'nomor_tiket' => $emailSatker->nomor_tiket,
+
+                        'instansi' => $emailSatker->nama_instansi,
+
+                        'nama' => $emailSatker->nama_penanggung_jawab,
+
+                        'status' => 'Menunggu Pemeriksaan',
+
+                        'tanggal' => $emailSatker->created_at,
+
+                        'url' => route('admin.email-satker.show', $emailSatker->id),
+                    ]),
+                );
+            }
 
             return redirect()->route('email-satker.success', $emailSatker->id);
         } catch (\Exception $e) {

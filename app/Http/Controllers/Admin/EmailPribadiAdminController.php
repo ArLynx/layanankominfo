@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 
 use App\Mail\AccountInformationMail;
 
+
 class EmailPribadiAdminController extends Controller
 {
     public function index(Request $request)

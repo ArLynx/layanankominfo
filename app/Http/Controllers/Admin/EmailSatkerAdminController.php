@@ -10,6 +10,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AccountInformationMail;
 
+
 class EmailSatkerAdminController extends Controller
 {
     public function index(Request $request)

@@ -9,6 +9,11 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Admin;
+use App\Models\Notification;
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PengajuanBaruMail;
 
 class EmailPribadiController extends Controller
 {
@@ -140,6 +145,50 @@ class EmailPribadiController extends Controller
                 'nomor_tiket' => $ticketService->generateEmailPribadiTicket(),
             ]);
 
+            // ===============================
+            // Notifikasi & Email Admin
+            // ===============================
+            $admins = Admin::where('role', 'admin')->get();
+
+            foreach ($admins as $admin) {
+                // Simpan Notifikasi
+                Notification::create([
+                    'recipient_type' => 'admin',
+                    'recipient_id' => $admin->id,
+
+                    'title' => 'Pengajuan Email Pribadi Baru',
+
+                    'message' => 'Nomor Tiket: ' . $emailPribadi->nomor_tiket,
+
+                    'type' => 'email_pribadi',
+
+                    'reference_type' => 'email_pribadi',
+
+                    'reference_id' => $emailPribadi->id,
+
+                    'url' => route('admin.email-pribadi.show', $emailPribadi->id),
+                ]);
+
+                // Kirim Email
+                Mail::to($admin->email)->send(
+                    new PengajuanBaruMail([
+                        'jenis_layanan' => 'Email Pribadi',
+
+                        'nomor_tiket' => $emailPribadi->nomor_tiket,
+
+                        'instansi' => $emailPribadi->nama_instansi,
+
+                        'nama' => $emailPribadi->nama,
+
+                        'status' => 'Menunggu Pemeriksaan',
+
+                        'tanggal' => $emailPribadi->created_at,
+
+                        'url' => route('admin.email-pribadi.show', $emailPribadi->id),
+                    ]),
+                );
+            }
+            
             return redirect()->route('email-pribadi.success', $emailPribadi)->with('success', 'Pengajuan Email Pribadi berhasil dibuat.');
         } catch (\Exception $e) {
             return back()->withInput()->with('error', $e->getMessage());

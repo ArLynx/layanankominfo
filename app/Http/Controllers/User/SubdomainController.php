@@ -10,6 +10,11 @@ use Illuminate\Support\Str;
 use App\Services\TicketService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Notification;
+use App\Models\Admin;
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PengajuanBaruMail;
 
 class SubdomainController extends Controller
 {
@@ -131,6 +136,50 @@ class SubdomainController extends Controller
                 'status' => 'terbuka',
                 'nomor_tiket' => $ticketService->generateSubdomainTicket(),
             ]);
+
+            // ===============================
+            // Notifikasi & Email Admin
+            // ===============================
+            $admins = Admin::where('role', 'admin')->get();
+
+            foreach ($admins as $admin) {
+                // Simpan Notifikasi
+                Notification::create([
+                    'recipient_type' => 'admin',
+                    'recipient_id' => $admin->id,
+
+                    'title' => 'Pengajuan Subdomain Baru',
+
+                    'message' => 'Nomor Tiket: ' . $subdomain->nomor_tiket,
+
+                    'type' => 'subdomain',
+
+                    'reference_type' => 'subdomain',
+
+                    'reference_id' => $subdomain->id,
+
+                    'url' => route('admin.subdomain.show', $subdomain->id),
+                ]);
+
+                // Kirim Email
+                Mail::to($admin->email)->send(
+                    new PengajuanBaruMail([
+                        'jenis_layanan' => 'Subdomain',
+
+                        'nomor_tiket' => $subdomain->nomor_tiket,
+
+                        'instansi' => $subdomain->nama_instansi,
+
+                        'nama' => $subdomain->nama_penanggung_jawab,
+
+                        'status' => 'Menunggu Pemeriksaan',
+
+                        'tanggal' => $subdomain->created_at,
+
+                        'url' => route('admin.subdomain.show', $subdomain->id),
+                    ]),
+                );
+            }
 
             return redirect()->route('subdomain.success', $subdomain->id);
         } catch (\Exception $e) {
@@ -355,7 +404,7 @@ class SubdomainController extends Controller
 
         return back()->with('success', 'Surat berhasil diupload');
     }
-    
+
     public function downloadSuratPenunjukanLama(Subdomain $subdomain)
     {
         if ($subdomain->user_id != Auth::id()) {
