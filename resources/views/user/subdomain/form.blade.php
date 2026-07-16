@@ -1,38 +1,6 @@
 @extends('user.layouts.app')
 
 @section('content')
-    <!-- Minimal Header for Transactional Flow (Suppressed Nav) -->
-    <header
-        class="bg-surface border-b border-border-subtle py-4 px-gutter md:px-margin-desktop sticky top-0 z-10 w-full shadow-sm">
-        <div class="max-w-container-max mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-primary text-3xl"
-                    style="font-variation-settings: 'FILL' 1;">account_balance</span>
-                <div>
-                    <h1 class="text-headline-md font-headline-md text-primary tracking-tight">Dinas Kominfo Murung Raya
-                    </h1>
-                    <p class="text-caption font-caption text-on-surface-variant">Portal Layanan Digital</p>
-                </div>
-            </div>
-            @if (isset($subdomain))
-                <a class="text-label-md font-label-md text-primary flex items-center gap-2 hover:bg-surface-container px-3 py-2 rounded transition-colors"
-                    href="{{ route('subdomain.show', $subdomain) }}">
-                    <span class="material-symbols-outlined text-xl">
-                        arrow_back
-                    </span>
-                    Batal
-                </a>
-            @else
-                <a class="text-label-md font-label-md text-primary flex items-center gap-2 hover:bg-surface-container px-3 py-2 rounded transition-colors"
-                    href="{{ route('jenis-layanan') }}">
-                    <span class="material-symbols-outlined text-xl">
-                        close
-                    </span>
-                    Batal
-                </a>
-            @endif
-        </div>
-    </header>
     <!-- Main Content Area -->
     <main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 md:py-12">
         <!-- Page Header -->

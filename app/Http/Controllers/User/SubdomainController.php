@@ -164,6 +164,8 @@ class SubdomainController extends Controller
                 // Kirim Email
                 Mail::to($admin->email)->send(
                     new PengajuanBaruMail([
+                        'role' => 'Administrator',
+                        
                         'jenis_layanan' => 'Subdomain',
 
                         'nomor_tiket' => $subdomain->nomor_tiket,

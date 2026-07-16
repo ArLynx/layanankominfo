@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ProcessController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\PimpinanController;
+use App\Http\Controllers\PimpinanNotificationController;
 
 use App\Http\Controllers\Admin\SubdomainAdminController;
 use App\Http\Controllers\Admin\EmailSatkerAdminController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\User\SubdomainController;
 use App\Http\Controllers\User\RiwayatController;
 use App\Http\Controllers\User\EmailPribadiController;
 use App\Http\Controllers\User\EmailSatkerController;
+use App\Http\Controllers\User\NotificationUserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -182,6 +184,10 @@ Route::middleware(['auth:admin', 'role:pimpinan', '2fa.admin', 'nocache'])
     ->group(function () {
         Route::get('/dashboard', [PimpinanController::class, 'index'])->name('dashboard');
 
+        // Notifikasi
+        Route::get('/notifications', [PimpinanNotificationController::class, 'index'])->name('notifications.index');
+        Route::get('/notifications/{notification}/read', [PimpinanNotificationController::class, 'read'])->name('notifications.read');
+
         // Subdomain
         Route::get('/pengajuan/subdomain', [PimpinanController::class, 'subdomainList'])->name('subdomain.list');
         Route::get('/pengajuan/subdomain/{subdomain}', [PimpinanController::class, 'showDetail'])->name('subdomain.show');
@@ -226,6 +232,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     // Profile
     Route::get('/user/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+
+    // Notifikasi
+    Route::get('/notifications', [NotificationUserController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{notification}/read', [NotificationUserController::class, 'read'])->name('notifications.read');
 
     //permohonan subdomain
     Route::get('/subdomain/create', [SubdomainController::class, 'create'])->name('subdomain.create');

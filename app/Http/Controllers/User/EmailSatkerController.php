@@ -183,6 +183,8 @@ class EmailSatkerController extends Controller
                 // Kirim Email
                 Mail::to($admin->email)->send(
                     new PengajuanBaruMail([
+                        'role' => 'Administrator',
+                        
                         'jenis_layanan' => 'Email Satker',
 
                         'nomor_tiket' => $emailSatker->nomor_tiket,

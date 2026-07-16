@@ -43,7 +43,8 @@
 
                             <p style="line-height:1.8;color:#475569;">
 
-                                Yth. Administrator Sistem,
+                                Yth.
+                                <strong>{{ $data['role'] ?? 'Administrator' }}</strong>,
 
                                 <br><br>
 
@@ -53,8 +54,15 @@
 
                                 <br><br>
 
-                                Silakan login ke aplikasi untuk melakukan verifikasi dokumen dan
-                                menindaklanjuti pengajuan sesuai dengan prosedur pelayanan yang berlaku.
+                                @if (($data['role'] ?? '') == 'Pimpinan')
+                                    Pengajuan tersebut telah selesai diperiksa oleh Administrator dan
+                                    saat ini memerlukan persetujuan dari Bapak/Ibu Pimpinan sebelum
+                                    proses layanan dapat dilanjutkan.
+                                @else
+                                    Silakan login ke aplikasi untuk melakukan pemeriksaan dokumen
+                                    serta menindaklanjuti pengajuan sesuai prosedur pelayanan
+                                    yang berlaku.
+                                @endif
 
                             </p>
 
@@ -115,10 +123,14 @@
 
                                 <a href="{{ $data['url'] }}"
                                     style="display:inline-block;background:#0F6CBD;color:#ffffff;
-                                    text-decoration:none;padding:14px 28px;
-                                    border-radius:8px;font-weight:bold;">
+                                        text-decoration:none;padding:14px 28px;
+                                        border-radius:8px;font-weight:bold;">
 
-                                    Buka Dashboard
+                                    @if (($data['role'] ?? '') == 'Pimpinan')
+                                        Buka Halaman Persetujuan
+                                    @else
+                                        Buka Dashboard
+                                    @endif
 
                                 </a>
 
@@ -126,15 +138,20 @@
 
                             <p
                                 style="margin-top:18px;
-                                font-size:13px;
-                                color:#64748B;
-                                text-align:center;
-                                line-height:1.7;">
+                                    font-size:13px;
+                                    color:#64748B;
+                                    text-align:center;
+                                    line-height:1.7;">
 
                                 Apabila tombol di atas tidak dapat digunakan,
-                                silakan login ke <strong>Sistem Layanan Diskominfo Kabupaten Murung Raya</strong>
-                                melalui browser menggunakan akun Administrator Anda untuk melihat detail
-                                pengajuan.
+                                silakan login ke
+                                <strong>Sistem Layanan Diskominfo Kabupaten Murung Raya</strong>
+
+                                @if (($data['role'] ?? '') == 'Pimpinan')
+                                    untuk membuka halaman persetujuan pengajuan.
+                                @else
+                                    menggunakan akun Administrator untuk melihat detail pengajuan.
+                                @endif
 
                             </p>
 

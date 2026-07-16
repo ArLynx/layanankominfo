@@ -1,61 +1,6 @@
 @extends('user.layouts.app')
 
 @section('content')
-
-    <!-- Header -->
-    <header
-        class="bg-surface border-b border-border-subtle py-4 px-gutter md:px-margin-desktop sticky top-0 z-10 w-full shadow-sm">
-
-        <div class="max-w-container-max mx-auto flex items-center justify-between">
-
-            <div class="flex items-center gap-3">
-
-                <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings:'FILL' 1;">
-                    account_balance
-                </span>
-
-                <div>
-
-                    <h1 class="text-headline-md font-headline-md text-primary tracking-tight">
-                        Dinas Kominfo Murung Raya
-                    </h1>
-
-                    <p class="text-caption font-caption text-on-surface-variant">
-                        Portal Layanan Digital
-                    </p>
-
-                </div>
-
-            </div>
-
-            @if (isset($emailPribadi))
-                <a href="{{ route('email-pribadi.show', $emailPribadi) }}"
-                    class="text-label-md font-label-md text-primary flex items-center gap-2 hover:bg-surface-container px-3 py-2 rounded transition-colors">
-
-                    <span class="material-symbols-outlined">
-                        arrow_back
-                    </span>
-
-                    Batal
-
-                </a>
-            @else
-                <a href="{{ route('jenis-layanan') }}"
-                    class="text-label-md font-label-md text-primary flex items-center gap-2 hover:bg-surface-container px-3 py-2 rounded transition-colors">
-
-                    <span class="material-symbols-outlined">
-                        close
-                    </span>
-
-                    Batal
-
-                </a>
-            @endif
-
-        </div>
-
-    </header>
-
     <!-- Main -->
     <main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 md:py-12">
 
@@ -287,7 +232,7 @@
                             class="flex-grow px-4 py-3 bg-surface border border-outline-variant rounded-l-lg text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                             id="nama_akuns" name="nama_akun"
                             value="{{ old('nama_akun', isset($emailPribadi) ? str_replace('@murungrayakab.go.id', '', $emailPribadi->nama_akun) : '') }}"
-                            placeholder="nama lengkap" type="text">
+                            placeholder="namalengkap (email hanya boleh huruf kecil, angka dan tanda hubung (-) tanpa spasi" type="text">
 
                         <span
                             class="px-4 py-3 bg-surface-container border border-l-0 border-outline-variant rounded-r-lg text-label-md text-on-surface-variant font-semibold">

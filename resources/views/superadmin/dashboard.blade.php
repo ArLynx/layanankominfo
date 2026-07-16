@@ -9,7 +9,7 @@
 
                 <h1 class="text-headline-large font-headline-large text-on-surface">
 
-                    Dashboard Admin
+                    Dashboard Superadmin
 
                 </h1>
 

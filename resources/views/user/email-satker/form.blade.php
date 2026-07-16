@@ -1,38 +1,6 @@
 @extends('user.layouts.app')
 
 @section('content')
-    <!-- Minimal Header for Transactional Flow (Suppressed Nav) -->
-    <header
-        class="bg-surface border-b border-border-subtle py-4 px-gutter md:px-margin-desktop sticky top-0 z-10 w-full shadow-sm">
-        <div class="max-w-container-max mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-primary text-3xl"
-                    style="font-variation-settings: 'FILL' 1;">account_balance</span>
-                <div>
-                    <h1 class="text-headline-md font-headline-md text-primary tracking-tight">Dinas Kominfo Murung Raya
-                    </h1>
-                    <p class="text-caption font-caption text-on-surface-variant">Portal Layanan Digital</p>
-                </div>
-            </div>
-            @if (isset($emailSatker))
-                <a class="text-label-md font-label-md text-primary flex items-center gap-2 hover:bg-surface-container px-3 py-2 rounded transition-colors"
-                    href="{{ route('email-satker.show', $emailSatker) }}">
-                    <span class="material-symbols-outlined text-xl">
-                        arrow_back
-                    </span>
-                    Batal
-                </a>
-            @else
-                <a class="text-label-md font-label-md text-primary flex items-center gap-2 hover:bg-surface-container px-3 py-2 rounded transition-colors"
-                    href="{{ route('jenis-layanan') }}">
-                    <span class="material-symbols-outlined text-xl">
-                        close
-                    </span>
-                    Batal
-                </a>
-            @endif
-        </div>
-    </header>
     <!-- Main Content Area -->
     <main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 md:py-12">
         <!-- Page Header -->
@@ -213,7 +181,7 @@
                             class="flex-grow px-4 py-3 bg-surface border border-outline-variant rounded-l-lg text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                             id="nama_akun_dinas" name="nama_akun_dinas"
                             value="{{ old('nama_akun_dinas', isset($emailSatker) ? str_replace('@murungrayakab.go.id', '', $emailSatker->nama_akun_dinas) : '') }}"
-                            placeholder="contoh: diskominfo" type="text">
+                            placeholder="nama-instansi (email hanya boleh huruf kecil, angka dan tanda hubung (-)" type="text">
 
                         <span
                             class="px-4 py-3 bg-surface-container border border-l-0 border-outline-variant rounded-r-lg text-label-md text-on-surface-variant font-semibold">

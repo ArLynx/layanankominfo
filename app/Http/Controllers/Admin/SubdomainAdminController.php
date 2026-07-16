@@ -8,6 +8,10 @@ use App\Models\Subdomain;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Admin;
+use App\Models\Notification;
+use App\Mail\PengajuanBaruMail;
+use App\Mail\StatusPengajuanMail;
 
 class SubdomainAdminController extends Controller
 {
@@ -76,6 +80,140 @@ class SubdomainAdminController extends Controller
             'catatan_admin' => $validated['catatan_admin'],
         ]);
 
+        // ====================================
+        // Notifikasi User
+        // ====================================
+
+        $statusLabel = match ($validated['status']) {
+            'terbuka' => 'Pengajuan Baru',
+
+            'baru' => 'Menunggu Pemeriksaan',
+
+            'tunda' => 'Menunggu Persetujuan Pimpinan',
+
+            'diproses' => 'Sedang Diproses',
+
+            'selesai' => 'Selesai',
+
+            'tutup' => 'Ditolak',
+
+            default => ucfirst($validated['status']),
+        };
+
+        $title = '';
+        $message = '';
+
+        switch ($validated['status']) {
+            case 'baru':
+                $title = 'Pengajuan Sedang Diperiksa';
+                $message = 'Pengajuan ' . $subdomain->nomor_tiket . ' sedang diperiksa Administrator.';
+                break;
+
+            case 'tunda':
+                $title = 'Menunggu Persetujuan';
+                $message = 'Pengajuan ' . $subdomain->nomor_tiket . ' sedang menunggu persetujuan Pimpinan.';
+                break;
+
+            case 'diproses':
+                $title = 'Pengajuan Diproses';
+                $message = 'Pengajuan ' . $subdomain->nomor_tiket . ' sedang diproses Administrator.';
+                break;
+
+            case 'selesai':
+                $title = 'Pengajuan Selesai';
+                $message = 'Pengajuan ' . $subdomain->nomor_tiket . ' telah selesai.';
+                break;
+
+            case 'tutup':
+                $title = 'Pengajuan Ditolak';
+                $message = 'Pengajuan ' . $subdomain->nomor_tiket . ' ditolak.';
+                break;
+        }
+
+        Notification::create([
+            'recipient_type' => 'user',
+
+            'recipient_id' => $subdomain->user_id,
+
+            'title' => $title,
+
+            'message' => $message,
+
+            'type' => 'subdomain',
+
+            'reference_type' => 'subdomain',
+
+            'reference_id' => $subdomain->id,
+
+            'url' => route('subdomain.show', $subdomain->id),
+        ]);
+
+        Mail::to($subdomain->user->email)->send(
+            new StatusPengajuanMail([
+                'jenis_layanan' => 'Subdomain',
+
+                'nomor_tiket' => $subdomain->nomor_tiket,
+
+                'instansi' => $subdomain->nama_instansi,
+
+                'nama' => $subdomain->nama_penanggung_jawab,
+
+                'status' => $statusLabel,
+
+                'tanggal' => now(),
+
+                'url' => route('subdomain.show', $subdomain->id),
+            ]),
+        );
+
+        // ===============================
+        // Notifikasi Pimpinan
+        // ===============================
+        if ($validated['status'] === 'tunda') {
+            $pimpinans = Admin::where('role', 'pimpinan')->get();
+
+            foreach ($pimpinans as $pimpinan) {
+                Notification::create([
+                    'recipient_type' => 'pimpinan',
+
+                    'recipient_id' => $pimpinan->id,
+
+                    'title' => 'Persetujuan Subdomain',
+
+                    'message' => 'Pengajuan ' . $subdomain->nomor_tiket . ' menunggu persetujuan.',
+
+                    'type' => 'subdomain',
+
+                    'reference_type' => 'subdomain',
+
+                    'reference_id' => $subdomain->id,
+
+                    'url' => route('pimpinan.approval-show', $subdomain->id),
+                ]);
+
+                // Kirim Email
+                Mail::to($pimpinan->email)->send(
+                    new PengajuanBaruMail([
+                        'role' => 'Pimpinan',
+
+                        'jenis_layanan' => 'Subdomain',
+
+                        'nomor_tiket' => $subdomain->nomor_tiket,
+
+                        'instansi' => $subdomain->nama_instansi,
+
+                        'nama' => $subdomain->nama_penanggung_jawab,
+
+                        'status' => 'Menunggu Persetujuan',
+
+                        'tanggal' => $subdomain->created_at,
+
+                        'url' => route('pimpinan.approval-show', $subdomain->id),
+                    ]),
+                );
+            }
+        }
+
         return redirect()->route('admin.subdomain')->with('success', 'Status berhasil diperbarui.');
     }
 
@@ -98,21 +236,6 @@ class SubdomainAdminController extends Controller
 
         return response()->file(Storage::disk('local')->path($subdomain->formulir_subdomain));
     }
-
-    // public function sendToLeader(Subdomain $subdomain)
-    // {
-    //     try {
-    //         $subdomain->update([
-    //             'status' => 'tunda',
-    //         ]);
-
-    //         return redirect()
-    //             ->route('admin.subdomain')
-    //             ->with('success', 'Pengajuan ' . $subdomain->nomor_tiket . ' berhasil dikirim ke pimpinan untuk persetujuan.');
-    //     } catch (\Exception $e) {
-    //         return back()->with('error', 'Gagal mengirim pengajuan ke pimpinan.');
-    //     }
-    // }
 
     public function resetFormulir(Subdomain $subdomain)
     {

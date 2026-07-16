@@ -16,7 +16,6 @@
     </div>
     <!-- Main Navigation Links -->
     <nav class="flex-1 flex flex-col gap-1 px-3">
-
         {{-- Dashboard --}}
         <a href="{{ route('dashboard-user') }}"
             class="flex items-center gap-3 px-4 py-3 mx-2 my-1 rounded-lg transition-all
