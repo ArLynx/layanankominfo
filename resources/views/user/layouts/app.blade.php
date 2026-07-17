@@ -148,7 +148,7 @@
         }
     </script>
     <!-- Tailwind Setup -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
 <script id="tailwind-config">
         tailwind.config = {
           darkMode: "class",
@@ -246,13 +246,17 @@
           }
         }
     </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
+
 <body class="bg-background text-on-background font-body-md text-body-md h-screen flex overflow-hidden">
+    
     <!-- SideBar -->
     @include('user.partial.sidebar')
     <!-- Main Content -->
     <main class="flex-1 md:ml-[280px] h-full overflow-y-auto pt-[80px] md:pt-0 bg-surface-bright relative">
+        @include('user.partial.header')
         @yield('content')
         <!-- Footer Spacer -->
          @include('user.partial.footer')

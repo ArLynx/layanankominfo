@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -24,9 +24,7 @@
             color: #0b1c30;
         }
 
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
+
     </style>
 </head>
 
@@ -301,12 +299,12 @@
                 </button>
 
                 {{-- Bell Notification --}}
-                <div x-data="{ open: false }" class="relative shrink-0">
+                <div x-data="{ open: false }" class="relative">
 
                     <button @click="open = !open"
                         class="relative w-11 h-11 rounded-full hover:bg-surface-container flex items-center justify-center">
 
-                        <span class="material-symbols-outlined text-[22px] leading-none">
+                        <span class="material-symbols-outlined text-[24px]">
 
                             notifications
 

@@ -57,7 +57,7 @@ class NotificationHelper
         ?int $referenceId = null
     ): void {
 
-        $superAdmins = User::where('role', 'superadmin')->get();
+        $superAdmins = Admin::where('role', 'superadmin')->get();
 
         foreach ($superAdmins as $superAdmin) {
 

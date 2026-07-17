@@ -9,7 +9,10 @@ use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AccountInformationMail;
-
+use App\Models\Admin;
+use App\Models\Notification;
+use App\Mail\PengajuanBaruMail;
+use App\Mail\StatusPengajuanMail;
 
 class EmailSatkerAdminController extends Controller
 {
@@ -91,6 +94,140 @@ class EmailSatkerAdminController extends Controller
             'status' => $status,
             'catatan_admin' => $validated['catatan_admin'],
         ]);
+
+        // ====================================
+        // Notifikasi User
+        // ====================================
+
+        $statusLabel = match ($validated['status']) {
+            'terbuka' => 'Pengajuan Baru',
+
+            'baru' => 'Menunggu Pemeriksaan',
+
+            'tunda' => 'Menunggu Persetujuan Pimpinan',
+
+            'diproses' => 'Sedang Diproses',
+
+            'selesai' => 'Selesai',
+
+            'tutup' => 'Ditolak',
+
+            default => ucfirst($validated['status']),
+        };
+
+        $title = '';
+        $message = '';
+
+        switch ($validated['status']) {
+            case 'baru':
+                $title = 'Pengajuan Sedang Diperiksa';
+                $message = 'Pengajuan ' . $emailSatker->nomor_tiket . ' sedang diperiksa Administrator.';
+                break;
+
+            case 'tunda':
+                $title = 'Menunggu Persetujuan';
+                $message = 'Pengajuan ' . $emailSatker->nomor_tiket . ' sedang menunggu persetujuan Pimpinan.';
+                break;
+
+            case 'diproses':
+                $title = 'Pengajuan Diproses';
+                $message = 'Pengajuan ' . $emailSatker->nomor_tiket . ' sedang diproses Administrator.';
+                break;
+
+            case 'selesai':
+                $title = 'Pengajuan Selesai';
+                $message = 'Pengajuan ' . $emailSatker->nomor_tiket . ' telah selesai.';
+                break;
+
+            case 'tutup':
+                $title = 'Pengajuan Ditolak';
+                $message = 'Pengajuan ' . $emailSatker->nomor_tiket . ' ditolak.';
+                break;
+        }
+
+        Notification::create([
+            'recipient_type' => 'user',
+
+            'recipient_id' => $emailSatker->user_id,
+
+            'title' => $title,
+
+            'message' => $message,
+
+            'type' => 'email_satker',
+
+            'reference_type' => 'email_satker',
+
+            'reference_id' => $emailSatker->id,
+
+            'url' => route('email-satker.show', $emailSatker->id),
+        ]);
+
+        Mail::to($emailSatker->user->email)->send(
+            new StatusPengajuanMail([
+                'jenis_layanan' => 'Email Satker',
+
+                'nomor_tiket' => $emailSatker->nomor_tiket,
+
+                'instansi' => $emailSatker->nama_instansi,
+
+                'nama' => $emailSatker->nama_penanggung_jawab,
+
+                'status' => $statusLabel,
+
+                'tanggal' => now(),
+
+                'url' => route('email-satker.show', $emailSatker->id),
+            ]),
+        );
+
+        // ===============================
+        // Notifikasi Pimpinan
+        // ===============================
+        if ($validated['status'] === 'tunda') {
+            $pimpinans = Admin::where('role', 'pimpinan')->get();
+
+            foreach ($pimpinans as $pimpinan) {
+                Notification::create([
+                    'recipient_type' => 'pimpinan',
+
+                    'recipient_id' => $pimpinan->id,
+
+                    'title' => 'Persetujuan Email Satker',
+
+                    'message' => 'Pengajuan ' . $emailSatker->nomor_tiket . ' menunggu persetujuan.',
+
+                    'type' => 'email_satker',
+
+                    'reference_type' => 'email_satker',
+
+                    'reference_id' => $emailSatker->id,
+
+                    'url' => route('pimpinan.email-satker.approval-show', $emailSatker->id),
+                ]);
+
+                // Kirim Email
+                Mail::to($pimpinan->email)->send(
+                    new PengajuanBaruMail([
+                        'role' => 'Pimpinan',
+
+                        'jenis_layanan' => 'Email Satker',
+
+                        'nomor_tiket' => $emailSatker->nomor_tiket,
+
+                        'instansi' => $emailSatker->nama_instansi,
+
+                        'nama' => $emailSatker->nama_penanggung_jawab,
+
+                        'status' => 'Menunggu Persetujuan',
+
+                        'tanggal' => $emailSatker->created_at,
+
+                        'url' => route('pimpinan.email-satker.approval-show', $emailSatker->id),
+                    ]),
+                );
+            }
+        }
 
         return redirect()->route('admin.email-satker.show', $emailSatker)->with('success', 'Status pengajuan berhasil diperbarui.');
     }

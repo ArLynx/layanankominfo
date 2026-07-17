@@ -172,6 +172,8 @@ class EmailPribadiController extends Controller
                 // Kirim Email
                 Mail::to($admin->email)->send(
                     new PengajuanBaruMail([
+                        'role' => 'Administrator',
+                        
                         'jenis_layanan' => 'Email Pribadi',
 
                         'nomor_tiket' => $emailPribadi->nomor_tiket,

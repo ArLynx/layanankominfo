@@ -16,18 +16,20 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         View::composer('*', function ($view) {
-            if (!Auth::check()) {
+            $user = Auth::user() ?? Auth::guard('admin')->user();
+
+            if (!$user) {
                 return;
             }
 
-            $headerNotifications = Notification::where('recipient_type', Auth::user()->role)
-                ->where('recipient_id', Auth::id())
+            $headerNotifications = Notification::where('recipient_type', $user->role)
+                ->where('recipient_id', $user->id)
                 ->latest()
                 ->take(5)
                 ->get();
 
-            $unreadNotifications = Notification::where('recipient_type', Auth::user()->role)
-                ->where('recipient_id', Auth::id())
+            $unreadNotifications = Notification::where('recipient_type', $user->role)
+                ->where('recipient_id', $user->id)
                 ->where('is_read', false)
                 ->count();
 

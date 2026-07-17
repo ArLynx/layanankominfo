@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\EmailPribadi;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
-
 use App\Mail\AccountInformationMail;
-
+use App\Models\Admin;
+use App\Models\Notification;
+use App\Mail\PengajuanBaruMail;
+use App\Mail\StatusPengajuanMail;
 
 class EmailPribadiAdminController extends Controller
 {
@@ -101,6 +102,140 @@ class EmailPribadiAdminController extends Controller
             'status' => $status,
             'catatan_admin' => $validated['catatan_admin'],
         ]);
+
+        // ====================================
+        // Notifikasi User
+        // ====================================
+
+        $statusLabel = match ($validated['status']) {
+            'terbuka' => 'Pengajuan Baru',
+
+            'baru' => 'Menunggu Pemeriksaan',
+
+            'tunda' => 'Menunggu Persetujuan Pimpinan',
+
+            'diproses' => 'Sedang Diproses',
+
+            'selesai' => 'Selesai',
+
+            'tutup' => 'Ditolak',
+
+            default => ucfirst($validated['status']),
+        };
+
+        $title = '';
+        $message = '';
+
+        switch ($validated['status']) {
+            case 'baru':
+                $title = 'Pengajuan Sedang Diperiksa';
+                $message = 'Pengajuan ' . $emailPribadi->nomor_tiket . ' sedang diperiksa Administrator.';
+                break;
+
+            case 'tunda':
+                $title = 'Menunggu Persetujuan';
+                $message = 'Pengajuan ' . $emailPribadi->nomor_tiket . ' sedang menunggu persetujuan Pimpinan.';
+                break;
+
+            case 'diproses':
+                $title = 'Pengajuan Diproses';
+                $message = 'Pengajuan ' . $emailPribadi->nomor_tiket . ' sedang diproses Administrator.';
+                break;
+
+            case 'selesai':
+                $title = 'Pengajuan Selesai';
+                $message = 'Pengajuan ' . $emailPribadi->nomor_tiket . ' telah selesai.';
+                break;
+
+            case 'tutup':
+                $title = 'Pengajuan Ditolak';
+                $message = 'Pengajuan ' . $emailPribadi->nomor_tiket . ' ditolak.';
+                break;
+        }
+
+        Notification::create([
+            'recipient_type' => 'user',
+
+            'recipient_id' => $emailPribadi->user_id,
+
+            'title' => $title,
+
+            'message' => $message,
+
+            'type' => 'email_pribadi',
+
+            'reference_type' => 'email_pribadi',
+
+            'reference_id' => $emailPribadi->id,
+
+            'url' => route('email-pribadi.show', $emailPribadi->id),
+        ]);
+
+        Mail::to($emailPribadi->user->email)->send(
+            new StatusPengajuanMail([
+                'jenis_layanan' => 'Email Pribadi',
+
+                'nomor_tiket' => $emailPribadi->nomor_tiket,
+
+                'instansi' => $emailPribadi->nama_instansi,
+
+                'nama' => $emailPribadi->nama,
+
+                'status' => $statusLabel,
+
+                'tanggal' => now(),
+
+                'url' => route('email-pribadi.show', $emailPribadi->id),
+            ]),
+        );
+
+        // ===============================
+        // Notifikasi Pimpinan
+        // ===============================
+        if ($validated['status'] === 'tunda') {
+            $pimpinans = Admin::where('role', 'pimpinan')->get();
+
+            foreach ($pimpinans as $pimpinan) {
+                Notification::create([
+                    'recipient_type' => 'pimpinan',
+
+                    'recipient_id' => $pimpinan->id,
+
+                    'title' => 'Persetujuan Email Pribadi',
+
+                    'message' => 'Pengajuan ' . $emailPribadi->nomor_tiket . ' menunggu persetujuan.',
+
+                    'type' => 'email_pribadi',
+
+                    'reference_type' => 'email_pribadi',
+
+                    'reference_id' => $emailPribadi->id,
+
+                    'url' => route('pimpinan.email-pribadi.approval-show', $emailPribadi->id),
+                ]);
+
+                // Kirim Email
+                Mail::to($pimpinan->email)->send(
+                    new PengajuanBaruMail([
+                        'role' => 'Pimpinan',
+
+                        'jenis_layanan' => 'Email Pribadi',
+
+                        'nomor_tiket' => $emailPribadi->nomor_tiket,
+
+                        'instansi' => $emailPribadi->nama_instansi,
+
+                        'nama' => $emailPribadi->nama,
+
+                        'status' => 'Menunggu Persetujuan',
+
+                        'tanggal' => $emailPribadi->created_at,
+
+                        'url' => route('pimpinan.email-pribadi.approval-show', $emailPribadi->id),
+                    ]),
+                );
+            }
+        }
 
         return redirect()->route('admin.email-pribadi.show', $emailPribadi)->with('success', 'Status pengajuan berhasil diperbarui.');
     }
