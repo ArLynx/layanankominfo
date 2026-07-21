@@ -217,13 +217,13 @@
                 <tr>
                     <td class="label">Usulan nama akun baru</td>
                     <td class="separator">:</td>
-                    <td>{{ $emailPribadi->nama_akun_baru }}@murungrayakab.go.id</td>
+                    <td>{{ $emailPribadi->nama_akun_baru }}</td>
                 </tr>
             @else
                 <tr>
                     <td class="label">Usulan nama akun yang diminta</td>
                     <td class="separator">:</td>
-                    <td>{{ $emailPribadi->nama_akun }}@murungrayakab.go.id</td>
+                    <td>{{ $emailPribadi->nama_akun }}</td>
                 </tr>
             @endif
 

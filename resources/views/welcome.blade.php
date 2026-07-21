@@ -29,11 +29,12 @@
                             Mulai Pengajuan
                             <span class="material-symbols-outlined">arrow_forward</span>
                         </a>
-                        <a href="#"
-                            class="bg-surface text-primary border border-border-subtle font-label-md text-label-md px-6 py-3 rounded-lg shadow-sm hover:bg-surface-container-low transition-all flex items-center gap-2">
+                        <button type="button"
+                            class="bg-surface text-primary border border-border-subtle font-label-md text-label-md px-6 py-3 rounded-lg shadow-sm hover:bg-surface-container-low transition-all flex items-center gap-2"
+                            onclick="openModal('modal-panduan')">
                             Panduan Penggunaan
                             <span class="material-symbols-outlined">menu_book</span>
-                        </a>
+                        </button>
                     @endauth
                 </div>
             </div>
@@ -98,13 +99,6 @@
                                 pengajuan real-time</span>
                         </div>
                     </div>
-                    <div class="mt-auto pt-6 border-t border-border-subtle flex justify-between items-center">
-                        <span
-                            class="font-label-md text-label-md text-primary group-hover:text-primary-container transition-colors">Mulai
-                            Pengajuan</span>
-                        <span
-                            class="material-symbols-outlined text-primary group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                    </div>
                 </div>
 
                 <!-- Service Card 2: Email -->
@@ -137,13 +131,6 @@
                             <span class="font-body-md text-body-md text-on-surface-variant text-sm">Dukungan teknis
                                 responsif</span>
                         </div>
-                    </div>
-                    <div class="mt-auto pt-6 border-t border-border-subtle flex justify-between items-center">
-                        <span
-                            class="font-label-md text-label-md text-primary group-hover:text-primary-container transition-colors">Mulai
-                            Pengajuan</span>
-                        <span
-                            class="material-symbols-outlined text-primary group-hover:translate-x-1 transition-transform">arrow_forward</span>
                     </div>
                 </div>
             </div>

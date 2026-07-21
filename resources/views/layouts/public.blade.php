@@ -40,12 +40,15 @@
             <!-- Menu Navigasi -->
             <nav class="hidden md:flex items-center gap-6">
                 <a class="text-primary font-bold border-b-2 border-primary pb-1" href="{{ url('/') }}">Layanan</a>
-                <a class="text-on-surface-variant font-label-md hover:text-primary transition-colors duration-200"
-                    href="#">Panduan</a>
-                <a class="text-on-surface-variant font-label-md hover:text-primary transition-colors duration-200"
-                    href="#">Status</a>
-                <a class="text-on-surface-variant font-label-md hover:text-primary transition-colors duration-200"
-                    href="#">Bantuan</a>
+                <button type="button"
+                    class="text-on-surface-variant font-label-md hover:text-primary transition-colors duration-200 cursor-pointer"
+                    onclick="openModal('modal-panduan')">Panduan</button>
+                <button type="button"
+                    class="text-on-surface-variant font-label-md hover:text-primary transition-colors duration-200 cursor-pointer"
+                    onclick="openModal('modal-status')">Status</button>
+                <button type="button"
+                    class="text-on-surface-variant font-label-md hover:text-primary transition-colors duration-200 cursor-pointer"
+                    onclick="openModal('modal-bantuan')">Bantuan</button>
             </nav>
 
             <!-- Tombol Auth (Login/Register atau Dashboard) -->
@@ -78,6 +81,22 @@
 
     </main>
 
+    <!-- Modals -->
+    <x-modal-dialog id="modal-panduan" icon="menu_book" title="Panduan">
+        <p>Fitur panduan penggunaan portal layanan masih dalam tahap pengembangan. Kami akan segera hadirkan petunjuk
+            lengkap untuk memudahkan Anda dalam menggunakan setiap layanan.</p>
+    </x-modal-dialog>
+
+    <x-modal-dialog id="modal-status" icon="monitoring" title="Status Layanan">
+        <p>Fitur status layanan masih dalam tahap pengembangan. Nantikan informasi real-time mengenai status pengajuan
+            dan layanan Anda.</p>
+    </x-modal-dialog>
+
+    <x-modal-dialog id="modal-bantuan" icon="support" title="Bantuan">
+        <p>Fitur bantuan masih dalam tahap pengembangan. Jika memerlukan bantuan, silakan hubungi tim support kami
+            melalui kontak yang tersedia.</p>
+    </x-modal-dialog>
+
     <!-- Footer -->
     <footer class="w-full py-8 px-gutter border-t border-border-subtle bg-surface-container-lowest">
         <div class="flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto gap-4">
@@ -88,17 +107,11 @@
                 </p>
             </div>
             <nav class="flex flex-wrap justify-center gap-6">
-                <a class="text-body-md font-body-md text-on-surface-variant hover:underline decoration-secondary transition-all"
-                    href="#">Kebijakan Privasi</a>
-                <a class="text-body-md font-body-md text-on-surface-variant hover:underline decoration-secondary transition-all"
-                    href="#">Syarat & Ketentuan</a>
-                <a class="text-body-md font-body-md text-on-surface-variant hover:underline decoration-secondary transition-all"
-                    href="#">Kontak Kami</a>
-                <a class="text-body-md font-body-md text-on-surface-variant hover:underline decoration-secondary transition-all"
-                    href="#">Peta Situs</a>
             </nav>
         </div>
     </footer>
+
+    @stack('scripts')
 </body>
 
 </html>
