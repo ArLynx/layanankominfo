@@ -243,6 +243,25 @@
             @endif
 
             @if (auth()->user()->role === 'superadmin')
+                {{-- Manajemen Admin --}}
+                <li>
+                    <a href="{{ route('admin.admins') }}"
+                        class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg
+            {{ request()->routeIs('admin.admins*') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }}
+            transition-all">
+
+                        <span class="material-symbols-outlined">
+                            admin_panel_settings
+                        </span>
+
+                        <span class="text-label-md font-label-md">
+                            Manajemen Admin
+                        </span>
+
+                    </a>
+                </li>
+
+                {{-- Log Aktivitas --}}
                 <li>
 
                     <a href=""
