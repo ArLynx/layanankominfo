@@ -1,18 +1,6 @@
 @extends('user.layouts.app')
 
 @section('content')
-    <header
-        class="md:hidden fixed top-0 w-full z-50 bg-surface border-b border-border-subtle flex justify-between items-center px-margin-mobile py-4 shadow-sm">
-        <div class="flex items-center gap-3">
-            <button class="text-primary p-1">
-                <span class="material-symbols-outlined text-[24px]">menu</span>
-            </button>
-            <span class="text-headline-lg-mobile font-headline-lg-mobile text-primary">Dinas Kominfo</span>
-        </div>
-        <div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-border-subtle">
-            <!-- Placeholder Avatar -->
-        </div>
-    </header>
     <!-- Subtle Background Pattern/Gradient -->
     <div
         class="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-surface-container-highest/40 via-transparent to-transparent opacity-50">

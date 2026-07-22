@@ -1,6 +1,6 @@
 <!-- SideNavBar (Shared Component) - Hidden on Mobile, Fixed Left on Desktop -->
 <aside
-    class="hidden md:flex bg-surface-container-low dark:bg-inverse-surface fixed left-0 top-0 h-full w-[280px] border-r border-border-subtle dark:border-outline-variant flex flex-col py-6 z-40 shadow-[4px_0_12px_rgba(0,30,64,0.02)]">
+    class="bg-surface-container-low dark:bg-inverse-surface fixed left-0 top-0 h-full w-[280px] border-r border-border-subtle dark:border-outline-variant flex flex-col py-6 z-40 shadow-[4px_0_12px_rgba(0,30,64,0.02)]">
     <!-- Header -->
     <div class="px-gutter mb-8 flex items-center gap-3">
         <div

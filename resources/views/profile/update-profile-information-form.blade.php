@@ -12,29 +12,27 @@
         @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
             <div x-data="{photoName: null, photoPreview: null}" class="col-span-6 sm:col-span-4">
                 <!-- Profile Photo File Input -->
-                <input type="file" id="photo" class="hidden"
-                            wire:model.live="photo"
-                            x-ref="photo"
-                            x-on:change="
-                                    photoName = $refs.photo.files[0].name;
-                                    const reader = new FileReader();
-                                    reader.onload = (e) => {
-                                        photoPreview = e.target.result;
-                                    };
-                                    reader.readAsDataURL($refs.photo.files[0]);
-                            " />
+                <input type="file" id="photo" class="hidden" wire:model.live="photo" x-ref="photo" x-on:change="
+                                                        photoName = $refs.photo.files[0].name;
+                                                        const reader = new FileReader();
+                                                        reader.onload = (e) => {
+                                                            photoPreview = e.target.result;
+                                                        };
+                                                        reader.readAsDataURL($refs.photo.files[0]);
+                                                " />
 
                 <x-label for="photo" value="{{ __('Photo') }}" />
 
                 <!-- Current Profile Photo -->
                 <div class="mt-2" x-show="! photoPreview">
-                    <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name }}" class="rounded-full size-20 object-cover">
+                    <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name }}"
+                        class="rounded-full size-20 object-cover">
                 </div>
 
                 <!-- New Profile Photo Preview -->
                 <div class="mt-2" x-show="photoPreview" style="display: none;">
                     <span class="block rounded-full size-20 bg-cover bg-no-repeat bg-center"
-                          x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
+                        x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
                     </span>
                 </div>
 
@@ -55,14 +53,16 @@
         <!-- Name -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="name" value="{{ __('Name') }}" />
-            <x-input id="name" type="text" class="mt-1 block w-full" wire:model="state.name" required autocomplete="name" />
+            <x-input id="name" type="text" class="mt-1 block w-full" wire:model="state.name" required
+                autocomplete="name" />
             <x-input-error for="name" class="mt-2" />
         </div>
 
         <!-- Email -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="email" value="{{ __('Email') }}" />
-            <x-input id="email" type="email" class="mt-1 block w-full" wire:model="state.email" required autocomplete="username" />
+            <x-input id="email" type="email" class="mt-1 block w-full" wire:model="state.email" required
+                autocomplete="username" />
             <x-input-error for="email" class="mt-2" />
         </div>
 
@@ -90,20 +90,15 @@
         <!-- Status Pegawai -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="status_pegawai" value="{{ __('Status Pegawai') }}" />
-            <select id="status_pegawai" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" wire:model="state.status_pegawai">
+            <select id="status_pegawai"
+                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                wire:model="state.status_pegawai">
                 <option value="">-- Pilih Status --</option>
                 <option value="PNS">PNS</option>
                 <option value="PPPK">PPPK</option>
                 <option value="Non ASN">Non ASN</option>
             </select>
             <x-input-error for="status_pegawai" class="mt-2" />
-        </div>
-
-        <!-- Kartu Pegawai -->
-        <div class="col-span-6 sm:col-span-4">
-            <x-label for="kartu_pegawai" value="{{ __('Kartu Pegawai (URL/Path)') }}" />
-            <x-input id="kartu_pegawai" type="text" class="mt-1 block w-full" wire:model="state.kartu_pegawai" />
-            <x-input-error for="kartu_pegawai" class="mt-2" />
         </div>
 
     </x-slot>

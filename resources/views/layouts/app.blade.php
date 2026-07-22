@@ -30,21 +30,6 @@
 
 <body class="bg-background text-on-background font-body-md text-body-md h-screen flex overflow-hidden">
 
-    <!-- Mobile Top Navigation (Visible only on small screens) -->
-    <header
-        class="md:hidden fixed top-0 w-full z-50 bg-surface border-b border-border-subtle flex justify-between items-center px-margin-mobile py-4 shadow-sm">
-        <div class="flex items-center gap-3">
-            <button class="text-primary p-1" x-data x-on:click="$dispatch('toggle-sidebar')">
-                <span class="material-symbols-outlined text-[24px]">menu</span>
-            </button>
-            <span class="text-headline-lg-mobile font-headline-lg-mobile text-primary">Dinas Kominfo</span>
-        </div>
-        <div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-border-subtle">
-            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=001e40&color=fff"
-                alt="Avatar" class="w-full h-full object-cover">
-        </div>
-    </header>
-
     <!-- Sidebar Overlay (Mobile) -->
     <div x-data="{ open: false }" x-on:toggle-sidebar.window="open = !open" class="md:hidden">
         <div x-show="open" x-transition:enter="transition-opacity ease-linear duration-300"
@@ -193,4 +178,5 @@
     @stack('scripts')
     @livewireScripts
 </body>
+
 </html>

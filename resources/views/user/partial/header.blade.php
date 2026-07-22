@@ -6,6 +6,10 @@
         {{-- Logo --}}
         <div class="flex items-center gap-4">
 
+            <button type="button" class="text-primary p-1 md:hidden" x-data x-on:click="$dispatch('toggle-sidebar')">
+                <span class="material-symbols-outlined text-[24px]">menu</span>
+            </button>
+
             <span class="material-symbols-outlined text-primary text-4xl"
                 style="font-variation-settings:'FILL' 1;">
 

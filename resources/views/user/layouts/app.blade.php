@@ -252,10 +252,28 @@
 
 <body class="bg-background text-on-background font-body-md text-body-md h-screen flex overflow-hidden">
     
-    <!-- SideBar -->
-    @include('user.partial.sidebar')
+    <!-- Mobile Sidebar Overlay -->
+    <div x-data="{ open: false }" x-on:toggle-sidebar.window="open = !open" class="md:hidden fixed inset-0 z-50 pointer-events-none">
+        <div x-show="open" x-transition:enter="transition-opacity ease-linear duration-300"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/50 pointer-events-auto" x-on:click="open = false"></div>
+        <div x-show="open" x-transition:enter="transition ease-in-out duration-300 transform"
+            x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition ease-in-out duration-300 transform" x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="-translate-x-full"
+            class="fixed left-0 top-0 h-full w-[280px] pointer-events-auto">
+            @include('user.partial.sidebar')
+        </div>
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <div class="hidden md:block">
+        @include('user.partial.sidebar')
+    </div>
     <!-- Main Content -->
-    <main class="flex-1 md:ml-[280px] h-full overflow-y-auto pt-[80px] md:pt-0 bg-surface-bright relative">
+    <main class="flex-1 md:ml-[280px] h-full overflow-y-auto bg-surface-bright relative">
         @include('user.partial.header')
         @yield('content')
         <!-- Footer Spacer -->
