@@ -5,7 +5,7 @@
         @php
             $dashboardRoute = auth()->user() instanceof \App\Models\Admin
                 ? (auth()->user()->role === 'pimpinan' ? route('pimpinan.dashboard') : route('admin.dashboard'))
-                : route('dashboard');
+                : route('dashboard-user');
         @endphp
         <div class="mt-8 pt-6 border-t border-gray-100 text-center">
             <a href="{{ $dashboardRoute }}"

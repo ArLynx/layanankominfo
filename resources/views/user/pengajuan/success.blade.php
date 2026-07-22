@@ -68,25 +68,27 @@
 
                 <div class="flex justify-center gap-3">
 
-                    <a href="{{ route('riwayat.index') }}" class="px-6 py-3 bg-primary text-white rounded-lg">
+                    <a href="{{ route('riwayat.index') }}" class="px-6 py-3 border rounded-lg">
 
                         Riwayat Pengajuan
                     </a>
 
                     @if (isset($subdomain))
-                        <a href="{{ route('subdomain.show', $subdomain) }}" class="px-6 py-3 border rounded-lg">
+                        <a href="{{ route('subdomain.show', $subdomain) }}" class="px-6 py-3 bg-primary text-white rounded-lg">
 
                             Detail Pengajuan
 
                         </a>
                     @elseif(isset($emailSatker))
-                        <a href="{{ route('email-satker.show', $emailSatker) }}" class="px-6 py-3 border rounded-lg">
+                        <a href="{{ route('email-satker.show', $emailSatker) }}"
+                            class="px-6 py-3 bg-primary text-white rounded-lg">
 
                             Detail Pengajuan
 
                         </a>
                     @elseif(isset($emailPribadi))
-                        <a href="{{ route('email-pribadi.show', $emailPribadi) }}" class="px-6 py-3 border rounded-lg">
+                        <a href="{{ route('email-pribadi.show', $emailPribadi) }}"
+                            class="px-6 py-3 bg-primary text-white rounded-lg">
 
                             Detail Pengajuan
 

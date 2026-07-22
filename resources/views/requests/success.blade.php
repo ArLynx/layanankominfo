@@ -88,7 +88,7 @@
 
             <!-- Action Buttons -->
             <div class="w-full flex flex-col md:flex-row gap-4">
-                <a href="{{ route('dashboard') }}" class="flex-1 flex items-center justify-center gap-2 py-4 px-6 bg-primary text-on-primary font-label-md text-label-md rounded-full hover:bg-primary-container transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface">
+                <a href="{{ route('dashboard-user') }}" class="flex-1 flex items-center justify-center gap-2 py-4 px-6 bg-primary text-on-primary font-label-md text-label-md rounded-full hover:bg-primary-container transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface">
                     <span class="material-symbols-outlined text-[20px]">dashboard</span>
                     Ke Dashboard Saya
                 </a>

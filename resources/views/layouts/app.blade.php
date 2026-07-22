@@ -74,10 +74,10 @@
 
             <!-- Navigation -->
             <nav class="flex-1 flex flex-col gap-1 px-3">
-                <a href="{{ route('dashboard') }}"
-                    class="{{ request()->routeIs('dashboard') ? 'bg-primary text-on-primary shadow-sm translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-primary' }} mx-2 my-1 px-4 py-3 rounded-lg flex items-center gap-3 transition-all">
+                <a href="{{ route('dashboard-user') }}"
+                    class="{{ request()->routeIs('dashboard-user') ? 'bg-primary text-on-primary shadow-sm translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-primary' }} mx-2 my-1 px-4 py-3 rounded-lg flex items-center gap-3 transition-all">
                     <span class="material-symbols-outlined text-[20px]"
-                        style="font-variation-settings: '{{ request()->routeIs('dashboard') ? '1' : '0' }}';">dashboard</span>
+                        style="font-variation-settings: '{{ request()->routeIs('dashboard-user') ? '1' : '0' }}';">dashboard</span>
                     <span class="text-label-md font-label-md">Dashboard</span>
                 </a>
                 <a href="{{ route('requests.service') }}"
@@ -148,10 +148,10 @@
 
         <!-- Navigation -->
         <nav class="flex-1 flex flex-col gap-1 px-3">
-            <a href="{{ route('dashboard') }}"
-                class="{{ request()->routeIs('dashboard') ? 'bg-primary text-on-primary shadow-sm translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-primary' }} mx-2 my-1 px-4 py-3 rounded-lg flex items-center gap-3 transition-all">
+            <a href="{{ route('dashboard-user') }}"
+                class="{{ request()->routeIs('dashboard-user') ? 'bg-primary text-on-primary shadow-sm translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-primary' }} mx-2 my-1 px-4 py-3 rounded-lg flex items-center gap-3 transition-all">
                 <span class="material-symbols-outlined text-[20px]"
-                    style="font-variation-settings: '{{ request()->routeIs('dashboard') ? '1' : '0' }}';">dashboard</span>
+                    style="font-variation-settings: '{{ request()->routeIs('dashboard-user') ? '1' : '0' }}';">dashboard</span>
                 <span class="text-label-md font-label-md">Dashboard</span>
             </a>
             <a href="{{ route('requests.service') }}"

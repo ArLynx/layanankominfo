@@ -19,7 +19,7 @@ class TwoFactorSetupController extends Controller
                 return redirect()->route($route);
             }
 
-            return redirect()->route('dashboard');
+            return redirect()->route('dashboard-user');
         }
 
         return view('auth.2fa-setup');

@@ -73,15 +73,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('/requests/{id}/edit', [RequestController::class, 'edit'])->name('requests.edit');
     Route::patch('/requests/{id}', [RequestController::class, 'update'])->name('requests.update');
 
-    // Di routes/web.php
-    Route::get('/dashboard', function () {
-        $applications = App\Models\RequestApplication::where('user_id', auth()->id())
-            ->latest()
-            ->get();
-        return view('dashboard', compact('applications'));
-    })
-        ->middleware(['auth', 'verified'])
-        ->name('dashboard');
 });
 
 // Admin 2FA Setup — tanpa role filter biar admin & pimpinan bisa akses
