@@ -30,7 +30,6 @@
                         </div>
 
                         <div class="flex items-center justify-end gap-4">
-                            <a href="{{ route('requests.index') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
                             <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition">
                                 Kirim Permohonan
                             </button>
