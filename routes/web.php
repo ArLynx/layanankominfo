@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\EmailSatkerAdminController;
 use App\Http\Controllers\Admin\EmailPribadiAdminController;
 use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\ActivityLogController;
 
 use App\Http\Controllers\TwoFactorSetupController;
 
@@ -174,8 +175,7 @@ Route::middleware(['auth:admin', 'role:superadmin', '2fa.admin', 'nocache'])
         Route::post('/admins/{admin}/reset-password', [AdminController::class, 'resetPassword'])->name('admins.reset-password');
 
         // Log Aktivitas
-        // Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
-    
+        Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
     });
 
 // Pimpinan Routes

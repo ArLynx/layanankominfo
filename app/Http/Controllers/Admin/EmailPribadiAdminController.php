@@ -13,6 +13,7 @@ use App\Models\Admin;
 use App\Models\Notification;
 use App\Mail\PengajuanBaruMail;
 use App\Mail\StatusPengajuanMail;
+use App\Helpers\ActivityLogHelper;
 
 class EmailPribadiAdminController extends Controller
 {
@@ -74,40 +75,7 @@ class EmailPribadiAdminController extends Controller
             'catatan_admin' => 'nullable|string',
         ]);
 
-        $status = $validated['status'];
-
-        /*
-    |--------------------------------------------------------------------------
-    | Reset Password, Reaktivasi & Ubah Akun
-    | Langsung ke Diproses (tidak melalui Persetujuan Pimpinan)
-    |--------------------------------------------------------------------------
-    */
-
-        if ($status == 'baru' && in_array($emailPribadi->jenis_layanan, ['reset', 'reaktivasi', 'ubah_akun'])) {
-            $status = 'diproses';
-        }
-
-        /*
-    |--------------------------------------------------------------------------
-    | Pengajuan Baru
-    | Masuk ke Persetujuan Pimpinan
-    |--------------------------------------------------------------------------
-    */
-
-        if ($status == 'baru' && $emailPribadi->jenis_layanan == 'baru') {
-            $status = 'tunda';
-        }
-
-        $emailPribadi->update([
-            'status' => $status,
-            'catatan_admin' => $validated['catatan_admin'],
-        ]);
-
-        // ====================================
-        // Notifikasi User
-        // ====================================
-
-        $statusLabel = match ($validated['status']) {
+         $statusLabel = match ($validated['status']) {
             'terbuka' => 'Pengajuan Baru',
 
             'baru' => 'Menunggu Pemeriksaan',
@@ -122,6 +90,56 @@ class EmailPribadiAdminController extends Controller
 
             default => ucfirst($validated['status']),
         };
+
+        $aksi = match ($validated['status']) {
+            'terbuka'  => 'Membuat Pengajuan',
+            'baru'     => 'Melakukan Pemeriksaan Pengajuan',
+            'tunda'    => 'Mengajukan Persetujuan ke Pimpinan',
+            'diproses' => 'Memproses Pengajuan',
+            'selesai'  => 'Menyelesaikan Pengajuan',
+            'tutup'    => 'Menolak Pengajuan',
+            default    => 'Mengubah Status Pengajuan',
+        };
+
+        $status = $validated['status'];
+
+        /*
+    |--------------------------------------------------------------------------
+    | Reset Password, Reaktivasi & Ubah Akun
+    | Langsung ke Diproses (tidak melalui Persetujuan Pimpinan)
+    |--------------------------------------------------------------------------
+    */
+
+        if ($status == 'baru' && in_array($emailPribadi->jenis_layanan, ['reset', 'reaktivasi', 'ubah_akun'])) {
+            $status = 'diproses';
+        }
+
+        /*
+    // |--------------------------------------------------------------------------
+    // | Pengajuan Baru
+    // | Masuk ke Persetujuan Pimpinan
+    // |--------------------------------------------------------------------------
+    // */
+
+    //     if ($status == 'baru' && $emailPribadi->jenis_layanan == 'baru') {
+    //         $status = 'tunda';
+    //     }
+
+        $emailPribadi->update([
+            'status' => $status,
+            'catatan_admin' => $validated['catatan_admin'],
+        ]);
+
+        // ====================================
+        // Notifikasi User
+        // ====================================
+
+        ActivityLogHelper::log(
+            aksi: $aksi,
+            modul: 'Email Pribadi',
+            nomorTiket: $emailPribadi->nomor_tiket,
+            detail: 'Status pengajuan diubah menjadi "' . $statusLabel . '".'
+        );
 
         $title = '';
         $message = '';

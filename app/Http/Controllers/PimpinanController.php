@@ -12,6 +12,7 @@ use App\Models\Notification;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PengajuanBaruMail;
 use App\Mail\StatusPengajuanMail;
+use App\Helpers\ActivityLogHelper;
 
 class PimpinanController extends Controller
 {
@@ -69,6 +70,13 @@ class PimpinanController extends Controller
             'status' => 'diproses',
             'catatan_pimpinan' => $request->catatan_pimpinan,
         ]);
+
+        ActivityLogHelper::log(
+            aksi: 'Menyetujui Pengajuan',
+            modul: 'Subdomain',
+            nomorTiket: $subdomain->nomor_tiket,
+            detail: 'Pimpinan menyetujui pengajuan sehingga status berubah menjadi "Sedang Diproses".'
+        );
 
         // ===============================
         // Notifikasi Admin
@@ -173,6 +181,13 @@ class PimpinanController extends Controller
             'status' => 'tutup',
             'catatan_pimpinan' => $request->catatan_pimpinan,
         ]);
+
+        ActivityLogHelper::log(
+            aksi: 'Menolak Pengajuan',
+            modul: 'Subdomain',
+            nomorTiket: $subdomain->nomor_tiket,
+            detail: 'Pimpinan menolak pengajuan. Status berubah menjadi "Ditolak".'
+        );
 
         $admins = Admin::where('role', 'admin')->get();
 
@@ -309,6 +324,13 @@ class PimpinanController extends Controller
             'catatan_pimpinan' => $request->catatan_pimpinan,
         ]);
 
+        ActivityLogHelper::log(
+            aksi: 'Menyetujui Pengajuan',
+            modul: 'Email Satker',
+            nomorTiket: $emailSatker->nomor_tiket,
+            detail: 'Pimpinan menyetujui pengajuan sehingga status berubah menjadi "Sedang Diproses".'
+        );
+
         // ===============================
         // Notifikasi & Email Admin
         // ===============================
@@ -412,6 +434,13 @@ class PimpinanController extends Controller
             'status' => 'tutup',
             'catatan_pimpinan' => $request->catatan_pimpinan,
         ]);
+
+        ActivityLogHelper::log(
+            aksi: 'Menolak Pengajuan',
+            modul: 'Email Satker',
+            nomorTiket: $emailSatker->nomor_tiket,
+            detail: 'Pimpinan menolak pengajuan. Status berubah menjadi "Ditolak".'
+        );
 
         // ===============================
         // Notifikasi & Email Admin
@@ -553,6 +582,13 @@ class PimpinanController extends Controller
             'catatan_pimpinan' => $request->catatan_pimpinan,
         ]);
 
+        ActivityLogHelper::log(
+            aksi: 'Menyetujui Pengajuan',
+            modul: 'Email Pribadi',
+            nomorTiket: $emailPribadi->nomor_tiket,
+            detail: 'Pimpinan menyetujui pengajuan sehingga status berubah menjadi "Sedang Diproses".'
+        );
+
         // ===============================
         // Notifikasi & Email Admin
         // ===============================
@@ -656,6 +692,13 @@ class PimpinanController extends Controller
             'status' => 'tutup',
             'catatan_pimpinan' => $request->catatan_pimpinan,
         ]);
+
+        ActivityLogHelper::log(
+            aksi: 'Menolak Pengajuan',
+            modul: 'Email Pribadi',
+            nomorTiket: $emailPribadi->nomor_tiket,
+            detail: 'Pimpinan menolak pengajuan. Status berubah menjadi "Ditolak".'
+        );
 
         // ===============================
         // Notifikasi & Email Admin
