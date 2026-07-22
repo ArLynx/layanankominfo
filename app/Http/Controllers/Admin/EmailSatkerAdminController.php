@@ -13,6 +13,7 @@ use App\Models\Admin;
 use App\Models\Notification;
 use App\Mail\PengajuanBaruMail;
 use App\Mail\StatusPengajuanMail;
+use App\Helpers\ActivityLogHelper;
 
 class EmailSatkerAdminController extends Controller
 {
@@ -68,38 +69,7 @@ class EmailSatkerAdminController extends Controller
             'catatan_admin' => 'nullable|string',
         ]);
 
-        $status = $validated['status'];
-
-        /*
-        |--------------------------------------------------------------------------
-        | Otomatis lewati Persetujuan Pimpinan
-        |--------------------------------------------------------------------------
-        */
-
-        if ($status == 'baru' && in_array($emailSatker->jenis_layanan, ['reset', 'reaktivasi', 'ubah_akun'])) {
-            $status = 'diproses';
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Pengajuan Baru & Ubah Penanggung
-        |--------------------------------------------------------------------------
-        */
-
-        if ($status == 'baru' && in_array($emailSatker->jenis_layanan, ['baru', 'ubah_penanggung'])) {
-            $status = 'tunda';
-        }
-
-        $emailSatker->update([
-            'status' => $status,
-            'catatan_admin' => $validated['catatan_admin'],
-        ]);
-
-        // ====================================
-        // Notifikasi User
-        // ====================================
-
-        $statusLabel = match ($validated['status']) {
+         $statusLabel = match ($validated['status']) {
             'terbuka' => 'Pengajuan Baru',
 
             'baru' => 'Menunggu Pemeriksaan',
@@ -114,6 +84,54 @@ class EmailSatkerAdminController extends Controller
 
             default => ucfirst($validated['status']),
         };
+
+        $aksi = match ($validated['status']) {
+            'terbuka'  => 'Membuat Pengajuan',
+            'baru'     => 'Melakukan Pemeriksaan Pengajuan',
+            'tunda'    => 'Mengajukan Persetujuan ke Pimpinan',
+            'diproses' => 'Memproses Pengajuan',
+            'selesai'  => 'Menyelesaikan Pengajuan',
+            'tutup'    => 'Menolak Pengajuan',
+            default    => 'Mengubah Status Pengajuan',
+        };
+
+        $status = $validated['status'];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Otomatis lewati Persetujuan Pimpinan
+        |--------------------------------------------------------------------------
+        */
+
+        if ($status == 'baru' && in_array($emailSatker->jenis_layanan, ['reset', 'reaktivasi', 'ubah_akun'])) {
+            $status = 'diproses';
+        }
+
+        // /*
+        // |--------------------------------------------------------------------------
+        // | Pengajuan Baru & Ubah Penanggung
+        // |--------------------------------------------------------------------------
+        // */
+
+        // if ($status == 'baru' && in_array($emailSatker->jenis_layanan, ['baru', 'ubah_penanggung'])) {
+        //     $status = 'tunda';
+        // }
+
+        $emailSatker->update([
+            'status' => $status,
+            'catatan_admin' => $validated['catatan_admin'],
+        ]);
+
+        // ====================================
+        // Notifikasi User
+        // ====================================
+
+       ActivityLogHelper::log(
+            aksi: $aksi,
+            modul: 'Email Satker',
+            nomorTiket: $emailSatker->nomor_tiket,
+            detail: 'Status pengajuan diubah menjadi "' . $statusLabel . '".'
+        );
 
         $title = '';
         $message = '';

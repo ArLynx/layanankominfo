@@ -12,6 +12,7 @@ use App\Models\Admin;
 use App\Models\Notification;
 use App\Mail\PengajuanBaruMail;
 use App\Mail\StatusPengajuanMail;
+use App\Helpers\ActivityLogHelper;
 
 class SubdomainAdminController extends Controller
 {
@@ -70,20 +71,6 @@ class SubdomainAdminController extends Controller
             'catatan_admin' => 'nullable|string',
         ]);
 
-        // Tidak boleh selesai jika Surat belum diupload
-        if ($validated['status'] === 'selesai' && !$subdomain->surat_penunjukan) {
-            return back()->with('error', 'Surat Penunjukan wajib diupload sebelum status selesai.');
-        }
-
-        $subdomain->update([
-            'status' => $validated['status'],
-            'catatan_admin' => $validated['catatan_admin'],
-        ]);
-
-        // ====================================
-        // Notifikasi User
-        // ====================================
-
         $statusLabel = match ($validated['status']) {
             'terbuka' => 'Pengajuan Baru',
 
@@ -99,6 +86,43 @@ class SubdomainAdminController extends Controller
 
             default => ucfirst($validated['status']),
         };
+
+        $aksi = match ($validated['status']) {
+            'terbuka'  => 'Membuat Pengajuan',
+
+            'baru'     => 'Melakukan Pemeriksaan Pengajuan',
+
+            'tunda'    => 'Mengajukan Persetujuan ke Pimpinan',
+
+            'diproses' => 'Memproses Pengajuan',
+
+            'selesai'  => 'Menyelesaikan Pengajuan',
+
+            'tutup'    => 'Menolak Pengajuan',
+
+            default    => 'Mengubah Status Pengajuan',
+        };
+
+        // Tidak boleh selesai jika Surat belum diupload
+        if ($validated['status'] === 'selesai' && !$subdomain->surat_penunjukan) {
+            return back()->with('error', 'Surat Penunjukan wajib diupload sebelum status selesai.');
+        }
+
+        $subdomain->update([
+            'status' => $validated['status'],
+            'catatan_admin' => $validated['catatan_admin'],
+        ]);
+
+        ActivityLogHelper::log(
+            aksi: $aksi,
+            modul: 'Subdomain',
+            nomorTiket: $subdomain->nomor_tiket,
+            detail: 'Status pengajuan berubah menjadi "' . $statusLabel . '".'
+        );
+
+        // ====================================
+        // Notifikasi User
+        // ====================================
 
         $title = '';
         $message = '';
