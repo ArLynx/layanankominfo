@@ -55,7 +55,7 @@
             <div class="flex items-center gap-4">
                 @auth
                     <!-- Jika user sudah login -->
-                    <a href="{{ url('/dashboard') }}"
+                    <a href="{{ url('/dashboard-user') }}"
                         class="font-label-md text-label-md bg-primary text-on-primary px-4 py-2 rounded-lg hover:bg-primary-container transition-colors flex items-center gap-2">
                         <span class="material-symbols-outlined text-[18px]">dashboard</span>
                         Dashboard

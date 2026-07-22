@@ -18,7 +18,7 @@
                 </p>
                 <div class="flex flex-wrap gap-4 mt-4">
                     @auth
-                        <a href="{{ url('/dashboard') }}"
+                        <a href="{{ url('/dashboard-user') }}"
                             class="bg-primary text-on-primary font-label-md text-label-md px-6 py-3 rounded-lg shadow-sm hover:bg-primary-container transition-all flex items-center gap-2">
                             Buka Dashboard
                             <span class="material-symbols-outlined">arrow_forward</span>

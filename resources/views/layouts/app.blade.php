@@ -80,12 +80,6 @@
                         style="font-variation-settings: '{{ request()->routeIs('dashboard-user') ? '1' : '0' }}';">dashboard</span>
                     <span class="text-label-md font-label-md">Dashboard</span>
                 </a>
-                <a href="{{ route('requests.service') }}"
-                    class="{{ request()->routeIs('requests.service') ? 'bg-primary text-on-primary shadow-sm translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-primary' }} mx-2 my-1 px-4 py-3 rounded-lg flex items-center gap-3 transition-all">
-                    <span class="material-symbols-outlined text-[20px]"
-                        style="font-variation-settings: '{{ request()->routeIs('requests.service') ? '1' : '0' }}';">add_circle</span>
-                    <span class="text-label-md font-label-md">Layanan Baru</span>
-                </a>
                 <a href="{{ route('requests.index') }}"
                     class="{{ request()->routeIs('requests.index') ? 'bg-primary text-on-primary shadow-sm translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-primary' }} mx-2 my-1 px-4 py-3 rounded-lg flex items-center gap-3 transition-all">
                     <span class="material-symbols-outlined text-[20px]"
@@ -153,12 +147,6 @@
                 <span class="material-symbols-outlined text-[20px]"
                     style="font-variation-settings: '{{ request()->routeIs('dashboard-user') ? '1' : '0' }}';">dashboard</span>
                 <span class="text-label-md font-label-md">Dashboard</span>
-            </a>
-            <a href="{{ route('requests.service') }}"
-                class="{{ request()->routeIs('requests.service') ? 'bg-primary text-on-primary shadow-sm translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-primary' }} mx-2 my-1 px-4 py-3 rounded-lg flex items-center gap-3 transition-all">
-                <span class="material-symbols-outlined text-[20px]"
-                    style="font-variation-settings: '{{ request()->routeIs('requests.service') ? '1' : '0' }}';">add_circle</span>
-                <span class="text-label-md font-label-md">Layanan Baru</span>
             </a>
             <a href="{{ route('requests.index') }}"
                 class="{{ request()->routeIs('requests.index') ? 'bg-primary text-on-primary shadow-sm translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-primary' }} mx-2 my-1 px-4 py-3 rounded-lg flex items-center gap-3 transition-all">

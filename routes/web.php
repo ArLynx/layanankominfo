@@ -67,11 +67,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', '2fa.ensure'])->group(function () {
     // Permohonan User
     Route::get('/requests', [RequestController::class, 'index'])->name('requests.index');
-    Route::get('/requests/service', [RequestController::class, 'create'])->name('requests.service');
     Route::post('/requests', [RequestController::class, 'store'])->name('requests.store');
-    Route::get('/requests/success/{id}', [RequestController::class, 'success'])->name('requests.success');
-    Route::get('/requests/{id}/edit', [RequestController::class, 'edit'])->name('requests.edit');
-    Route::patch('/requests/{id}', [RequestController::class, 'update'])->name('requests.update');
+    Route::get('/requests/success/{id}', [RequestController::class, 'success'])->name('requests.success')->whereNumber('id');
+    Route::get('/requests/{id}/edit', [RequestController::class, 'edit'])->name('requests.edit')->whereNumber('id');
+    Route::patch('/requests/{id}', [RequestController::class, 'update'])->name('requests.update')->whereNumber('id');
 
 });
 

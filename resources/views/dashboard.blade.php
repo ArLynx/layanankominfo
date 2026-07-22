@@ -149,9 +149,6 @@
                 <span class="material-symbols-outlined text-6xl text-outline-variant mb-4">assignment_late</span>
                 <h3 class="text-headline-md font-headline-md text-on-surface">Belum Ada Pengajuan</h3>
                 <p class="text-body-md text-on-surface-variant mt-2">Anda belum mengajukan permohonan layanan apapun.</p>
-                <a href="{{ route('requests.service') }}" class="mt-6 inline-block bg-primary text-on-primary px-6 py-2 rounded-lg hover:bg-primary-container transition-colors">
-                    Buat Pengajuan Sekarang
-                </a>
             </div>
         @endforelse
     </section>
