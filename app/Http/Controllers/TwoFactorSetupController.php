@@ -10,7 +10,7 @@ class TwoFactorSetupController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->two_factor_secret) {
+        if ($user->two_factor_confirmed_at) {
             if ($user instanceof \App\Models\Admin) {
                 $route = $user->role === 'pimpinan'
                     ? 'pimpinan.dashboard'
