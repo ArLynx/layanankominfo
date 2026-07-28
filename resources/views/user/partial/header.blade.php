@@ -19,7 +19,7 @@
 
             <div>
 
-                <h1 class="text-headline-lg font-headline-lg text-primary tracking-tight">
+                <h1 class="text-title-lg md:text-headline-lg font-headline-lg text-primary tracking-tight">
 
                     Dinas Kominfo Murung Raya
 

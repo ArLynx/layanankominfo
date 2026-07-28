@@ -10,8 +10,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-background font-body-md text-on-surface min-h-screen flex items-center justify-center antialiased p-4">
-    <div class="w-full max-w-md">
-        <div class="bg-surface-container-lowest p-8 rounded-xl border border-border-subtle shadow-lg">
+    <div class="w-full max-w-2xl">
+        <div class="bg-surface-container-lowest p-10 rounded-xl border border-border-subtle shadow-lg">
             {{ $slot }}
         </div>
     </div>
