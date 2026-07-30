@@ -24,3 +24,7 @@ RUN apt install nano -y
 RUN apt install npm -y
 
 RUN composer install
+
+RUN npm install
+
+RUN npm run build
