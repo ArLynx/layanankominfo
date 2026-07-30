@@ -25,5 +25,9 @@
         </ol>
     </div>
 
-    @livewire('two-factor-setup-page')
+    @if (request()->is('admin/*'))
+        @livewire('admin.two-factor-setup-page')
+    @else
+        @livewire('user.two-factor-setup-page')
+    @endif
 </x-simple-layout>

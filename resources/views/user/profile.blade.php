@@ -36,7 +36,7 @@
             <div class="bg-surface rounded-xl border border-border-subtle p-6 mb-6">
                 @livewire('profile.two-factor-authentication-form')
 
-                @if(auth()->user()->two_factor_secret)
+                @if(auth()->user()?->two_factor_secret)
                     <div class="mt-6 pt-4 border-t border-border-subtle">
                         <form method="POST" action="{{ route('2fa.reset.send') }}" class="space-y-3">
                             @csrf

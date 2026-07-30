@@ -15,7 +15,9 @@ class EnsureTwoFactorIsEnabled
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && !auth()->user()->two_factor_secret && !$request->is('2fa-setup*')) {
+        $user = auth()->user();
+
+        if ($user && !$user->two_factor_secret && !in_array($request->path(), ['2fa-setup'], true)) {
             return redirect()->route('2fa.setup');
         }
 

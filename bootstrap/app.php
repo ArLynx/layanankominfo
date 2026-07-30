@@ -31,15 +31,15 @@ return Application::configure(basePath: dirname(__DIR__))
          });
 
          $middleware->redirectUsersTo(function (Request $request) {
-             if ($request->is('pimpinan/*') || auth('admin')->user()?->role === 'pimpinan') {
-                 return route('pimpinan.dashboard');
-             }
+              if ($request->is('pimpinan/*') || auth('admin')->user()?->role === 'pimpinan') {
+                  return route('pimpinan.dashboard');
+              }
 
-             if ($request->is('admin/*')) {
-                 return route('admin.dashboard');
-             }
+              if ($request->is('admin/*')) {
+                  return route('admin.dashboard');
+              }
 
-             return route('dashboard');
+              return route('dashboard-user');
          });
     })
     ->withExceptions(function (Exceptions $exceptions): void {

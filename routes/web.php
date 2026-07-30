@@ -16,7 +16,6 @@ use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\ActivityLogController;
 
-use App\Http\Controllers\TwoFactorSetupController;
 
 //User
 use App\Http\Controllers\User\DashboardUserController;
@@ -26,6 +25,8 @@ use App\Http\Controllers\User\RiwayatController;
 use App\Http\Controllers\User\EmailPribadiController;
 use App\Http\Controllers\User\EmailSatkerController;
 use App\Http\Controllers\User\NotificationUserController;
+
+use App\Http\Controllers\User\TwoFactorSetupController as UserTwoFactorSetupController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -59,7 +60,7 @@ Route::get('/two-factor/reset', [App\Http\Controllers\TwoFactorResetController::
 Route::post('/two-factor/reset/verify', [App\Http\Controllers\TwoFactorResetController::class, 'verifyOtp'])->name('2fa.reset.verify');
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-    Route::get('/2fa-setup', [TwoFactorSetupController::class, 'index'])->name('2fa.setup');
+    Route::get('/2fa-setup', [UserTwoFactorSetupController::class, 'index'])->name('2fa.setup');
 
     // 2FA Reset via OTP (authenticated - from profile page)
     Route::post('/two-factor/reset/send', [App\Http\Controllers\TwoFactorResetController::class, 'sendOtp'])->name('2fa.reset.send');
@@ -74,7 +75,7 @@ Route::middleware(['auth:admin', '2fa.admin', 'nocache'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::get('/2fa-setup', [App\Http\Controllers\TwoFactorSetupController::class, 'index'])->name('2fa.setup');
+        Route::get('/2fa-setup', [App\Http\Controllers\Admin\TwoFactorSetupController::class, 'index'])->name('2fa.setup');
     });
 
 // Shared Admin & Superadmin Routes
@@ -109,7 +110,7 @@ Route::middleware(['auth:admin', 'role:admin', '2fa.admin', 'nocache'])
         // Pengajuan Subdomain
         Route::get('/pengajuan/subdomain', [SubdomainAdminController::class, 'index'])->name('subdomain');
         Route::get('/pengajuan/subdomain/{subdomain}', [SubdomainAdminController::class, 'show'])->name('subdomain.show');
-        Route::delete('/admin/subdomain/{subdomain}', [SubdomainAdminController::class, 'destroy'])->name('subdomain.destroy');
+        Route::delete('/subdomain/{subdomain}', [SubdomainAdminController::class, 'destroy'])->name('subdomain.destroy');
         Route::patch('/subdomain/{subdomain}/update-status', [SubdomainAdminController::class, 'updateStatus'])->name('subdomain.update-status');
         Route::patch('/subdomain/{subdomain}/send-to-leader', [SubdomainAdminController::class, 'sendToLeader'])->name('subdomain.send-to-leader');
         Route::get('/subdomain/{subdomain}/sk-pegawai', [SubdomainAdminController::class, 'viewKarpeg'])->name('subdomain.karpeg');
@@ -118,7 +119,7 @@ Route::middleware(['auth:admin', 'role:admin', '2fa.admin', 'nocache'])
         Route::get('/subdomain/{subdomain}/cetak-sk', [SubdomainAdminController::class, 'cetakSk'])->name('subdomain.cetak-sk');
         Route::post('/subdomain/{subdomain}/upload-sk', [SubdomainAdminController::class, 'uploadSkPenunjukan'])->name('subdomain.upload-sk');
         Route::get('/subdomain/{subdomain}/download-sk', [SubdomainAdminController::class, 'downloadSkPenunjukan'])->name('subdomain.download-sk');
-        Route::get('/admin/subdomain/{subdomain}/surat-lama', [SubdomainAdminController::class, 'suratLama'])->name('subdomain.surat-lama');
+        Route::get('/subdomain/{subdomain}/surat-lama', [SubdomainAdminController::class, 'suratLama'])->name('subdomain.surat-lama');
         Route::get('/persetujuan-pimpinan', [SubdomainAdminController::class, 'approvalList'])->name('approval-list');
         Route::get('/persetujuan-pimpinan/{subdomain}', [SubdomainAdminController::class, 'approvalShow'])->name('approval-show');
         Route::post('/persetujuan-pimpinan/{subdomain}/approve', [SubdomainAdminController::class, 'approve'])->name('approve-subdomain');

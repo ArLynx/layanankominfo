@@ -13,7 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\EmailPribadi;
 use App\Models\EmailSatker;
-use App\Models\SUbdomain;
+use App\Models\Subdomain;
 use App\Models\ActivityLog;
 
 class User extends Authenticatable implements MustVerifyEmail
