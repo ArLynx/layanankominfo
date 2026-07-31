@@ -18,3 +18,13 @@ COPY . /var/www/html
 RUN chmod -R 777 storage bootstrap/cache
 
 RUN php artisan storage:link || true
+
+RUN apt install nano -y
+
+RUN apt install npm -y
+
+RUN composer install
+
+RUN npm install
+
+RUN npm run build
