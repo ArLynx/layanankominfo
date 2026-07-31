@@ -2,7 +2,8 @@
     <x-validation-errors class="mb-4" />
 
     @if (session('status'))
-        <div class="mb-4 font-medium text-sm text-success-emerald bg-surface-container-low p-3 rounded-lg border border-border-subtle flex items-start gap-2">
+        <div
+            class="mb-4 font-medium text-sm text-success-emerald bg-surface-container-low p-3 rounded-lg border border-border-subtle flex items-start gap-2">
             <span class="material-symbols-outlined shrink-0" style="font-size: 18px;">check_circle</span>
             {{ session('status') }}
         </div>
@@ -60,6 +61,8 @@
     </form>
 
     <div class="mt-4 text-center">
+        <a href="{{ route('admin.2fa.reset.request') }}" class="text-sm text-primary hover:underline block mb-2">Lupa
+            Two-Factor Authentication? Reset di sini</a>
         <a href="{{ route('login') }}" class="text-sm text-primary hover:underline">Kembali ke halaman login user</a>
     </div>
 </x-guest-layout>

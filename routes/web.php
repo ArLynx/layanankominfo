@@ -27,6 +27,7 @@ use App\Http\Controllers\User\EmailSatkerController;
 use App\Http\Controllers\User\NotificationUserController;
 
 use App\Http\Controllers\User\TwoFactorSetupController as UserTwoFactorSetupController;
+use App\Http\Controllers\Admin\TwoFactorResetController as AdminTwoFactorResetController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -51,6 +52,20 @@ Route::prefix('admin')
         Route::post('/logout', [App\Http\Controllers\Admin\AuthController::class, 'logout'])
             ->middleware('auth:admin')
             ->name('logout');
+
+        // Admin 2FA Reset (unauthenticated - from login page)
+        Route::get('/two-factor/reset/request', [AdminTwoFactorResetController::class, 'showRequestForm'])
+            ->middleware('guest:admin')
+            ->name('2fa.reset.request');
+        Route::post('/two-factor/reset/request', [AdminTwoFactorResetController::class, 'sendOtpByEmail'])
+            ->middleware('guest:admin')
+            ->name('2fa.reset.send-email');
+        Route::get('/two-factor/reset', [AdminTwoFactorResetController::class, 'showOtpForm'])
+            ->middleware('guest:admin')
+            ->name('2fa.reset.show');
+        Route::post('/two-factor/reset/verify', [AdminTwoFactorResetController::class, 'verifyOtp'])
+            ->middleware('guest:admin')
+            ->name('2fa.reset.verify');
     });
 
 // 2FA Reset (unauthenticated - from login page)
@@ -76,6 +91,9 @@ Route::middleware(['auth:admin', '2fa.admin', 'nocache'])
     ->name('admin.')
     ->group(function () {
         Route::get('/2fa-setup', [App\Http\Controllers\Admin\TwoFactorSetupController::class, 'index'])->name('2fa.setup');
+
+        // Admin 2FA Reset via OTP (authenticated - from profile/setup page)
+        Route::post('/two-factor/reset/send', [AdminTwoFactorResetController::class, 'sendOtp'])->name('2fa.reset.send');
     });
 
 // Shared Admin & Superadmin Routes

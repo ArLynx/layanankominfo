@@ -68,6 +68,12 @@
         </form>
 
         <div class="text-center mt-6 pt-4 border-t border-border-subtle">
+            <p class="font-body-sm text-body-sm text-on-surface-variant mb-2">Tidak bisa mengakses aplikasi authenticator?</p>
+            <a href="{{ route('admin.2fa.reset.request') }}"
+                class="font-label-sm text-label-sm text-primary hover:text-primary-container hover:underline transition-colors inline-flex items-center gap-1 mb-2">
+                <span class="material-symbols-outlined text-[16px]">lock_reset</span>
+                Reset Two-Factor Authentication
+            </a>
             <a href="{{ route('admin.login') }}"
                 class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors inline-flex items-center gap-1">
                 <span class="material-symbols-outlined text-[16px]">arrow_back</span>
