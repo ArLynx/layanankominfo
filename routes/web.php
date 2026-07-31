@@ -102,6 +102,10 @@ Route::middleware(['auth:admin', '2fa.admin', 'nocache'])
     ->name('admin.')
     ->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Notifikasi (admin & superadmin)
+        Route::get('/notifications/read/{notification}', [NotificationController::class, 'read'])->name('notifications.read');
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     });
 
 // Admin-only Routes
@@ -113,10 +117,6 @@ Route::middleware(['auth:admin', 'role:admin', '2fa.admin', 'nocache'])
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
         Route::get('/laporan/export/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export.pdf');
         Route::get('/laporan/export/excel', [LaporanController::class, 'exportExcel'])->name('laporan.export.excel');
-
-        //notif
-        Route::get('/notifications/read/{notification}', [NotificationController::class, 'read'])->name('notifications.read');
-        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
         // Proses Permohonan
         Route::get('/process', [ProcessController::class, 'index'])->name('process');
