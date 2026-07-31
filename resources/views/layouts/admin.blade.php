@@ -24,17 +24,39 @@
             color: #0b1c30;
         }
 
+        .admin-sidebar {
+            transform: translateX(-100%);
+            transition: transform 300ms ease-in-out;
+        }
+
+        @media (min-width: 768px) {
+            .admin-sidebar {
+                transform: none;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .admin-sidebar.open {
+                transform: translateX(0);
+            }
+        }
 
     </style>
 </head>
 
 <body class="flex h-screen overflow-hidden antialiased font-body-md text-body-md">
 
-    <!-- SideNavBar (Desktop) -->
-    <nav
-        class="fixed left-0 top-0 h-full w-[280px] bg-surface-container-low flex flex-col py-6 border-r border-border-subtle z-40 hidden md:flex">
+    <!-- SideNavBar (Mobile & Desktop) -->
+    <nav x-data="{ open: false }" x-on:toggle-admin-sidebar.window="open = !open"
+        :class="open && 'open'"
+        class="admin-sidebar fixed left-0 top-0 h-full w-[280px] bg-surface-container-low flex flex-col py-6 border-r border-border-subtle z-40 overflow-y-auto">
         <div class="px-gutter mb-8 flex flex-col gap-2">
-            <h1 class="text-headline-md font-headline-md text-primary">Admin Panel</h1>
+            
+            @if (auth()->user()->role === 'superadmin')
+                <h1 class="text-headline-md font-headline-md text-primary">Superadmin Panel</h1>
+            @else
+                <h1 class="text-headline-md font-headline-md text-primary">Admin Panel</h1>
+            @endif
             <p class="text-body-md font-body-md text-on-surface-variant">Dinas Kominfo</p>
         </div>
 
@@ -58,23 +80,6 @@
                 </a>
             </li>
 
-            {{-- Profil --}}
-            <li>
-                <a href=""
-                    class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg
-            {{ request()->routeIs('profile') ? 'bg-primary text-on-primary translate-x-1' : 'text-on-surface-variant hover:bg-surface-container-high' }}
-            transition-all">
-
-                    <span class="material-symbols-outlined">
-                        account_circle
-                    </span>
-
-                    <span class="text-label-md font-label-md">
-                        Profil Saya
-                    </span>
-
-                </a>
-            </li>
 
             @if (auth()->user()->role === 'superadmin')
                 {{-- Manajemen User --}}
@@ -298,12 +303,17 @@
         </div>
     </nav>
 
+    {{-- Mobile Overlay --}}
+    <div x-data="{ open: false }" x-on:toggle-admin-sidebar.window="open = !open" x-cloak
+        x-show="open" class="fixed inset-0 z-30 bg-black/50 md:hidden"
+        x-on:click="$dispatch('toggle-admin-sidebar')"></div>
+
     <!-- Main Content -->
     <main class="flex-1 md:ml-[280px] overflow-y-auto bg-surface-gray">
         <!-- Header -->
         <header
             class="bg-surface-container-lowest border-b border-border-subtle sticky top-0 z-30 px-gutter py-4 flex justify-between items-center">
-            <h2 class="text-headline-md font-headline-md text-on-surface">{{ $title ?? 'Dashboard Admin' }}</h2>
+            <h2 class="text-headline-md font-headline-md text-on-surface">{{ $title ?? (auth()->user()->role === 'superadmin' ? 'Dashboard Superadmin' : 'Dashboard Admin') }}</h2>
             <div class="flex items-center gap-4">
 
                 {{-- Mobile Menu --}}
