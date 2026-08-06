@@ -1,6 +1,5 @@
 <header
     class="bg-surface border-b border-border-subtle py-4 px-gutter md:px-margin-desktop sticky top-0 z-40 w-full shadow-sm">
-
     <div class="max-w-container-max mx-auto flex items-center justify-between">
 
         {{-- Logo --}}
@@ -10,8 +9,7 @@
                 <span class="material-symbols-outlined text-[24px]">menu</span>
             </button>
 
-            <span class="material-symbols-outlined text-primary text-4xl"
-                style="font-variation-settings:'FILL' 1;">
+            <span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings:'FILL' 1;">
 
                 account_balance
 
@@ -41,8 +39,7 @@
             {{-- Notification --}}
             <div x-data="{ open: false }" class="relative">
 
-                <button
-                    @click="open = !open"
+                <button @click="open = !open"
                     class="relative w-11 h-11 rounded-full hover:bg-surface-container flex items-center justify-center">
 
                     <span class="material-symbols-outlined text-[24px]">
@@ -52,23 +49,18 @@
                     </span>
 
                     @if ($unreadNotifications > 0)
-
                         <span
                             class="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-600 text-white text-[10px] flex items-center justify-center">
 
                             {{ $unreadNotifications }}
 
                         </span>
-
                     @endif
 
                 </button>
 
                 {{-- Dropdown --}}
-                <div
-                    x-show="open"
-                    @click.outside="open = false"
-                    x-transition
+                <div x-show="open" @click.outside="open = false" x-transition
                     class="absolute right-0 mt-2 w-[420px] bg-white rounded-xl border border-outline-variant shadow-2xl z-50">
 
                     <div class="px-4 py-3 border-b flex items-center justify-between">
@@ -79,8 +71,7 @@
 
                         </h3>
 
-                        <a href="{{ route('notifications.index') }}"
-                            class="text-xs text-primary hover:underline">
+                        <a href="{{ route('notifications.index') }}" class="text-xs text-primary hover:underline">
 
                             Lihat Semua
 
@@ -91,9 +82,7 @@
                     <div class="divide-y divide-outline-variant max-h-[420px] overflow-y-auto">
 
                         @forelse($headerNotifications as $notification)
-
-                            <a
-                                href="{{ route('notifications.read', $notification) }}"
+                            <a href="{{ route('notifications.read', $notification) }}"
                                 class="flex gap-3 px-4 py-3 transition
                                 {{ !$notification->is_read
                                     ? 'bg-blue-50 border-l-4 border-blue-600 hover:bg-blue-100'
@@ -102,7 +91,6 @@
                                 <div class="mt-1">
 
                                     @switch($notification->type)
-
                                         @case('subdomain')
                                             <span class="material-symbols-outlined text-blue-600">
                                                 language
@@ -125,7 +113,6 @@
                                             <span class="material-symbols-outlined text-primary">
                                                 notifications
                                             </span>
-
                                     @endswitch
 
                                 </div>
@@ -154,32 +141,31 @@
 
                             </a>
 
-                        @empty
+                            @empty
 
-                            <div class="py-10 text-center text-sm text-on-surface-variant">
+                                <div class="py-10 text-center text-sm text-on-surface-variant">
 
-                                Belum ada notifikasi.
+                                    Belum ada notifikasi.
 
-                            </div>
+                                </div>
+                            @endforelse
 
-                        @endforelse
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
+                {{-- Avatar --}}
+                <div
+                    class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold">
 
-            {{-- Avatar --}}
-            <div
-                class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold">
+                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
 
-                {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                </div>
 
             </div>
 
         </div>
 
-    </div>
-
-</header>
+    </header>

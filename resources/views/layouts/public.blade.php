@@ -18,6 +18,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
+        html {
+            overflow-y: scroll;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
         }
@@ -30,45 +34,204 @@
 
 <body class="bg-background text-on-background min-h-screen flex flex-col">
 
-    <!-- TopNavBar -->
-    <header class="fixed top-0 w-full z-50 bg-surface/95 backdrop-blur-sm border-b border-border-subtle">
-        <div class="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto">
-            <div class="flex items-center gap-4">
-                <img src="{{ asset('logo-layanan-192x192.png') }}" alt="Logo" class="h-10 w-auto">
-                <span class="text-headline-md font-headline-md font-bold text-primary">Dinas Kominfo Murung Raya</span>
+    <!-- ================= Responsiv Mobile ================= -->
+    <header class="md:hidden fixed top-0 left-0 right-0 z-50 h-16 bg-white border-b border-slate-200 shadow-sm">
+
+        <div class="w-full h-full px-5 flex items-center justify-between">
+
+            <a href="{{ route('home') }}" class="flex items-center gap-3 flex-1 min-w-0">
+
+                <img src="{{ asset('logo-layanan-192x192.png') }}" class="w-10 h-10 shrink-0" alt="Logo">
+
+                <div class="min-w-0">
+
+                    <h1 class="text-[16px] font-semibold text-slate-900 truncate">
+                        Dinas Kominfo
+                    </h1>
+
+                    <p class="text-xs text-slate-500 truncate">
+                        Kabupaten Murung Raya
+                    </p>
+
+                </div>
+
+            </a>
+
+            <button id="mobileMenuButton"
+                class="ml-3 w-12 h-12 shrink-0 rounded-lg flex items-center justify-center active:bg-slate-100 transition-colors duration-200">
+
+                <span id="mobileMenuIcon" class="material-symbols-outlined text-[26px]">
+                    menu
+                </span>
+
+            </button>
+
+        </div>
+
+    </header>
+
+    <div id="mobileOverlay"
+        class="md:hidden fixed inset-0 top-16 bg-black/30 opacity-0 invisible transition duration-200 z-30">
+    </div>
+
+    <div id="mobileMenu"
+        class="md:hidden fixed left-0 right-0 bg-white border-b border-slate-200 shadow-lg
+           opacity-0 invisible -translate-y-2 transition-all duration-200 z-40"
+        style="top: 64px;">
+
+        @php
+
+            $mobileNav = '
+            flex
+            items-center
+            gap-3
+            px-6
+            h-14
+            text-[14px]
+            font-medium
+            text-slate-700
+            active:bg-slate-100
+            transition-colors
+            duration-200';
+
+            $mobileActive = '
+            flex
+            items-center
+            gap-3
+            px-6
+            h-14
+            text-[14px]
+            font-semibold
+            text-primary
+            bg-slate-100';
+
+        @endphp
+
+        <nav>
+
+            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? $mobileActive : $mobileNav }}">
+                <span class="material-symbols-outlined text-[18px] shrink-0">home</span>
+                <span>Layanan</span>
+            </a>
+
+            <a href="{{ route('panduan') }}" class="{{ request()->routeIs('panduan') ? $mobileActive : $mobileNav }}">
+                <span class="material-symbols-outlined text-[18px] shrink-0">menu_book</span>
+                <span>Panduan</span>
+            </a>
+
+            <a href="{{ route('status') }}" class="{{ request()->routeIs('status') ? $mobileActive : $mobileNav }}">
+                <span class="material-symbols-outlined text-[18px] shrink-0">monitoring</span>
+                <span>Status</span>
+            </a>
+
+            <a href="{{ route('bantuan') }}" class="{{ request()->routeIs('bantuan') ? $mobileActive : $mobileNav }}">
+                <span class="material-symbols-outlined text-[18px] shrink-0">help</span>
+                <span>Bantuan</span>
+            </a>
+
+            <div class="px-6 pt-4 pb-4 space-y-3 border-t border-slate-200">
+
+                @auth
+
+                    <a href="{{ url('/dashboard-user') }}"
+                        class="flex items-center justify-center w-full h-12 rounded-lg bg-primary text-white text-[14px] font-medium shadow-sm active:opacity-90 transition-colors duration-200">
+                        Dashboard
+                    </a>
+                @else
+                    <a href="{{ route('login') }}"
+                        class="flex items-center justify-center w-full h-12 rounded-lg bg-primary text-white text-[14px] font-medium shadow-sm active:opacity-90 transition-colors duration-200">
+                        Login
+                    </a>
+
+                    <a href="{{ route('register') }}"
+                        class="flex items-center justify-center w-full h-12 rounded-lg bg-primary text-white text-[14px] font-medium shadow-sm active:opacity-90 transition-colors duration-200 mb-4">
+                        Register
+                    </a>
+
+                @endauth
+
+            </div>
+        </nav>
+    </div>
+
+    <!-- Dekstop -->
+    <header class="hidden md:block fixed top-0 z-50 w-full h-16 bg-surface border-b border-border-subtle">
+        <div class="h-full flex justify-between items-center px-gutter max-w-container-max mx-auto">
+            <div class="flex items-center gap-4 cursor-pointer">
+                <img src="{{ asset('logo-layanan-192x192.png') }}" alt="Logo" width="40" height="40"
+                    class="h-10 w-auto object-contain">
+                <span class="text-headline-md font-bold text-primary">Dinas Kominfo Murung Raya</span>
             </div>
 
+            @php
+                $navDefault = 'relative px-2 py-2 text-sm font-semibold text-on-surface-variant
+                border-b-2 border-transparent
+                transition-colors duration-200
+                hover:text-primary hover:border-primary';
+
+                $navActive = 'relative px-2 py-2 text-sm font-semibold text-on-surface-variant
+                border-b-2 border-transparent
+                transition-colors duration-200
+                hover:text-primary hover:border-primary';
+            @endphp
+
             <!-- Menu Navigasi -->
-            <nav class="hidden md:flex items-center gap-6">
-                <a class="text-primary font-bold border-b-2 border-primary pb-1" href="{{ url('/') }}">Layanan</a>
-                <button type="button"
-                    class="text-on-surface-variant font-label-md hover:text-primary transition-colors duration-200 cursor-pointer"
-                    onclick="openModal('modal-panduan')">Panduan</button>
-                <button type="button"
-                    class="text-on-surface-variant font-label-md hover:text-primary transition-colors duration-200 cursor-pointer"
-                    onclick="openModal('modal-status')">Status</button>
-                <button type="button"
-                    class="text-on-surface-variant font-label-md hover:text-primary transition-colors duration-200 cursor-pointer"
-                    onclick="openModal('modal-bantuan')">Bantuan</button>
+            <nav class="hidden md:flex items-center gap-8">
+
+                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? $navActive : $navDefault }}">
+                    Layanan
+                </a>
+
+                <a href="{{ route('panduan') }}"
+                    class="{{ request()->routeIs('panduan') ? $navActive : $navDefault }}">
+                    Panduan
+                </a>
+
+                <a href="{{ route('status') }}" class="{{ request()->routeIs('status') ? $navActive : $navDefault }}">
+                    Status
+                </a>
+
+                <a href="{{ route('bantuan') }}"
+                    class="{{ request()->routeIs('bantuan') ? $navActive : $navDefault }}">
+                    Bantuan
+                </a>
+
             </nav>
 
-            <!-- Tombol Auth (Login/Register atau Dashboard) -->
             <div class="flex items-center gap-4">
                 @auth
-                    <!-- Jika user sudah login -->
                     <a href="{{ url('/dashboard-user') }}"
-                        class="font-label-md text-label-md bg-primary text-on-primary px-4 py-2 rounded-lg hover:bg-primary-container transition-colors flex items-center gap-2">
+                        class="flex items-center gap-2
+                            px-4 py-2
+                            rounded-lg
+                            text-primary
+                            font-label-md text-label-md
+                            transition-colors duration-200
+                            hover:bg-primary
+                            hover:text-on-primary">
                         <span class="material-symbols-outlined text-[18px]">dashboard</span>
                         Dashboard
                     </a>
                 @else
-                    <!-- Jika user belum login -->
                     <a href="{{ route('login') }}"
-                        class="font-label-md text-label-md text-primary hover:bg-surface-container-low px-4 py-2 rounded-lg transition-colors">
+                        class="px-4 py-2
+                            rounded-lg
+                            text-primary
+                            font-label-md text-label-md
+                            transition-colors duration-200
+                            hover:bg-primary
+                            hover:text-on-primary">
                         Login
                     </a>
+
                     <a href="{{ route('register') }}"
-                        class="font-label-md text-label-md bg-primary text-on-primary px-4 py-2 rounded-lg hover:bg-primary-container transition-colors">
+                        class="px-4 py-2
+                            rounded-lg
+                            text-primary
+                            font-label-md text-label-md
+                            transition-colors duration-200
+                            hover:bg-primary
+                            hover:text-on-primary">
                         Register
                     </a>
                 @endauth
@@ -77,34 +240,25 @@
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow pt-[88px]">
+    <main class="pt-16">
         {{ $slot }}
 
     </main>
 
-    <!-- Modals -->
-    <x-modal-dialog id="modal-panduan" icon="menu_book" title="Panduan">
-        <p>Fitur panduan penggunaan portal layanan masih dalam tahap pengembangan. Kami akan segera hadirkan petunjuk
-            lengkap untuk memudahkan Anda dalam menggunakan setiap layanan.</p>
-    </x-modal-dialog>
-
-    <x-modal-dialog id="modal-status" icon="monitoring" title="Status Layanan">
-        <p>Fitur status layanan masih dalam tahap pengembangan. Nantikan informasi real-time mengenai status pengajuan
-            dan layanan Anda.</p>
-    </x-modal-dialog>
-
-    <x-modal-dialog id="modal-bantuan" icon="support" title="Bantuan">
-        <p>Fitur bantuan masih dalam tahap pengembangan. Jika memerlukan bantuan, silakan hubungi tim support kami
-            melalui kontak yang tersedia.</p>
-    </x-modal-dialog>
-
-    <!-- Footer -->
-    <footer class="w-full py-8 px-gutter border-t border-border-subtle bg-surface-container-lowest">
+    <!-- ================= Footer Dekstop ================= -->
+    <footer class="hidden md:block w-full py-8 px-gutter border-t border-border-subtle bg-surface-container-lowest">
         <div class="flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto gap-4">
             <div class="text-center md:text-left">
-                <span class="text-label-md font-bold text-primary">Dinas Kominfo Murung Raya</span>
-                <p class="text-caption font-caption text-on-surface-variant mt-1">
-                    © {{ date('Y') }} Tim Pengembang Dinas Kominfo Kabupaten Murung Raya.
+                <span class="text-label-md font-bold text-primary">Dinas Komunikasi dan Informatika Kabupaten Murung
+                    Raya</span>
+                <p class="flex items-center gap-1 text-caption font-caption text-on-surface-variant mt-1">
+                    <img src="{{ asset('icons/warning.png') }}" alt="Warning" class="w-3.5 h-3.5 shrink-0">
+                    <span>Seluruh Hak Cipta Dilindungi.</span>
+                </p>
+
+                <p class="flex items-center gap-1 text-caption font-caption text-on-surface-variant mt-1">
+                    <img src="{{ asset('icons/copyright.png') }}" alt="Copyright" class="w-3.5 h-3.5 shrink-0">
+                    <span>Tim Pengembang Dinas Kominfo Kabupaten Murung Raya.</span>
                 </p>
             </div>
             <nav class="flex flex-wrap justify-center gap-6">
@@ -112,7 +266,93 @@
         </div>
     </footer>
 
+    <!-- ================= Footer Mobile ================= -->
+    <footer class="md:hidden w-full py-5 px-6 border-t border-border-subtle bg-surface-container-lowest">
+
+        <div class="max-w-container-max mx-auto flex flex-col items-center text-center">
+
+            <span class="text-label-md font-bold text-primary">
+                Dinas Komunikasi dan Informatika Kabupaten Murung Raya
+            </span>
+
+            <p class="mt-1 flex items-center justify-center gap-2 text-caption font-caption text-on-surface-variant">
+                <img src="{{ asset('icons/warning.png') }}" alt="Warning" class="w-3.5 h-3.5 shrink-0">
+
+                <span>Seluruh Hak Cipta Dilindungi.</span>
+            </p>
+
+            <p class="mt-1 flex items-center justify-center gap-2 text-caption font-caption text-on-surface-variant">
+                <img src="{{ asset('icons/copyright.png') }}" alt="Copyright" class="w-3.5 h-3.5 shrink-0">
+
+                <span>Tim Pengembang Dinas Kominfo Kabupaten Murung Raya.</span>
+            </p>
+
+        </div>
+
+    </footer>
     @stack('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const menu = document.getElementById("mobileMenu");
+            const overlay = document.getElementById("mobileOverlay");
+            const button = document.getElementById("mobileMenuButton");
+            const icon = document.getElementById("mobileMenuIcon");
+
+            if (!menu || !overlay || !button || !icon) return;
+
+            function openMenu() {
+
+                menu.classList.remove("opacity-0", "invisible", "-translate-y-2");
+                overlay.classList.remove("opacity-0", "invisible");
+
+                document.body.classList.add("overflow-hidden");
+
+                icon.textContent = "close";
+
+                button.setAttribute("aria-expanded", "true");
+
+            }
+
+            function closeMenu() {
+
+                menu.classList.add("opacity-0", "invisible", "-translate-y-2");
+                overlay.classList.add("opacity-0", "invisible");
+
+                document.body.classList.remove("overflow-hidden");
+
+                icon.textContent = "menu";
+
+                button.setAttribute("aria-expanded", "false");
+
+            }
+
+            button.addEventListener("click", () => {
+
+                if (menu.classList.contains("invisible")) {
+                    openMenu();
+                } else {
+                    closeMenu();
+                }
+
+            });
+
+            overlay.addEventListener("click", closeMenu);
+
+            document.addEventListener("keydown", (e) => {
+
+                if (e.key === "Escape") {
+                    closeMenu();
+                }
+
+            });
+
+            menu.querySelectorAll("a").forEach(link => {
+                link.addEventListener("click", closeMenu);
+            });
+
+        });
+    </script>
 </body>
 
 </html>
