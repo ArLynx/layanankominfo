@@ -58,20 +58,22 @@
                     </p>
 
                     <div class="mt-10 flex flex-wrap gap-4">
-                        <a href="{{ asset('icons/video.mp4') }}" download
+                        <a href="https://youtu.be/pGum4S-NRlE?si=0uMVP_XMKv2DEPai" target="_blank"
+                            rel="noopener noreferrer"
                             class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-surface text-primary border border-border-subtle font-label-md text-label-md shadow-sm transition-colors duration-200 hover:bg-primary hover:text-on-primary hover:border-primary">
                             <span class="material-symbols-outlined">
                                 play_circle
                             </span>
-                            Unduh Video
+                            Tonton Video
                         </a>
 
-                        <a href="{{ asset('icons/') }}" download
+                        <a href="https://drive.google.com/file/d/14VkHuQ7qrrc8_jBurRRoEDduvEq91COZ/view?usp=sharing"
+                            target="_blank" rel="noopener noreferrer"
                             class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-surface text-primary border border-border-subtle font-label-md text-label-md shadow-sm transition-colors duration-200 hover:bg-primary hover:text-on-primary hover:border-primary">
                             <span class="material-symbols-outlined">
                                 download
                             </span>
-                            Download PDF
+                            Buka PDF
                         </a>
                     </div>
                 </div>

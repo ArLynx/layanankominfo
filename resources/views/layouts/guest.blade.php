@@ -36,7 +36,7 @@
     </style>
 </head>
 
-<body class="bg-background font-body-md text-on-surface min-h-screen flex antialiased">
+<body class="bg-background font-body-md text-on-surface h-screen overflow-hidden flex antialiased">
     <main class="flex w-full h-screen overflow-hidden">
 
         <!-- Left Side: Visual/Branding (Hidden on mobile) -->
@@ -70,31 +70,31 @@
         </div>
 
         <!-- Right Side: Authentication Form -->
-        <div class="w-full md:w-1/2 flex items-center justify-center p-gutter bg-surface overflow-y-auto">
-            <div class="w-full max-w-[400px]">
+        <div class="w-full md:w-1/2 flex items-center justify-center p-3 sm:p-5 bg-surface overflow-hidden">
+            <div class="w-full max-w-[400px] flex flex-col justify-center h-full max-h-full">
 
-                <!-- Mobile Branding Header -->
-                <div class="md:hidden flex flex-col items-center mb-10 text-center">
+                <!-- Mobile Branding Header (Compact & Fit) -->
+                <div class="md:hidden flex flex-col items-center mb-3 text-center shrink-0">
                     <div
-                        class="mb-4 inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary-container text-on-primary-container">
-                        <span class="material-symbols-outlined text-3xl"
+                        class="mb-1.5 inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary-container text-on-primary-container shadow-sm">
+                        <span class="material-symbols-outlined text-xl"
                             style="font-variation-settings: 'FILL' 1;">assured_workload</span>
                     </div>
-                    <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Dinas Kominfo</h1>
-                    <p class="font-caption text-caption text-on-surface-variant mt-1">Kabupaten Murung Raya</p>
+                    <h1 class="text-base font-bold tracking-tight text-primary">Dinas Kominfo</h1>
+                    <p class="text-[11px] text-on-surface-variant font-medium">Kabupaten Murung Raya</p>
                 </div>
 
                 <div
-                    class="bg-surface-container-lowest p-8 rounded-xl border border-border-subtle shadow-[0_4px_20px_rgba(0,30,64,0.03)]">
+                    class="bg-surface-container-lowest p-5 sm:p-6 rounded-2xl md:rounded-xl border border-border-subtle shadow-[0_4px_20px_rgba(0,30,64,0.03)] shrink-0">
 
-                    <!-- Tabs (Diubah menjadi Link Navigasi) -->
-                    <div class="flex border-b border-border-subtle mb-8">
+                    <!-- Tabs (Diubah menjadi Link Navigasi dengan tambahan padding bawah) -->
+                    <div class="flex border-b border-border-subtle mb-5 sm:mb-6">
                         <a href="{{ route('login') }}"
-                            class="flex-1 pb-3 text-center font-label-md text-label-md transition-all duration-200 focus:outline-none {{ request()->routeIs('login') ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary border-b-2 border-transparent' }}">
+                            class="flex-1 pb-4 text-center font-label-md text-label-md transition-all duration-200 focus:outline-none {{ request()->routeIs('login') ? 'text-primary border-b-2 border-primary font-semibold' : 'text-on-surface-variant hover:text-primary border-b-2 border-transparent' }}">
                             Login
                         </a>
                         <a href="{{ route('register') }}"
-                            class="flex-1 pb-3 text-center font-label-md text-label-md transition-all duration-200 focus:outline-none {{ request()->routeIs('register') ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary border-b-2 border-transparent' }}">
+                            class="flex-1 pb-4 text-center font-label-md text-label-md transition-all duration-200 focus:outline-none {{ request()->routeIs('register') ? 'text-primary border-b-2 border-primary font-semibold' : 'text-on-surface-variant hover:text-primary border-b-2 border-transparent' }}">
                             Daftar
                         </a>
                     </div>
