@@ -43,7 +43,7 @@
         </div>
 
         <!-- MOBILE VIEW -->
-        <div class="md:hidden flex flex-col items-center text-center px-6 py-12 max-w-sm mx-auto w-full">
+        <div class="md:hidden flex flex-col items-center text-center px-6 pt-0 pb-6 -mt-6 max-w-sm mx-auto w-full">
 
             <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-green-600" fill="currentColor"

@@ -44,15 +44,12 @@
                 <img src="{{ asset('logo-layanan-192x192.png') }}" class="w-10 h-10 shrink-0" alt="Logo">
 
                 <div class="min-w-0">
-
-                    <h1 class="text-[16px] font-semibold text-slate-900 truncate">
+                    <h1 class="text-[18px] font-semibold text-slate-900 truncate leading-none">
                         Dinas Kominfo
                     </h1>
-
-                    <p class="text-xs text-slate-500 truncate">
+                    <p class="text-sm font-medium text-slate-600 leading-tight -mt-1">
                         Kabupaten Murung Raya
                     </p>
-
                 </div>
 
             </a>
@@ -87,7 +84,7 @@
             gap-3
             px-6
             h-14
-            text-[14px]
+            text-[16px]
             font-medium
             text-slate-700
             active:bg-slate-100
@@ -100,7 +97,7 @@
             gap-3
             px-6
             h-14
-            text-[14px]
+            text-[16px]
             font-semibold
             text-primary
             bg-slate-100';
@@ -110,22 +107,22 @@
         <nav>
 
             <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? $mobileActive : $mobileNav }}">
-                <span class="material-symbols-outlined text-[18px] shrink-0">home</span>
+                <span class="material-symbols-outlined text-[20px] shrink-0">home</span>
                 <span>Layanan</span>
             </a>
 
             <a href="{{ route('panduan') }}" class="{{ request()->routeIs('panduan') ? $mobileActive : $mobileNav }}">
-                <span class="material-symbols-outlined text-[18px] shrink-0">menu_book</span>
+                <span class="material-symbols-outlined text-[20px] shrink-0">menu_book</span>
                 <span>Panduan</span>
             </a>
 
             <a href="{{ route('status') }}" class="{{ request()->routeIs('status') ? $mobileActive : $mobileNav }}">
-                <span class="material-symbols-outlined text-[18px] shrink-0">monitoring</span>
+                <span class="material-symbols-outlined text-[20px] shrink-0">monitoring</span>
                 <span>Status</span>
             </a>
 
             <a href="{{ route('bantuan') }}" class="{{ request()->routeIs('bantuan') ? $mobileActive : $mobileNav }}">
-                <span class="material-symbols-outlined text-[18px] shrink-0">help</span>
+                <span class="material-symbols-outlined text-[20px] shrink-0">help</span>
                 <span>Bantuan</span>
             </a>
 
@@ -134,17 +131,17 @@
                 @auth
 
                     <a href="{{ url('/dashboard-user') }}"
-                        class="flex items-center justify-center w-full h-12 rounded-lg bg-primary text-white text-[14px] font-medium shadow-sm active:opacity-90 transition-colors duration-200">
+                        class="w-full flex justify-center items-center gap-2 px-6 py-3 min-h-[48px] rounded-xl bg-primary text-white font-medium text-base shadow-md active:scale-[0.98] transition-all">
                         Dashboard
                     </a>
                 @else
                     <a href="{{ route('login') }}"
-                        class="flex items-center justify-center w-full h-12 rounded-lg bg-primary text-white text-[14px] font-medium shadow-sm active:opacity-90 transition-colors duration-200">
+                        class="w-full flex justify-center items-center gap-2 px-6 py-3 min-h-[48px] rounded-xl bg-primary text-white font-medium text-base shadow-md active:scale-[0.98] transition-all">
                         Login
                     </a>
 
                     <a href="{{ route('register') }}"
-                        class="flex items-center justify-center w-full h-12 rounded-lg bg-primary text-white text-[14px] font-medium shadow-sm active:opacity-90 transition-colors duration-200 mb-4">
+                        class="w-full flex justify-center items-center gap-2 px-6 py-3 min-h-[48px] rounded-xl bg-primary text-white font-medium text-base shadow-md active:scale-[0.98] transition-all mb-4">
                         Register
                     </a>
 
@@ -164,15 +161,14 @@
             </div>
 
             @php
-                $navDefault = 'relative px-2 py-2 text-sm font-semibold text-on-surface-variant
-                border-b-2 border-transparent
-                transition-colors duration-200
+                $navDefault = 'relative px-2 py-2 text-sm font-semibold text-on-surface-variant 
+                border-b-2 border-transparent 
+                transition-all duration-200 
                 hover:text-primary hover:border-primary';
 
-                $navActive = 'relative px-2 py-2 text-sm font-semibold text-on-surface-variant
-                border-b-2 border-transparent
-                transition-colors duration-200
-                hover:text-primary hover:border-primary';
+                $navActive = 'relative px-2 py-2 text-sm font-bold text-primary 
+                border-b-2 border-primary 
+                transition-all duration-200';
             @endphp
 
             <!-- Menu Navigasi -->
@@ -251,13 +247,15 @@
             <div class="text-center md:text-left">
                 <span class="text-label-md font-bold text-primary">Dinas Komunikasi dan Informatika Kabupaten Murung
                     Raya</span>
-                <p class="flex items-center gap-1 text-caption font-caption text-on-surface-variant mt-1">
-                    <img src="{{ asset('icons/warning.png') }}" alt="Warning" class="w-3.5 h-3.5 shrink-0">
+
+                <p class="flex items-center gap-1.5 text-caption font-semibold text-on-surface-variant mt-1">
+                    <span class="material-symbols-outlined text-[16px] text-primary shrink-0">verified_user</span>
                     <span>Seluruh Hak Cipta Dilindungi.</span>
                 </p>
 
-                <p class="flex items-center gap-1 text-caption font-caption text-on-surface-variant mt-1">
-                    <img src="{{ asset('icons/copyright.png') }}" alt="Copyright" class="w-3.5 h-3.5 shrink-0">
+                <p class="flex items-center gap-1.5 text-caption font-semibold text-on-surface-variant mt-1">
+                    <span
+                        class="material-symbols-outlined text-[16px] font-medium text-primary shrink-0">copyright</span>
                     <span>Tim Pengembang Dinas Kominfo Kabupaten Murung Raya.</span>
                 </p>
             </div>
@@ -268,28 +266,25 @@
 
     <!-- ================= Footer Mobile ================= -->
     <footer class="md:hidden w-full py-5 px-6 border-t border-border-subtle bg-surface-container-lowest">
-
         <div class="max-w-container-max mx-auto flex flex-col items-center text-center">
 
             <span class="text-label-md font-bold text-primary">
                 Dinas Komunikasi dan Informatika Kabupaten Murung Raya
             </span>
 
-            <p class="mt-1 flex items-center justify-center gap-2 text-caption font-caption text-on-surface-variant">
-                <img src="{{ asset('icons/warning.png') }}" alt="Warning" class="w-3.5 h-3.5 shrink-0">
-
+            <p class="mt-1 flex items-center justify-center gap-1.5 text-caption font-semibold text-on-surface-variant">
+                <span class="material-symbols-outlined text-[16px] text-primary shrink-0">verified_user</span>
                 <span>Seluruh Hak Cipta Dilindungi.</span>
             </p>
 
-            <p class="mt-1 flex items-center justify-center gap-2 text-caption font-caption text-on-surface-variant">
-                <img src="{{ asset('icons/copyright.png') }}" alt="Copyright" class="w-3.5 h-3.5 shrink-0">
-
+            <p class="mt-1 flex items-center justify-center gap-1.5 text-caption font-semibold text-on-surface-variant">
+                <span class="material-symbols-outlined text-[16px] font-medium text-primary shrink-0">copyright</span>
                 <span>Tim Pengembang Dinas Kominfo Kabupaten Murung Raya.</span>
             </p>
 
         </div>
-
     </footer>
+
     @stack('scripts')
     <script>
         document.addEventListener("DOMContentLoaded", () => {

@@ -20,16 +20,17 @@
                 </p>
 
                 <div class="mt-8 flex flex-col w-full gap-3">
-                    <a href="{{ asset('icons/video.mp4') }}" download
+                    <a href="https://youtu.be/pGum4S-NRlE?si=0uMVP_XMKv2DEPai" target="_blank" rel="noopener noreferrer"
                         class="w-full flex justify-center items-center gap-2 px-6 py-3 min-h-[48px] rounded-xl bg-primary text-white font-medium text-base shadow-md active:scale-[0.98] transition-all">
                         <span class="material-symbols-outlined text-[20px]">play_circle</span>
-                        Unduh Video
+                        Tonton Video
                     </a>
 
-                    <a href="{{ asset('icons/CV IRPANSYAH.pdf') }}" download
+                    <a href="https://drive.google.com/file/d/14VkHuQ7qrrc8_jBurRRoEDduvEq91COZ/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer"
                         class="w-full flex justify-center items-center gap-2 px-6 py-3 min-h-[48px] rounded-xl bg-primary text-white font-medium text-base shadow-md active:scale-[0.98] transition-all">
                         <span class="material-symbols-outlined text-[20px]">download</span>
-                        Download PDF
+                        Buka PDF
                     </a>
                 </div>
             </div>
@@ -94,43 +95,45 @@
                 </p>
             </div>
 
-            <div class="grid lg:grid-cols-3 gap-8 mt-12">
-                <div class="lg:col-span-2">
-                    <div class="rounded-3xl overflow-hidden shadow-xl border bg-black">
-                        <video controls class="w-full">
-                            <source src="{{ asset('icons/') }}" type="video/mp4">
-                        </video>
+            <div class="grid lg:grid-cols-3 gap-8 mt-12 items-stretch">
+                <div class="lg:col-span-2 h-full">
+                    <div class="rounded-3xl overflow-hidden shadow-xl border bg-black h-full">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/pGum4S-NRlE"
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
+                        </iframe>
                     </div>
                 </div>
 
-                <div>
-                    <div class="rounded-3xl bg-surface border shadow-sm p-8 h-full">
+                <div class="h-full">
+                    <div class="rounded-3xl bg-surface border shadow-sm p-8 h-full flex flex-col">
                         <h3 class="text-xl font-bold">
                             Materi Video
                         </h3>
-                        <ul class="space-y-4 mt-6">
+                        <ul class="space-y-4 mt-6 flex-grow">
                             <li class="flex gap-3">
-                                <span class="text-green-600">✔</span>
+                                <span class="text-green-600 font-bold">✔</span>
                                 Registrasi akun
                             </li>
                             <li class="flex gap-3">
-                                <span class="text-green-600">✔</span>
+                                <span class="text-green-600 font-bold">✔</span>
                                 Login pengguna
                             </li>
                             <li class="flex gap-3">
-                                <span class="text-green-600">✔</span>
+                                <span class="text-green-600 font-bold">✔</span>
                                 Pengajuan layanan
                             </li>
                             <li class="flex gap-3">
-                                <span class="text-green-600">✔</span>
+                                <span class="text-green-600 font-bold">✔</span>
                                 Upload dokumen
                             </li>
                             <li class="flex gap-3">
-                                <span class="text-green-600">✔</span>
+                                <span class="text-green-600 font-bold">✔</span>
                                 Monitoring status
                             </li>
                             <li class="flex gap-3">
-                                <span class="text-green-600">✔</span>
+                                <span class="text-green-600 font-bold">✔</span>
                                 Download hasil
                             </li>
                         </ul>

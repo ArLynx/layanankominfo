@@ -128,12 +128,25 @@
 
                 <div
                     class="group bg-surface rounded-xl border border-border-subtle p-8 hover:shadow-lg transition-all duration-300 relative overflow-hidden flex flex-col h-full cursor-pointer">
-                    <div
-                        class="w-16 h-16 bg-surface-container-low rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary transition-colors">
-                        <span
-                            class="material-symbols-outlined text-[32px] text-primary group-hover:text-on-primary transition-colors"
-                            style="font-variation-settings: 'FILL' 1;">language</span>
+
+                    <!-- KHUSUS TAMPILAN MOBILE -->
+                    <div class="block md:hidden">
+                        <div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-6">
+                            <span class="material-symbols-outlined text-[32px] text-white"
+                                style="font-variation-settings: 'FILL' 1;">language</span>
+                        </div>
                     </div>
+
+                    <!-- KHUSUS TAMPILAN DESKTOP -->
+                    <div class="hidden md:block">
+                        <div
+                            class="w-16 h-16 bg-surface-container-low rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary transition-colors">
+                            <span
+                                class="material-symbols-outlined text-[32px] text-primary group-hover:text-on-primary transition-colors"
+                                style="font-variation-settings: 'FILL' 1;">language</span>
+                        </div>
+                    </div>
+
                     <h3 class="font-headline-md text-headline-md text-on-surface mb-3">Pengajuan Subdomain</h3>
                     <p class="font-body-md text-body-md text-on-surface-variant mb-8 flex-grow">
                         Fasilitas pembuatan alamat website resmi (subdomain) di bawah domain murungrayakab.go.id untuk
@@ -160,12 +173,25 @@
 
                 <div
                     class="group bg-surface rounded-xl border border-border-subtle p-8 hover:shadow-lg transition-all duration-300 relative overflow-hidden flex flex-col h-full cursor-pointer">
-                    <div
-                        class="w-16 h-16 bg-surface-container-low rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary transition-colors">
-                        <span
-                            class="material-symbols-outlined text-[32px] text-primary group-hover:text-on-primary transition-colors"
-                            style="font-variation-settings: 'FILL' 1;">mail</span>
+
+                    <!-- KHUSUS TAMPILAN MOBILE -->
+                    <div class="block md:hidden">
+                        <div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-6">
+                            <span class="material-symbols-outlined text-[32px] text-white"
+                                style="font-variation-settings: 'FILL' 1;">mail</span>
+                        </div>
                     </div>
+
+                    <!-- KHUSUS TAMPILAN DESKTOP -->
+                    <div class="hidden md:block">
+                        <div
+                            class="w-16 h-16 bg-surface-container-low rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary transition-colors">
+                            <span
+                                class="material-symbols-outlined text-[32px] text-primary group-hover:text-on-primary transition-colors"
+                                style="font-variation-settings: 'FILL' 1;">mail</span>
+                        </div>
+                    </div>
+
                     <h3 class="font-headline-md text-headline-md text-on-surface mb-3">Pengajuan Email Resmi</h3>
                     <p class="font-body-md text-body-md text-on-surface-variant mb-8 flex-grow">
                         Layanan pembuatan akun email resmi berakhiran @murungrayakab.go.id untuk ASN dan Perangkat
