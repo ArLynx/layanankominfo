@@ -8,6 +8,7 @@ use App\Notifications\TwoFactorOtp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 use Laravel\Fortify\Actions\DisableTwoFactorAuthentication;
 
 class TwoFactorResetController extends Controller
@@ -20,6 +21,15 @@ class TwoFactorResetController extends Controller
     public function sendOtpByEmail(Request $request)
     {
         $request->validate(['email' => 'required|email|exists:admins,email']);
+
+        $key = '2fa-reset-admin-send:'.$request->ip();
+
+        RateLimiter::hit($key);
+
+        if (RateLimiter::tooManyAttempts($key, 3)) {
+            $seconds = RateLimiter::availableIn($key);
+            return back()->withErrors(['email' => "Terlalu banyak permintaan kode. Coba lagi dalam {$seconds} detik."]);
+        }
 
         $admin = Admin::where('email', $request->email)->first();
 
@@ -72,6 +82,15 @@ class TwoFactorResetController extends Controller
             'otp' => 'required|string|size:6',
             'email' => 'required|email|exists:admins,email',
         ]);
+
+        $key = '2fa-reset-admin-verify:'.$request->ip();
+
+        RateLimiter::hit($key);
+
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+            return back()->withErrors(['otp' => "Terlalu banyak percobaan. Coba lagi dalam {$seconds} detik."]);
+        }
 
         $email = $request->email;
         $cached = Cache::get('2fa_reset_admin_' . $email);
