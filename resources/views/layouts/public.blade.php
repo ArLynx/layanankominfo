@@ -35,19 +35,21 @@
 <body class="bg-background text-on-background min-h-screen flex flex-col">
 
     <!-- ================= Responsiv Mobile ================= -->
-    <header class="md:hidden fixed top-0 left-0 right-0 z-50 h-16 bg-white border-b border-slate-200 shadow-sm">
+    <header class="lg:hidden fixed top-0 left-0 right-0 z-50 h-16 bg-white border-b border-slate-200 shadow-sm">
 
-        <div class="w-full h-full px-5 flex items-center justify-between">
+        <!-- Padding disesuaikan agar aman di layar < 316px (menggunakan px-3, naik ke px-5 saat sm) -->
+        <div class="w-full h-full px-3 sm:px-5 flex items-center justify-between gap-1">
 
-            <a href="{{ route('home') }}" class="flex items-center gap-3 flex-1 min-w-0">
+            <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
 
-                <img src="{{ asset('logo-layanan-192x192.png') }}" class="w-10 h-10 shrink-0" alt="Logo">
+                <img src="{{ asset('logo-layanan-192x192.png') }}" class="w-10 h-10 sm:w-10 sm:h-10 shrink-0"
+                    alt="Logo">
 
-                <div class="min-w-0">
-                    <h1 class="text-[18px] font-semibold text-slate-900 truncate leading-none">
+                <div class="min-w-0 flex-1">
+                    <h1 class="text-[16px] sm:text-[18px] font-semibold text-slate-900 truncate leading-tight">
                         Dinas Kominfo
                     </h1>
-                    <p class="text-sm font-medium text-slate-600 leading-tight -mt-1">
+                    <p class="text-[13px] sm:text-sm font-medium text-slate-600 truncate leading-tight mt-0">
                         Kabupaten Murung Raya
                     </p>
                 </div>
@@ -55,9 +57,9 @@
             </a>
 
             <button id="mobileMenuButton"
-                class="ml-3 w-12 h-12 shrink-0 rounded-lg flex items-center justify-center active:bg-slate-100 transition-colors duration-200">
+                class="ml-1 sm:ml-3 w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-lg flex items-center justify-center active:bg-slate-100 transition-colors duration-200">
 
-                <span id="mobileMenuIcon" class="material-symbols-outlined text-[26px]">
+                <span id="mobileMenuIcon" class="material-symbols-outlined text-[26px] sm:text-[26px]">
                     menu
                 </span>
 
@@ -68,12 +70,12 @@
     </header>
 
     <div id="mobileOverlay"
-        class="md:hidden fixed inset-0 top-16 bg-black/30 opacity-0 invisible transition duration-200 z-30">
+        class="lg:hidden fixed inset-0 top-16 bg-black/30 opacity-0 invisible transition duration-200 z-30">
     </div>
 
     <div id="mobileMenu"
-        class="md:hidden fixed left-0 right-0 bg-white border-b border-slate-200 shadow-lg
-           opacity-0 invisible -translate-y-2 transition-all duration-200 z-40"
+        class="lg:hidden fixed left-0 right-0 bg-white border-b border-slate-200 shadow-lg
+            opacity-0 invisible -translate-y-2 transition-all duration-200 z-40"
         style="top: 64px;">
 
         @php
@@ -82,9 +84,9 @@
             flex
             items-center
             gap-3
-            px-6
+            px-4 sm:px-6
             h-14
-            text-[16px]
+            text-[15px] sm:text-[16px]
             font-medium
             text-slate-700
             active:bg-slate-100
@@ -95,9 +97,9 @@
             flex
             items-center
             gap-3
-            px-6
+            px-4 sm:px-6
             h-14
-            text-[16px]
+            text-[15px] sm:text-[16px]
             font-semibold
             text-primary
             bg-slate-100';
@@ -126,22 +128,22 @@
                 <span>Bantuan</span>
             </a>
 
-            <div class="px-6 pt-4 pb-4 space-y-3 border-t border-slate-200">
+            <div class="px-4 sm:px-6 pt-4 pb-4 space-y-3 border-t border-slate-200">
 
                 @auth
 
                     <a href="{{ url('/dashboard-user') }}"
-                        class="w-full flex justify-center items-center gap-2 px-6 py-3 min-h-[48px] rounded-xl bg-primary text-white font-medium text-base shadow-md active:scale-[0.98] transition-all">
+                        class="w-full flex justify-center items-center gap-2 px-4 sm:px-6 py-3 min-h-[48px] rounded-xl bg-primary text-white font-medium text-base shadow-md active:scale-[0.98] transition-all">
                         Dashboard
                     </a>
                 @else
                     <a href="{{ route('login') }}"
-                        class="w-full flex justify-center items-center gap-2 px-6 py-3 min-h-[48px] rounded-xl bg-primary text-white font-medium text-base shadow-md active:scale-[0.98] transition-all">
+                        class="w-full flex justify-center items-center gap-2 px-4 sm:px-6 py-3 min-h-[48px] rounded-xl bg-primary text-white font-medium text-base shadow-md active:scale-[0.98] transition-all">
                         Login
                     </a>
 
                     <a href="{{ route('register') }}"
-                        class="w-full flex justify-center items-center gap-2 px-6 py-3 min-h-[48px] rounded-xl bg-primary text-white font-medium text-base shadow-md active:scale-[0.98] transition-all mb-4">
+                        class="w-full flex justify-center items-center gap-2 px-4 sm:px-6 py-3 min-h-[48px] rounded-xl bg-primary text-white font-medium text-base shadow-md active:scale-[0.98] transition-all mb-4">
                         Register
                     </a>
 
@@ -247,16 +249,12 @@
             <div class="text-center md:text-left">
                 <span class="text-label-md font-bold text-primary">Dinas Komunikasi dan Informatika Kabupaten Murung
                     Raya</span>
-
-                <p class="flex items-center gap-1.5 text-caption font-semibold text-on-surface-variant mt-1">
-                    <span class="material-symbols-outlined text-[16px] text-primary shrink-0">verified_user</span>
-                    <span>Seluruh Hak Cipta Dilindungi.</span>
+                <p class="text-caption font-semibold text-on-surface-variant leading-relaxed">
+                    ⚠ Seluruh Hak Cipta Dilindungi.
                 </p>
 
-                <p class="flex items-center gap-1.5 text-caption font-semibold text-on-surface-variant mt-1">
-                    <span
-                        class="material-symbols-outlined text-[16px] font-medium text-primary shrink-0">copyright</span>
-                    <span>Tim Pengembang Dinas Kominfo Kabupaten Murung Raya.</span>
+                <p class="text-caption font-semibold text-on-surface-variant leading-relaxed max-w-[320px]">
+                    © Tim Pengembang Dinas Kominfo Kabupaten Murung Raya.
                 </p>
             </div>
             <nav class="flex flex-wrap justify-center gap-6">
@@ -272,14 +270,12 @@
                 Dinas Komunikasi dan Informatika Kabupaten Murung Raya
             </span>
 
-            <p class="mt-1 flex items-center justify-center gap-1.5 text-caption font-semibold text-on-surface-variant">
-                <span class="material-symbols-outlined text-[16px] text-primary shrink-0">verified_user</span>
-                <span>Seluruh Hak Cipta Dilindungi.</span>
+            <p class="text-caption font-semibold text-on-surface-variant leading-relaxed">
+                ⚠ Seluruh Hak Cipta Dilindungi.
             </p>
 
-            <p class="mt-1 flex items-center justify-center gap-1.5 text-caption font-semibold text-on-surface-variant">
-                <span class="material-symbols-outlined text-[16px] font-medium text-primary shrink-0">copyright</span>
-                <span>Tim Pengembang Dinas Kominfo Kabupaten Murung Raya.</span>
+            <p class="text-caption font-semibold text-on-surface-variant leading-relaxed max-w-[320px]">
+                © Tim Pengembang Dinas Kominfo Kabupaten Murung Raya.
             </p>
 
         </div>
