@@ -7,6 +7,7 @@ use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 use Laravel\Fortify\Fortify;
@@ -24,6 +25,17 @@ class AuthController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
+
+        $key = 'admin-login:'.$request->ip();
+
+        RateLimiter::hit($key);
+
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+            throw ValidationException::withMessages([
+                'email' => "Terlalu banyak percobaan login. Coba lagi dalam {$seconds} detik.",
+            ]);
+        }
 
         $admin = Admin::where('email', $request->email)->first();
 
@@ -52,6 +64,8 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
+        RateLimiter::clear('admin-login:'.$request->ip());
+
         $redirectRoute = match ($admin->role) {
             'pimpinan' => route('pimpinan.dashboard'),
             default => route('admin.dashboard'),
@@ -71,6 +85,15 @@ class AuthController extends Controller
 
     public function challenge(Request $request, TwoFactorAuthenticationProvider $provider)
     {
+        $key = 'admin-login:'.$request->ip();
+
+        RateLimiter::hit($key);
+
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+            return back()->withErrors(['code' => "Terlalu banyak percobaan. Coba lagi dalam {$seconds} detik."]);
+        }
+
         $request->validate([
             'code' => 'nullable|string',
             'recovery_code' => 'nullable|string',
