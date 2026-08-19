@@ -35,7 +35,8 @@
         <div class="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto">
             <div class="flex items-center gap-4">
                 <img src="{{ asset('logo-layanan-192x192.png') }}" alt="Logo" class="h-10 w-auto">
-                <span class="text-headline-md font-headline-md font-bold text-primary">Dinas Kominfo Murung Raya</span>
+                <span class="text-headline-md font-headline-md font-bold text-primary">DISKOMINFO SP
+                    KAB. MURUNG RAYA</span>
             </div>
 
             <!-- Menu Navigasi -->
@@ -102,7 +103,8 @@
     <footer class="w-full py-8 px-gutter border-t border-border-subtle bg-surface-container-lowest">
         <div class="flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto gap-4">
             <div class="text-center md:text-left">
-                <span class="text-label-md font-bold text-primary">Dinas Kominfo Murung Raya</span>
+                <span class="text-label-md font-bold text-primary">Dinas Komunikasi Informatika Statistik Dan Persandian
+                    Murung Raya</span>
                 <p class="text-caption font-caption text-on-surface-variant mt-1">
                     © {{ date('Y') }} Tim Pengembang Dinas Kominfo Kabupaten Murung Raya.
                 </p>
