@@ -25,13 +25,19 @@ use App\Http\Controllers\User\RiwayatController;
 use App\Http\Controllers\User\EmailPribadiController;
 use App\Http\Controllers\User\EmailSatkerController;
 use App\Http\Controllers\User\NotificationUserController;
-
 use App\Http\Controllers\User\TwoFactorSetupController as UserTwoFactorSetupController;
 use App\Http\Controllers\Admin\TwoFactorResetController as AdminTwoFactorResetController;
+use App\Http\Controllers\StatusController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/', 'layanan')->name('home');
+Route::view('/panduan', 'panduan')->name('panduan');
+Route::get('/status', function () {
+    return view('status');
+})->name('status');
+
+Route::get('/status/progres', [StatusController::class, 'progres'])
+    ->name('status.progres');
+Route::view('/bantuan', 'bantuan')->name('bantuan');
 
 // Admin Auth Routes
 Route::prefix('admin')

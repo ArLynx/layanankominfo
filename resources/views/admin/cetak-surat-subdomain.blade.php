@@ -87,12 +87,24 @@
         .ttd {
             width: 100%;
             margin-top: 20px;
+            border-collapse: collapse;
             page-break-inside: avoid;
             break-inside: avoid;
         }
 
         .ttd td {
             vertical-align: top;
+            padding: 0;
+            line-height: 1.25;
+        }
+
+        .ttd-left {
+            width: 62%;
+        }
+
+        .ttd-right {
+            width: 38%;
+            padding-right: 0;
         }
 
         .space-sign {
@@ -158,7 +170,7 @@
 
         <p>
             Nomor :
-            800.1.11/___/Diskominfo/{{ $bulanRomawi[now()->month] }}/{{ now()->format('Y') }}
+            800.1.11/&nbsp;&nbsp;&nbsp;&nbsp;/DISKOMINFOSP/{{ $bulanRomawi[now()->month] }}/{{ now()->format('Y') }}
         </p>
 
     </div>
@@ -306,8 +318,8 @@
     @if ($subdomain->jenis_layanan == 'baru')
         <p>
 
-            Sebagai penanggung jawab pengelolaan nama subdomain :
-
+            Sebagai penanggung jawab nama subdomain Pemerintah Kabupaten Murung Raya berikut:</br>
+            subdomain:
             <strong>
                 {{ $subdomain->nama_subdomain }}
             </strong>
@@ -317,9 +329,9 @@
         <p>
 
             Penanggung Jawab Baru sebagaimana tersebut di atas ditetapkan sebagai
-            penanggung jawab pengelolaan nama subdomain
+            penanggung jawab nama subdomain Pemerintah Kabupaten Murung Raya berikut:</br>
 
-            <strong>{{ $subdomain->nama_subdomain }}</strong>
+            subdomain:<strong>{{ $subdomain->nama_subdomain }}</strong>
 
             menggantikan Penanggung Jawab sebelumnya.
 
@@ -327,13 +339,13 @@
     @elseif ($subdomain->jenis_layanan == 'ubah_subdomain')
         <p>
 
-            Sebagai pejabat pengelola nama domain sebelumnya
-
+            Sebagai pejabat yang bertanggung jawab atas nama subdomain sebelumnya
+            subdomain:
             <strong>
                 {{ $subdomain->nama_subdomain }}
             </strong>
 
-            yang selanjutnya dilakukan perubahan nama domain menjadi
+            yang selanjutnya dilakukan perubahan nama subdomain menjadi
 
             <strong>
                 {{ $subdomain->nama_subdomain_baru }}
@@ -364,9 +376,9 @@
 
         <tr>
 
-            <td width="50%"></td>
+            <td class="ttd-left"></td>
 
-            <td>
+            <td class="ttd-right">
 
                 Puruk Cahu,
                 {{ now()->locale('id')->translatedFormat('d F Y') }}
@@ -383,17 +395,17 @@
 
         <tr>
 
-            <td></td>
+            <td class="ttd-left"></td>
 
-            <td class="space-sign"></td>
+            <td class="ttd-right space-sign"></td>
 
         </tr>
 
         <tr>
 
-            <td></td>
+            <td class="ttd-left"></td>
 
-            <td>
+            <td class="ttd-right">
 
                 <div class="nama">
                     Dr. YULIANUS, M.Pd
