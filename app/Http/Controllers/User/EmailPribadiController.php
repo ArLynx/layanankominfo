@@ -257,7 +257,7 @@ class EmailPribadiController extends Controller
                 'nama_instansi' => 'required|string|max:255',
                 'nama_kadis' => 'required|string|max:255',
                 'jabatan_kadis' => 'required|string|max:255',
-                'nip_kadis' => 'required|dmin:18',
+                'nip_kadis' => 'required|min:18',
 
                 'nama_akun' => ['required', 'regex:/^(?!.*@)[a-z0-9._-]+$/'],
                 'nama_akun_baru' => $request->jenis_layanan == 'ubah_akun' ? ['required', 'regex:/^(?!.*@)[a-z0-9._-]+$/'] : ['nullable'],
