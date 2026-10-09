@@ -122,18 +122,34 @@
 
     @if (session('success'))
         <div class="mb-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-700">
-
             {{ session('success') }}
-
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: @json(session('success')),
+                    confirmButtonText: 'OK'
+                });
+            });
+        </script>
     @endif
 
     @if (session('error'))
         <div class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700">
-
             {{ session('error') }}
-
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: @json(session('error')),
+                    confirmButtonText: 'OK'
+                });
+            });
+        </script>
     @endif
 
     {{-- card timeline --}}
@@ -913,7 +929,7 @@
 
                 <div class="flex flex-col gap-3 mt-5">
 
-                    @if ($emailSatker->status == 'diproses')
+                    @if (in_array($emailSatker->status, ['diproses', 'selesai']))
 
                         <div class="border rounded-lg bg-gray-50 p-5 mt-4">
 

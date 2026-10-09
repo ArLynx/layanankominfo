@@ -328,7 +328,7 @@ class SubdomainController extends Controller
                 'nip_kadis' => $validated['nip_kadis'],
                 'jabatan_kadis' => $validated['jabatan_kadis'],
 
-                'karpeg' => $validated['karpeg'] ?? $subdomain->karpeg,
+                'karpeg' => $request->hasFile('karpeg') ? $subdomain->karpeg : $subdomain->getOriginal('karpeg'),
             ]);
 
             return redirect()->route('subdomain.show', $subdomain)->with('success', 'Data pengajuan berhasil diperbarui.');

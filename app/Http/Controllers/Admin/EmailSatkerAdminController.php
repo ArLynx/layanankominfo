@@ -95,6 +95,35 @@ class EmailSatkerAdminController extends Controller
             default    => 'Mengubah Status Pengajuan',
         };
 
+        // 1. Tidak boleh memajukan status ke 'baru', 'tunda', 'diproses', atau 'selesai' jika formulir belum diupload
+        if (in_array($validated['status'], ['baru', 'tunda', 'diproses', 'selesai']) && empty($emailSatker->formulir_email)) {
+            return back()->with('error', 'Formulir permohonan belum diunggah oleh pemohon. Status tidak dapat dimajukan.');
+        }
+
+        // 2. Tidak boleh ke 'tunda' jika karpeg belum ada
+        if ($validated['status'] === 'tunda') {
+            if (empty($emailSatker->karpeg)) {
+                return back()->with('error', 'Dokumen belum lengkap. Kartu Pegawai wajib ada sebelum dikirim ke Pimpinan.');
+            }
+        }
+
+        // 3. Tidak boleh ke 'diproses' secara manual untuk layanan yang butuh pimpinan
+        if (in_array($emailSatker->jenis_layanan, ['baru', 'ubah_penanggung'])) {
+            if ($validated['status'] === 'diproses' && !in_array($emailSatker->status, ['diproses', 'selesai'])) {
+                return back()->with('error', 'Status Proses Pembuatan hanya dapat diberikan setelah Pimpinan menyetujui pengajuan.');
+            }
+        }
+
+        // 4. Tidak boleh ke 'selesai' jika belum disetujui pimpinan, atau akun belum dikirim
+        if ($validated['status'] === 'selesai') {
+            if (in_array($emailSatker->jenis_layanan, ['baru', 'ubah_penanggung']) && !in_array($emailSatker->status, ['diproses', 'selesai'])) {
+                return back()->with('error', 'Pengajuan belum dapat diselesaikan karena belum disetujui oleh Pimpinan.');
+            }
+            if (empty($emailSatker->dokumen_akun)) {
+                return back()->with('error', 'Informasi Akun (Username & Password) wajib dikirimkan sebelum status selesai.');
+            }
+        }
+
         $status = $validated['status'];
 
         /*
@@ -377,11 +406,29 @@ class EmailSatkerAdminController extends Controller
             // Update database
             $emailSatker->update([
                 'dokumen_akun' => $finalFile,
-
                 'email_sent_at' => now(),
+                'status' => 'selesai',
             ]);
 
-            return back()->with('success', $isResend ? 'Informasi akun berhasil diperbarui dan dikirim ulang.' : 'Informasi akun berhasil dikirim ke Email Penanggung Jawab.');
+            ActivityLogHelper::log(
+                aksi: 'Menyelesaikan Pengajuan',
+                modul: 'Email Satker',
+                nomorTiket: $emailSatker->nomor_tiket,
+                detail: 'Informasi akun telah dikirimkan ke Email Penanggung Jawab dan status pengajuan otomatis selesai.'
+            );
+
+            Notification::create([
+                'recipient_type' => 'user',
+                'recipient_id' => $emailSatker->user_id,
+                'title' => 'Pengajuan Selesai',
+                'message' => 'Pengajuan ' . $emailSatker->nomor_tiket . ' telah selesai. Informasi akun telah dikirim ke Email Penanggung Jawab.',
+                'type' => 'email_satker',
+                'reference_type' => 'email_satker',
+                'reference_id' => $emailSatker->id,
+                'url' => route('email-satker.show', $emailSatker->id),
+            ]);
+
+            return back()->with('success', $isResend ? 'Informasi akun berhasil diperbarui dan dikirim ulang.' : 'Informasi akun berhasil dikirim ke Email Penanggung Jawab dan status pengajuan otomatis selesai.');
         } catch (\Exception $e) {
             // Hapus file sementara bila ada
             if (isset($tempFile) && Storage::disk('local')->exists($tempFile)) {

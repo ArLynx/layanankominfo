@@ -103,9 +103,31 @@ class SubdomainAdminController extends Controller
             default    => 'Mengubah Status Pengajuan',
         };
 
-        // Tidak boleh selesai jika Surat belum diupload
-        if ($validated['status'] === 'selesai' && !$subdomain->surat_penunjukan) {
-            return back()->with('error', 'Surat Penunjukan wajib diupload sebelum status selesai.');
+        // 1. Tidak boleh memajukan status ke 'baru', 'tunda', 'diproses', atau 'selesai' jika formulir belum diupload
+        if (in_array($validated['status'], ['baru', 'tunda', 'diproses', 'selesai']) && empty($subdomain->formulir_subdomain)) {
+            return back()->with('error', 'Formulir permohonan belum diunggah oleh pemohon. Status tidak dapat dimajukan.');
+        }
+
+        // 2. Tidak boleh ke 'tunda' jika karpeg belum ada
+        if ($validated['status'] === 'tunda') {
+            if (empty($subdomain->karpeg)) {
+                return back()->with('error', 'Dokumen belum lengkap. Kartu Pegawai wajib ada sebelum dikirim ke Pimpinan.');
+            }
+        }
+
+        // 3. Tidak boleh ke 'diproses' secara manual (hanya dapat melalui persetujuan Pimpinan)
+        if ($validated['status'] === 'diproses' && !in_array($subdomain->status, ['diproses', 'selesai'])) {
+            return back()->with('error', 'Status Proses Pembuatan hanya dapat diberikan setelah Pimpinan menyetujui pengajuan.');
+        }
+
+        // 4. Tidak boleh ke 'selesai' jika belum disetujui pimpinan, atau Surat belum diupload
+        if ($validated['status'] === 'selesai') {
+            if (!in_array($subdomain->status, ['diproses', 'selesai'])) {
+                return back()->with('error', 'Pengajuan belum dapat diselesaikan karena belum disetujui oleh Pimpinan.');
+            }
+            if (empty($subdomain->surat_penunjukan)) {
+                return back()->with('error', 'Surat Penunjukan wajib diupload sebelum status selesai.');
+            }
         }
 
         $subdomain->update([
@@ -322,6 +344,8 @@ class SubdomainAdminController extends Controller
         ]);
 
         try {
+            $isReupload = !empty($subdomain->surat_penunjukan);
+
             if ($subdomain->surat_penunjukan) {
                 Storage::disk('local')->delete($subdomain->surat_penunjukan);
             }
@@ -330,9 +354,40 @@ class SubdomainAdminController extends Controller
 
             $subdomain->update([
                 'surat_penunjukan' => $path,
+                'status' => 'selesai',
             ]);
 
-            return back()->with('success', 'Surat Penunjukan berhasil diupload.');
+            ActivityLogHelper::log(
+                aksi: 'Menyelesaikan Pengajuan',
+                modul: 'Subdomain',
+                nomorTiket: $subdomain->nomor_tiket,
+                detail: 'Surat Penunjukan berhasil diunggah dan status pengajuan otomatis selesai.'
+            );
+
+            Notification::create([
+                'recipient_type' => 'user',
+                'recipient_id' => $subdomain->user_id,
+                'title' => 'Pengajuan Selesai',
+                'message' => 'Pengajuan ' . $subdomain->nomor_tiket . ' telah selesai. Surat Penunjukan telah diunggah oleh Administrator.',
+                'type' => 'subdomain',
+                'reference_type' => 'subdomain',
+                'reference_id' => $subdomain->id,
+                'url' => route('subdomain.show', $subdomain->id),
+            ]);
+
+            Mail::to($subdomain->user->email)->send(
+                new StatusPengajuanMail([
+                    'jenis_layanan' => 'Subdomain',
+                    'nomor_tiket' => $subdomain->nomor_tiket,
+                    'instansi' => $subdomain->nama_instansi,
+                    'nama' => $subdomain->nama_penanggung_jawab,
+                    'status' => 'Selesai',
+                    'tanggal' => now(),
+                    'url' => route('subdomain.show', $subdomain->id),
+                ])
+            );
+
+            return back()->with('success', $isReupload ? 'Surat Penunjukan berhasil diupload ulang.' : 'Surat Penunjukan berhasil diupload dan status pengajuan telah selesai.');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }

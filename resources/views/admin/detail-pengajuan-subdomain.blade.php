@@ -3,7 +3,7 @@
         <div>
             <h2 class="text-headline-lg font-headline-lg text-on-surface">Pengajuan Subdomain</h2>
             <p class="text-body-md font-body-md text-on-surface-variant mt-1">Daftar pengajuan layanan subdomain yang
-                masuk. agencies.</p>
+                masuk.</p>
         </div>
     </header>
 
@@ -78,18 +78,34 @@
 
     @if (session('success'))
         <div class="mb-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-700">
-
             {{ session('success') }}
-
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: @json(session('success')),
+                    confirmButtonText: 'OK'
+                });
+            });
+        </script>
     @endif
 
     @if (session('error'))
         <div class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700">
-
             {{ session('error') }}
-
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: @json(session('error')),
+                    confirmButtonText: 'OK'
+                });
+            });
+        </script>
     @endif
 
     {{-- card timeline --}}
@@ -884,7 +900,7 @@
                 <div class="flex flex-col gap-3 mt-3">
 
                     {{-- Saat diproses boleh cetak SK --}}
-                    @if ($subdomain->status == 'diproses')
+                    @if (in_array($subdomain->status, ['diproses', 'selesai']))
                         <a href="{{ route('admin.subdomain.cetak-sk', $subdomain) }}" target="_blank"
                             class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium">
 
@@ -915,8 +931,8 @@
                         </div>
                     @endif
 
-                    {{-- Upload hanya saat diproses --}}
-                    @if ($subdomain->status == 'diproses')
+                    {{-- Upload saat diproses atau selesai --}}
+                    @if (in_array($subdomain->status, ['diproses', 'selesai']))
                         <div class="border rounded-lg p-4 bg-gray-50 mt-3">
 
                             <h4 class="font-medium mb-3">

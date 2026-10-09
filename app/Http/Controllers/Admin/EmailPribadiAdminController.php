@@ -101,6 +101,35 @@ class EmailPribadiAdminController extends Controller
             default    => 'Mengubah Status Pengajuan',
         };
 
+        // 1. Tidak boleh memajukan status ke 'baru', 'tunda', 'diproses', atau 'selesai' jika formulir belum diupload
+        if (in_array($validated['status'], ['baru', 'tunda', 'diproses', 'selesai']) && empty($emailPribadi->formulir_email)) {
+            return back()->with('error', 'Formulir permohonan belum diunggah oleh pemohon. Status tidak dapat dimajukan.');
+        }
+
+        // 2. Tidak boleh ke 'tunda' jika karpeg belum ada
+        if ($validated['status'] === 'tunda') {
+            if (empty($emailPribadi->karpeg)) {
+                return back()->with('error', 'Dokumen belum lengkap. Kartu Pegawai wajib ada sebelum dikirim ke Pimpinan.');
+            }
+        }
+
+        // 3. Tidak boleh ke 'diproses' secara manual jika jenis layanan 'baru' (wajib lewat pimpinan)
+        if ($emailPribadi->jenis_layanan === 'baru') {
+            if ($validated['status'] === 'diproses' && !in_array($emailPribadi->status, ['diproses', 'selesai'])) {
+                return back()->with('error', 'Status Proses Pembuatan hanya dapat diberikan setelah Pimpinan menyetujui pengajuan.');
+            }
+        }
+
+        // 4. Tidak boleh ke 'selesai' jika belum disetujui pimpinan (khusus 'baru'), atau akun belum dikirim
+        if ($validated['status'] === 'selesai') {
+            if ($emailPribadi->jenis_layanan === 'baru' && !in_array($emailPribadi->status, ['diproses', 'selesai'])) {
+                return back()->with('error', 'Pengajuan belum dapat diselesaikan karena belum disetujui oleh Pimpinan.');
+            }
+            if (empty($emailPribadi->dokumen_akun)) {
+                return back()->with('error', 'Informasi Akun (Username & Password) wajib dikirimkan sebelum status selesai.');
+            }
+        }
+
         $status = $validated['status'];
 
         /*
@@ -381,9 +410,28 @@ class EmailPribadiAdminController extends Controller
             $emailPribadi->update([
                 'dokumen_akun' => $finalFile,
                 'email_sent_at' => now(),
+                'status' => 'selesai',
             ]);
 
-            return back()->with('success', $isResend ? 'Informasi akun berhasil diperbarui dan dikirim ulang.' : 'Informasi akun berhasil dikirim ke Email Pribadi.');
+            ActivityLogHelper::log(
+                aksi: 'Menyelesaikan Pengajuan',
+                modul: 'Email Pribadi',
+                nomorTiket: $emailPribadi->nomor_tiket,
+                detail: 'Informasi akun telah dikirimkan ke Email Pribadi Pemohon dan status pengajuan otomatis selesai.'
+            );
+
+            Notification::create([
+                'recipient_type' => 'user',
+                'recipient_id' => $emailPribadi->user_id,
+                'title' => 'Pengajuan Selesai',
+                'message' => 'Pengajuan ' . $emailPribadi->nomor_tiket . ' telah selesai. Informasi akun telah dikirim ke Email Pribadi Pemohon.',
+                'type' => 'email_pribadi',
+                'reference_type' => 'email_pribadi',
+                'reference_id' => $emailPribadi->id,
+                'url' => route('email-pribadi.show', $emailPribadi->id),
+            ]);
+
+            return back()->with('success', $isResend ? 'Informasi akun berhasil diperbarui dan dikirim ulang.' : 'Informasi akun berhasil dikirim ke Email Pribadi Pemohon dan status pengajuan otomatis selesai.');
         } catch (\Exception $e) {
             // Hapus file sementara bila ada
             if (isset($tempFile) && Storage::disk('local')->exists($tempFile)) {

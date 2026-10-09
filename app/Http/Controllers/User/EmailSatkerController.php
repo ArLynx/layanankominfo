@@ -350,7 +350,7 @@ class EmailSatkerController extends Controller
                 'jabatan_kadis' => $validated['jabatan_kadis'],
                 'nip_kadis' => $validated['nip_kadis'],
 
-                'karpeg' => $validated['karpeg'] ?? $emailSatker->karpeg,
+                'karpeg' => $request->hasFile('karpeg') ? $emailSatker->karpeg : $emailSatker->getOriginal('karpeg'),
             ]);
 
             return redirect()->route('email-satker.show', $emailSatker)->with('success', 'Data pengajuan berhasil diperbarui.');
