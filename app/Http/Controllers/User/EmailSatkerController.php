@@ -372,6 +372,14 @@ class EmailSatkerController extends Controller
 
     public function uploadFormulir(Request $request, EmailSatker $emailSatker)
     {
+        if ($emailSatker->user_id != auth()->id()) {
+            abort(403);
+        }
+
+        if ($emailSatker->formulir_email || in_array($emailSatker->status, ['tunda', 'diproses', 'selesai', 'tutup'])) {
+            return back()->with('error', 'Formulir telah diupload dan tidak dapat diubah.');
+        }
+
         $request->validate([
             'formulir_email' => 'required|mimes:pdf|max:5120',
         ]);
@@ -392,6 +400,8 @@ class EmailSatkerController extends Controller
         if ($emailSatker->user_id != auth()->id()) {
             abort(403);
         }
+
+        abort_if(!$emailSatker->formulir_email, 404);
 
         $path = Storage::disk('local')->path($emailSatker->formulir_email);
 

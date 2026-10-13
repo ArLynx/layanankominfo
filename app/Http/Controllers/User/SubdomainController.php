@@ -350,6 +350,14 @@ class SubdomainController extends Controller
 
     public function uploadFormulir(Request $request, Subdomain $subdomain)
     {
+        if ($subdomain->user_id != auth()->id()) {
+            abort(403);
+        }
+
+        if ($subdomain->formulir_subdomain || in_array($subdomain->status, ['tunda', 'diproses', 'selesai', 'tutup'])) {
+            return back()->with('error', 'Formulir telah diupload dan tidak dapat diubah.');
+        }
+
         $request->validate([
             'formulir_subdomain' => 'required|mimes:pdf|max:5120',
         ]);
@@ -370,6 +378,8 @@ class SubdomainController extends Controller
             abort(403);
         }
 
+        abort_if(!$subdomain->formulir_subdomain, 404);
+
         $path = Storage::disk('local')->path($subdomain->formulir_subdomain);
 
         return response()->file($path, [
@@ -379,6 +389,10 @@ class SubdomainController extends Controller
 
     public function downloadSkPenunjukan(Subdomain $subdomain)
     {
+        if ($subdomain->user_id != auth()->id()) {
+            abort(403);
+        }
+
         abort_if(!$subdomain->surat_penunjukan, 404);
 
         $path = Storage::disk('local')->path($subdomain->surat_penunjukan);
@@ -394,6 +408,14 @@ class SubdomainController extends Controller
 
     public function uploadSuratPenunjukanLama(Request $request, Subdomain $subdomain)
     {
+        if ($subdomain->user_id != auth()->id()) {
+            abort(403);
+        }
+
+        if ($subdomain->surat_penunjukan_lama || in_array($subdomain->status, ['tunda', 'diproses', 'selesai', 'tutup'])) {
+            return back()->with('error', 'Surat Penunjukan Sebelumnya telah diupload dan tidak dapat diubah.');
+        }
+
         $request->validate([
             'surat_penunjukan_lama' => 'required|mimes:pdf|max:5120',
         ]);

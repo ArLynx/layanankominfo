@@ -395,6 +395,10 @@ class EmailPribadiController extends Controller
             abort(403);
         }
 
+        if ($emailPribadi->formulir_email || in_array($emailPribadi->status, ['tunda', 'diproses', 'selesai', 'tutup'])) {
+            return back()->with('error', 'Formulir telah diupload dan tidak dapat diubah.');
+        }
+
         $request->validate([
             'formulir_email' => 'required|mimes:pdf|max:5120',
         ]);
@@ -414,6 +418,8 @@ class EmailPribadiController extends Controller
         if ($emailPribadi->user_id != auth()->id()) {
             abort(403);
         }
+
+        abort_if(!$emailPribadi->formulir_email, 404);
 
         $path = Storage::disk('local')->path($emailPribadi->formulir_email);
 
